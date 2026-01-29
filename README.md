@@ -1,4 +1,4 @@
-# Marios Bros Like/ Platformer 2D
+# Mario Bros Like/ Platformer 2D
 
 
 Membres de l'équipe :

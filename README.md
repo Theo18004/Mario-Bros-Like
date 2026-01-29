@@ -56,3 +56,10 @@ Clonez le dépôt et compilez le projet via le Makefile :
 git clone [https://github.com/ton-pseudo/nom-du-repo.git](https://github.com/ton-pseudo/nom-du-repo.git)
 cd nom-du-repo
 make
+
+Lancez l'exécutable généré :
+  ./game
+
+Pour nettoyer les fichiers objets et l'exécutable :
+
+  make clean

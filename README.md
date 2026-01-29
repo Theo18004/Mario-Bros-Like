@@ -25,13 +25,21 @@ Structure du Projet
 
 
 ├── assets/          # Sprites, tuiles et images
+
 ├── src/             # Code source (.c)
+
 │   ├── main.c       # Point d'entrée et Game Loop
+
 │   ├── player.c     # Logique du joueur
+
 │   ├── map.c        # Gestion de la Tilemap
+
 │   └── physics.c    # Moteur de collisions
+
 ├── include/         # En-têtes (.h)
+
 ├── Makefile         # Script de compilation
+
 └── README.md        # Documentation
 
 

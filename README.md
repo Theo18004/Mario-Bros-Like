@@ -8,7 +8,7 @@ Membres de l'équipe :
     Caillon Elouan   L2 informatique Le Mans
     Ernault Théo     L2 informatique Le Mans
 
-Création du projet le 12/01/2025
+Création du projet le 13/01/2025
 
 Fonctionnalités
 

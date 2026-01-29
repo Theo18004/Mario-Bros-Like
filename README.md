@@ -1,5 +1,15 @@
 # Marios Bros Like/ Platformer 2D
 
+
+Membres de l'équipe :
+    
+    Angot Mathis     L2 informatique Le Mans
+    Anfray Alban     L2 informatique Le Mans
+    Caillon Elouan   L2 informatique Le Mans
+    Ernault Théo     L2 informatique Le Mans
+
+
+
 Fonctionnalités
 
 Ce projet implémente les mécaniques de base d'un platformer rétro :
@@ -9,9 +19,6 @@ Ce projet implémente les mécaniques de base d'un platformer rétro :
 · Collisions Précises :** Détection et résolution des collisions (AABB) avec le sol, les murs et les plateformes suspendues.
 · Ennemis (IA Simple) :** Entités patrouillant automatiquement avec détection des bords.
 · Game Loop Optimisée : ** Gestion du *delta time* pour assurer une vitesse de jeu constante peu importe le framerate.
-
-
-
 
 
 Structure du Projet

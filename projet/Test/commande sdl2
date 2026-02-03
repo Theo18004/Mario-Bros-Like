@@ -1,2 +1,0 @@
-pour compiler les fichiers :
-gcc test.c -o sdl_test $(sdl2-config --cflags --libs) -lSDL2_ttf -lSDL2_image

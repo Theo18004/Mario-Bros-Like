@@ -1,80 +1,46 @@
-# Mario Bros Like/ Platformer 2D
+# 🎮 Nom du Projet
 
 
-Membres de l'équipe :
-    
-    Angot Mathis     L2 informatique Le Mans
-    Anfray Alban     L2 informatique Le Mans
-    Caillon Elouan   L2 informatique Le Mans
-    Ernault Théo     L2 informatique Le Mans
+> **Projet étudiant de L2 Informatique** - Université du Mans.  
+> *Début du développement : 13 janvier 2025*
 
-Création du projet le 13/01/2025
+Ce projet est un moteur de jeu de plateforme rétro performant écrit en C avec la bibliothèque SDL2. Il implémente les fondamentaux d'un jeu 2D : physique, collisions, tilemapping et entités.
 
-Fonctionnalités
+---
 
-Ce projet implémente les mécaniques de base d'un platformer rétro :
+## 👥 L'Équipe
 
-· Déplacements Fluides :** Gestion de la course avec inertie et sauts paraboliques (gravité réaliste).
-· Système de Tilemap :** Chargement et rendu de niveaux basés sur des tuiles (fichiers `.txt` ou tableaux).
-· Collisions Précises :** Détection et résolution des collisions (AABB) avec le sol, les murs et les plateformes suspendues.
-· Ennemis (IA Simple) :** Entités patrouillant automatiquement avec détection des bords.
-· Game Loop Optimisée : ** Gestion du *delta time* pour assurer une vitesse de jeu constante peu importe le framerate.
+| Membre | Formation | Établissement |
+| :--- | :---: | :---: |
+| **Angot Mathis** | L2 Informatique | Le Mans Université |
+| **Anfray Alban** | L2 Informatique | Le Mans Université |
+| **Caillon Elouan** | L2 Informatique | Le Mans Université |
+| **Ernault Théo** | L2 Informatique | Le Mans Université |
 
+---
 
-Structure du Projet
+##  Fonctionnalités
 
+Le moteur intègre les mécaniques suivantes :
 
-├── assets/          # Sprites, tuiles et images
+* ** Déplacements Fluides** : Gestion précise de la physique du joueur (course avec inertie) et sauts paraboliques avec une gravité réaliste.
+* ** Système de Tilemap** : Chargement et rendu de niveaux basés sur des tuiles.
+* ** Collisions Précises** : Détection et résolution des collisions avec le sol, les murs et les plateformes suspendues.
+* ** Ennemis (IA Simple)** : Entités autonomes patrouillant avec détection automatique des bords de plateformes.
+* ** Game Loop Optimisée** : Gestion du *Delta Time* pour assurer une vitesse de jeu constante, indépendamment du framerate de la machine.
 
-├── src/             # Code source (.c)
+---
 
-│   ├── main.c       # Point d'entrée et Game Loop
-
-│   ├── player.c     # Logique du joueur
-
-│   ├── map.c        # Gestion de la Tilemap
-
-│   └── physics.c    # Moteur de collisions
-
-├── include/         # En-têtes (.h)
-
-├── Makefile         # Script de compilation
-
-└── README.md        # Documentation
-
-
-Installation et Lancement
-
-1. Prérequis
-
-Vous devez avoir installé **GCC** et la bibliothèque **SDL2** (ainsi que `SDL2_image` si tu l'utilises pour les sprites).
-
-· Linux (Debian/Ubuntu) :
-    ```bash
-    sudo apt-get update
-    sudo apt-get install build-essential libsdl2-dev
-    ```
-
-· macOS (via Homebrew) :
-    ```bash
-    brew install sdl2
-    ```
-
-· Windows :
-    Utilisez MSYS2 ou configurez les liens SDL2 dans votre IDE (VS Code / Visual Studio).
-
-2. Compilation
-
-Clonez le dépôt et compilez le projet via le Makefile :
+##  Structure du Projet
 
 ```bash
-git clone [https://github.com/ton-pseudo/nom-du-repo.git](https://github.com/ton-pseudo/nom-du-repo.git)
-cd nom-du-repo
-make
-
-Lancez l'exécutable généré :
-  ./game
-
-Pour nettoyer les fichiers objets et l'exécutable :
-
-  make clean
+.
+├── assets/          # Sprites, tuiles et images (.png)
+├── include/         # Fichiers d'en-tête (.h)
+├── src/             # Code source (.c)
+│   ├── main.c       # Point d'entrée et boucle de jeu principale
+│   ├── player.c     # Logique et physique du joueur
+│   ├── map.c        # Gestion du chargement et rendu de la Tilemap
+│   └── physics.c    # Moteur de collisions (AABB)
+├── Makefile         # Script d'automatisation de la compilation
+└── README.md        # Documentation du projet

@@ -1,10 +1,9 @@
 # 🎮 MarioBrosLike
 
-
 > **Projet étudiant de L2 Informatique** - Université du Mans.  
 > *Début du développement : 13 janvier 2025*
 
-Ce projet est un moteur de jeu de plateforme rétro performant écrit en C avec la bibliothèque SDL2. Il implémente les fondamentaux d'un jeu 2D : physique, collisions, tilemapping et entités.
+Ce projet est un moteur de jeu de plateforme rétro performant écrit en C avec la bibliothèque SDL2. Il implémente les fondamentaux d'un jeu 2D : physique, collisions, tilemapping et entités animées.
 
 ---
 
@@ -19,19 +18,19 @@ Ce projet est un moteur de jeu de plateforme rétro performant écrit en C avec 
 
 ---
 
-##  Fonctionnalités
+## ✨ Fonctionnalités
 
 Le moteur intègre les mécaniques suivantes :
 
-* ** Déplacements Fluides** : Gestion précise de la physique du joueur (course avec inertie) et sauts paraboliques avec une gravité réaliste.
-* ** Système de Tilemap** : Chargement et rendu de niveaux basés sur des tuiles.
-* ** Collisions Précises** : Détection et résolution des collisions avec le sol, les murs et les plateformes suspendues.
-* ** Ennemis (IA Simple)** : Entités autonomes patrouillant avec détection automatique des bords de plateformes.
-* ** Game Loop Optimisée** : Gestion du *Delta Time* pour assurer une vitesse de jeu constante, indépendamment du framerate de la machine.
+* **Déplacements Fluides** : Gestion précise de la physique du joueur (course avec inertie) et sauts paraboliques avec une gravité réaliste.
+* **Système de Tilemap** : Chargement et rendu de niveaux basés sur des tuiles.
+* **Collisions Précises** : Détection et résolution des collisions avec le sol et les plateformes.
+* **Game Loop Optimisée** : Boucle de jeu fluide avec gestion du temps et synchronisation verticale (VSync).
+* **Animations Dynamiques** : Machine à états gérant les sprites (Idle, Run, Jump) et la direction du regard.
 
 ---
 
-##  Structure du Projet
+## 📂 Structure du Projet
 
 ```bash
 .
@@ -44,3 +43,35 @@ Le moteur intègre les mécaniques suivantes :
 │   └── physics.c    # Moteur de collisions (AABB)
 ├── Makefile         # Script d'automatisation de la compilation
 └── README.md        # Documentation du projet
+```
+
+## 🛠️ Prérequis
+
+Pour compiler et exécuter ce projet, vous devez disposer des bibliothèques de développement SDL2 installées sur votre machine.
+Linux (Debian/Ubuntu/Mint)
+
+```bash
+sudo apt-get update
+sudo apt-get install build-essential libsdl2-dev libsdl2-image-dev
+```
+
+🚀 Compilation & Lancement
+
+Le projet utilise un Makefile pour automatiser la compilation et la gestion des ressources.
+
+Compilation : Ouvrez un terminal à la racine du projet et lancez la commande :
+
+```Bash
+make
+```
+Cela générera l'exécutable dans le dossier bin/.
+
+Lancement : Pour jouer, utilisez la commande suivante (elle assure que le jeu trouve bien le dossier assets/) :
+```Bash
+make run
+```
+Nettoyage : Pour supprimer les fichiers temporaires (.o) et l'exécutable :
+```Bash
+    make clean
+```
+Note importante : Ne lancez pas l'exécutable en faisant cd bin puis ./MarioBrosLike. Le jeu a besoin d'être lancé depuis la racine pour charger les images situées dans assets/.

@@ -1,3 +1,8 @@
+/**
+ * @file main.c
+ * @brief Point d'entrée principal du jeu MarioBrosLike.
+ */
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>

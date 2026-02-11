@@ -2,7 +2,7 @@
 
 
 
-/*
+/** 
     * Avance ou recule le joueur en fonction des touches fléchées.
     * @param player : pointeur vers la structure du joueur
     * @param speed : vitesse de déplacement (ex: 5 pixels par frame)
@@ -28,7 +28,7 @@ void avancer(Player* player, int speed) {
         player->facingLeft = 1; // Regarde à gauche
     }
 }
-/*
+/** 
     * Permet au joueur de sauter lorsqu'on appuie sur la touche flèche haut.
     * @param player : pointeur vers la structure du joueur
     * Note : Le joueur ne peut sauter que s'il n'est pas déjà en train de sauter (isJumping == 0).
@@ -48,7 +48,7 @@ void saut(Player* player) {
 }
 
 
-/*
+/** 
     * Permet au joueur de descendre plus rapidement lorsqu'on appuie sur la touche flèche bas.
     * @param player : pointeur vers la structure du joueur
     * Note : Cette fonction ajoute une force de gravité supplémentaire lorsque la touche flèche bas est pressée, ce qui fait que le joueur descend plus rapidement.
@@ -66,7 +66,7 @@ void descendre(Player* player) {
     }
 }
 
-/*
+/** 
     * Met à jour la position, la physique et l'animation du joueur à chaque frame.
     * @param player : pointeur vers la structure du joueur
     * Note : Cette fonction doit être appelée à chaque frame pour que le jeu fonctionne correctement.

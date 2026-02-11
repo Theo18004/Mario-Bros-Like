@@ -1,1 +1,5 @@
-/* Gestion des collision (mur et sol), Gravité pour les sauts*/
+/* Gestion des collision (mur et sol) */
+
+
+
+

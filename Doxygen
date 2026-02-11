@@ -13,9 +13,10 @@ TYPEDEF_HIDES_STRUCT   = YES
 
 # --- Chemins d'entrée (Sources) ---
 # Doxygen cherchera dans vos dossiers de code
-INPUT                  = src lib assets
+INPUT                  = src lib bin test README.md gitignor Diagramme de Gantt.ods 
 FILE_PATTERNS          = *.c *.h 
 RECURSIVE              = YES 
+USE_MDFILE_ASMAINPAGE  = README.md
 
 # --- Configuration de l'Interface HTML ---
 GENERATE_HTML          = YES 
@@ -44,3 +45,6 @@ GENERATE_XML           = NO
 SHOW_FILES             = YES
 OPTIMIZE_OUTPUT_FOR_C  = YES
 EXTRACT_ALL            = YES
+
+# Si tu veux inclure des images dans la doc
+IMAGE_PATH             = assets

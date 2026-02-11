@@ -1,8 +1,7 @@
 # 🎮 MarioBrosLike
 
 > **Projet étudiant de L2 Informatique** - Université du Mans.  
-> *Début du développement : 13 janvier 2026*
-> *Fin du développement : avril 2026 *
+> *Début du développement : 13 janvier 2026* > *Fin du développement : avril 2026*
 
 Ce projet est un moteur de jeu de plateforme rétro performant écrit en C avec la bibliothèque SDL2. Il implémente les fondamentaux d'un jeu 2D : physique, collisions, tilemapping et entités animées.
 

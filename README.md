@@ -1,4 +1,4 @@
-# 🎮 Nom du Projet
+# 🎮 MarioBrosLike
 
 
 > **Projet étudiant de L2 Informatique** - Université du Mans.  

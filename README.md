@@ -75,3 +75,27 @@ Nettoyage : Pour supprimer les fichiers temporaires (.o) et l'exécutable :
     make clean
 ```
 Note importante : Ne lancez pas l'exécutable en faisant cd bin puis ./MarioBrosLike. Le jeu a besoin d'être lancé depuis la racine pour charger les images situées dans assets/.
+
+
+
+Touche,Action
+Flèche Droite → ,Déplacer le personnage vers la droite
+Flèche Gauche ← ,Déplacer le personnage vers la gauche
+Flèche Haut ↑ ,Sauter (Jump)
+Flèche Bas ↓ ,Chute rapide (Fast Fall)
+
+
+⚙️ Fonctionnement Technique
+Chargement de Niveau par Image (temporaire)
+
+Machine à États (Animation)
+
+Le système d'animation gère les transitions entre les sprites selon l'état physique du joueur :
+
+    IDLE : Le joueur est immobile au sol.
+
+    RUN : Le joueur se déplace horizontalement.
+
+    JUMP : Le joueur est en l'air (vélocité Y négative ou positive).
+
+Chaque état possède sa propre vitesse d'animation et son nombre de frames, gérés par un timer interne (frameTimer).

@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
 
         // --- A. MISE À JOUR (player.c) ---
         // Utilise tes fonctions avancer/sauter via updatePlayer
-        updatePlayer(&player, NULL, 0, screenH);
+        updatePlayer(&player, tileMap);
 
         // --- B. CAMÉRA ---
         updateCamera(&cam, player.rect, screenW, screenH);

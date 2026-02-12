@@ -1,0 +1,437 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MarioBrosLike: Référence du fichier lib/player.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">MarioBrosLike
+   </div>
+   <div id="projectbrief">Moteur de jeu de plateforme 2D performant en C avec SDL2. Gère la physique, les collisions et le tilemapping.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('player_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Référence du fichier player.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Définitions et prototypes pour la gestion du joueur.  
+<a href="#details">Plus de détails...</a></p>
+<div class="textblock"><code>#include &lt;SDL2/SDL.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Graphe des dépendances par inclusion de player.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h__incl.png" border="0" usemap="#alib_2player_8h" loading="lazy" alt=""/></div>
+<map name="alib_2player_8h" id="alib_2player_8h">
+<area shape="rect" title="Définitions et prototypes pour la gestion du joueur." alt="" coords="6,5,101,31"/>
+<area shape="rect" title=" " alt="" coords="5,79,101,104"/>
+<area shape="poly" title=" " alt="" coords="56,31,56,65,51,65,51,31"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+Ce graphe montre quels fichiers incluent directement ou indirectement ce fichier :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h__dep__incl.png" border="0" usemap="#alib_2player_8hdep" loading="lazy" alt=""/></div>
+<map name="alib_2player_8hdep" id="alib_2player_8hdep">
+<area shape="rect" title="Définitions et prototypes pour la gestion du joueur." alt="" coords="61,5,156,31"/>
+<area shape="rect" href="main_8c.html" title="Point d&#39;entrée principal du projet MarioBrosLike." alt="" coords="5,79,95,104"/>
+<area shape="poly" title=" " alt="" coords="92,43,62,80,57,77,88,40"/>
+<area shape="rect" href="player_8c.html" title="Implémentation de la logique métier et physique du joueur." alt="" coords="119,79,215,104"/>
+<area shape="poly" title=" " alt="" coords="129,40,160,77,156,80,125,43"/>
+</map>
+</div>
+</div>
+<p><a href="player_8h_source.html">Aller au code source de ce fichier.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Structures de données</h2></td></tr>
+<tr class="memitem:Player" id="r_Player"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPlayer.html">Player</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure regroupant toutes les données du joueur.  <a href="structPlayer.html#details">Plus de détails...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr id="define-members-0" class="groupHeader"><td colspan="2"><div class="groupHeader">Paramètres physiques du jeu</div></td></tr>
+<tr class="memitem:a6801baa546c6112d19eb095111d24720" id="r_a6801baa546c6112d19eb095111d24720"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6801baa546c6112d19eb095111d24720">GRAVITY</a>&#160;&#160;&#160;0.5f</td></tr>
+<tr class="memitem:ab8d0cabcc33a510ffa8cfadde6cd9ded" id="r_ab8d0cabcc33a510ffa8cfadde6cd9ded"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8d0cabcc33a510ffa8cfadde6cd9ded">JUMP_FORCE</a>&#160;&#160;&#160;-12.0f</td></tr>
+<tr class="memitem:aece11b592c2adb1490c86a2a2bed475c" id="r_aece11b592c2adb1490c86a2a2bed475c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aece11b592c2adb1490c86a2a2bed475c">GROUND_Y</a>&#160;&#160;&#160;540</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Énumérations</h2></td></tr>
+<tr class="memitem:ae14d5cd4a1a6c41237f81f3ae6e8a075" id="r_ae14d5cd4a1a6c41237f81f3ae6e8a075"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075">AnimState</a> { <a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075aed7d27993ddd345e399d8c599a9151c1">ANIM_IDLE</a>
+, <a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075a043851bf2fd588c4905428f95dd9711e">ANIM_RUN</a>
+, <a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075a9c491919d57a5d79da4fe052b5f0a5bc">ANIM_JUMP</a>
+ }</td></tr>
+<tr class="memdesc:ae14d5cd4a1a6c41237f81f3ae6e8a075"><td class="mdescLeft">&#160;</td><td class="mdescRight">États possibles de l'animation du joueur.  <a href="#ae14d5cd4a1a6c41237f81f3ae6e8a075">Plus de détails...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Fonctions</h2></td></tr>
+<tr class="memitem:a0f5f821bd9305f811abaf027fdbd6efb" id="r_a0f5f821bd9305f811abaf027fdbd6efb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f5f821bd9305f811abaf027fdbd6efb">updatePlayer</a> (<a class="el" href="structPlayer.html">Player</a> *player)</td></tr>
+<tr class="memdesc:a0f5f821bd9305f811abaf027fdbd6efb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Met à jour la position, la physique et l'animation du joueur à chaque frame.  <br /></td></tr>
+<tr class="memitem:a065d747963dee0929005eefd512e0632" id="r_a065d747963dee0929005eefd512e0632"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a065d747963dee0929005eefd512e0632">avancer</a> (<a class="el" href="structPlayer.html">Player</a> *player, int speed)</td></tr>
+<tr class="memdesc:a065d747963dee0929005eefd512e0632"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gère les déplacements horizontaux.  <br /></td></tr>
+<tr class="memitem:aa3885e7f8b280f7ae3c9699b165734cf" id="r_aa3885e7f8b280f7ae3c9699b165734cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3885e7f8b280f7ae3c9699b165734cf">saut</a> (<a class="el" href="structPlayer.html">Player</a> *player)</td></tr>
+<tr class="memdesc:aa3885e7f8b280f7ae3c9699b165734cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Déclenche un saut si le joueur est au sol.  <br /></td></tr>
+<tr class="memitem:a8b94c2c25b5cb061468b33e00fe9824a" id="r_a8b94c2c25b5cb061468b33e00fe9824a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b94c2c25b5cb061468b33e00fe9824a">descendre</a> (<a class="el" href="structPlayer.html">Player</a> *player)</td></tr>
+<tr class="memdesc:a8b94c2c25b5cb061468b33e00fe9824a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Permet au joueur de descendre plus rapidement.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Description détaillée</h2>
+<div class="textblock"><p>Définitions et prototypes pour la gestion du joueur. </p>
+<ul>
+<li>Ce module contient la structure principale du joueur ainsi que les constantes liées à la physique (gravité, saut) et les états d'animation. </li>
+</ul>
+
+<p class="definition">Définition dans le fichier <a class="el" href="player_8h_source.html">player.h</a>.</p>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Documentation des macros</h2>
+<a id="a6801baa546c6112d19eb095111d24720" name="a6801baa546c6112d19eb095111d24720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6801baa546c6112d19eb095111d24720">&#9670;&#160;</a></span>GRAVITY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GRAVITY&#160;&#160;&#160;0.5f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Accélération de la pesanteur appliquée à chaque frame </p>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8h_source.html#l00015">15</a> du fichier <a class="el" href="player_8h_source.html">player.h</a>.</p>
+
+</div>
+</div>
+<a id="aece11b592c2adb1490c86a2a2bed475c" name="aece11b592c2adb1490c86a2a2bed475c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aece11b592c2adb1490c86a2a2bed475c">&#9670;&#160;</a></span>GROUND_Y</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GROUND_Y&#160;&#160;&#160;540</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Coordonnée Y par défaut représentant le sol </p>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8h_source.html#l00017">17</a> du fichier <a class="el" href="player_8h_source.html">player.h</a>.</p>
+
+</div>
+</div>
+<a id="ab8d0cabcc33a510ffa8cfadde6cd9ded" name="ab8d0cabcc33a510ffa8cfadde6cd9ded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8d0cabcc33a510ffa8cfadde6cd9ded">&#9670;&#160;</a></span>JUMP_FORCE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define JUMP_FORCE&#160;&#160;&#160;-12.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Puissance de l'impulsion de saut (négatif pour monter) </p>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8h_source.html#l00016">16</a> du fichier <a class="el" href="player_8h_source.html">player.h</a>.</p>
+
+</div>
+</div>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Documentation du type de l'énumération</h2>
+<a id="ae14d5cd4a1a6c41237f81f3ae6e8a075" name="ae14d5cd4a1a6c41237f81f3ae6e8a075"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae14d5cd4a1a6c41237f81f3ae6e8a075">&#9670;&#160;</a></span>AnimState</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075">AnimState</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>États possibles de l'animation du joueur. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Valeurs énumérées</th></tr><tr><td class="fieldname"><a id="ae14d5cd4a1a6c41237f81f3ae6e8a075aed7d27993ddd345e399d8c599a9151c1" name="ae14d5cd4a1a6c41237f81f3ae6e8a075aed7d27993ddd345e399d8c599a9151c1"></a>ANIM_IDLE&#160;</td><td class="fielddoc"><p>Joueur immobile </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae14d5cd4a1a6c41237f81f3ae6e8a075a043851bf2fd588c4905428f95dd9711e" name="ae14d5cd4a1a6c41237f81f3ae6e8a075a043851bf2fd588c4905428f95dd9711e"></a>ANIM_RUN&#160;</td><td class="fielddoc"><p>Joueur en mouvement horizontal </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae14d5cd4a1a6c41237f81f3ae6e8a075a9c491919d57a5d79da4fe052b5f0a5bc" name="ae14d5cd4a1a6c41237f81f3ae6e8a075a9c491919d57a5d79da4fe052b5f0a5bc"></a>ANIM_JUMP&#160;</td><td class="fielddoc"><p>Joueur en phase de saut ou de chute </p>
+</td></tr>
+</table>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8h_source.html#l00024">24</a> du fichier <a class="el" href="player_8h_source.html">player.h</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentation des fonctions</h2>
+<a id="a065d747963dee0929005eefd512e0632" name="a065d747963dee0929005eefd512e0632"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a065d747963dee0929005eefd512e0632">&#9670;&#160;</a></span>avancer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void avancer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>speed</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gère les déplacements horizontaux. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td>Pointeur vers le joueur. </td></tr>
+    <tr><td class="paramname">speed</td><td>Vitesse de déplacement en pixels.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Gère les déplacements horizontaux. </p>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00016">16</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_a065d747963dee0929005eefd512e0632_icgraph.png" border="0" usemap="#aplayer_8h_a065d747963dee0929005eefd512e0632_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_a065d747963dee0929005eefd512e0632_icgraph" id="aplayer_8h_a065d747963dee0929005eefd512e0632_icgraph">
+<area shape="rect" title="Gère les déplacements horizontaux." alt="" coords="264,5,339,31"/>
+<area shape="rect" href="player_8c.html#a0f5f821bd9305f811abaf027fdbd6efb" title="Coeur de la boucle de mise à jour du joueur." alt="" coords="108,5,216,31"/>
+<area shape="poly" title=" " alt="" coords="250,21,216,21,216,15,250,15"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="Fonction principale : Initialisation, Boucle de jeu et Nettoyage." alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a8b94c2c25b5cb061468b33e00fe9824a" name="a8b94c2c25b5cb061468b33e00fe9824a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b94c2c25b5cb061468b33e00fe9824a">&#9670;&#160;</a></span>descendre()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void descendre </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Permet au joueur de descendre plus rapidement. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td>Pointeur vers la structure du joueur.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Permet au joueur de descendre plus rapidement. </p>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00047">47</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_a8b94c2c25b5cb061468b33e00fe9824a_icgraph.png" border="0" usemap="#aplayer_8h_a8b94c2c25b5cb061468b33e00fe9824a_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_a8b94c2c25b5cb061468b33e00fe9824a_icgraph" id="aplayer_8h_a8b94c2c25b5cb061468b33e00fe9824a_icgraph">
+<area shape="rect" title="Permet au joueur de descendre plus rapidement." alt="" coords="264,5,353,31"/>
+<area shape="rect" href="player_8c.html#a0f5f821bd9305f811abaf027fdbd6efb" title="Coeur de la boucle de mise à jour du joueur." alt="" coords="108,5,216,31"/>
+<area shape="poly" title=" " alt="" coords="250,21,216,21,216,15,250,15"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="Fonction principale : Initialisation, Boucle de jeu et Nettoyage." alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa3885e7f8b280f7ae3c9699b165734cf" name="aa3885e7f8b280f7ae3c9699b165734cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3885e7f8b280f7ae3c9699b165734cf">&#9670;&#160;</a></span>saut()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void saut </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Déclenche un saut si le joueur est au sol. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td>Pointeur vers le joueur.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Déclenche un saut si le joueur est au sol. </p>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00034">34</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_aa3885e7f8b280f7ae3c9699b165734cf_icgraph.png" border="0" usemap="#aplayer_8h_aa3885e7f8b280f7ae3c9699b165734cf_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_aa3885e7f8b280f7ae3c9699b165734cf_icgraph" id="aplayer_8h_aa3885e7f8b280f7ae3c9699b165734cf_icgraph">
+<area shape="rect" title="Déclenche un saut si le joueur est au sol." alt="" coords="264,5,315,31"/>
+<area shape="rect" href="player_8c.html#a0f5f821bd9305f811abaf027fdbd6efb" title="Coeur de la boucle de mise à jour du joueur." alt="" coords="108,5,216,31"/>
+<area shape="poly" title=" " alt="" coords="251,21,216,21,216,15,251,15"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="Fonction principale : Initialisation, Boucle de jeu et Nettoyage." alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0f5f821bd9305f811abaf027fdbd6efb" name="a0f5f821bd9305f811abaf027fdbd6efb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f5f821bd9305f811abaf027fdbd6efb">&#9670;&#160;</a></span>updatePlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void updatePlayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Met à jour la position, la physique et l'animation du joueur à chaque frame. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td>Pointeur vers la structure du joueur à mettre à jour.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Met à jour la position, la physique et l'animation du joueur à chaque frame. </p>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00059">59</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe d'appel pour cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_a0f5f821bd9305f811abaf027fdbd6efb_cgraph.png" border="0" usemap="#aplayer_8h_a0f5f821bd9305f811abaf027fdbd6efb_cgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_a0f5f821bd9305f811abaf027fdbd6efb_cgraph" id="aplayer_8h_a0f5f821bd9305f811abaf027fdbd6efb_cgraph">
+<area shape="rect" title="Met à jour la position, la physique et l&#39;animation du joueur à chaque frame." alt="" coords="5,55,113,80"/>
+<area shape="rect" href="player_8c.html#a065d747963dee0929005eefd512e0632" title="Gère les déplacements latéraux du joueur." alt="" coords="169,5,243,31"/>
+<area shape="poly" title=" " alt="" coords="97,52,155,32,156,37,99,57"/>
+<area shape="rect" href="player_8c.html#a8b94c2c25b5cb061468b33e00fe9824a" title="Augmente la vitesse de chute du joueur." alt="" coords="161,55,251,80"/>
+<area shape="poly" title=" " alt="" coords="113,65,148,65,148,70,113,70"/>
+<area shape="rect" href="player_8c.html#aa3885e7f8b280f7ae3c9699b165734cf" title="Applique une force d&#39;impulsion verticale." alt="" coords="181,104,231,129"/>
+<area shape="poly" title=" " alt="" coords="99,78,168,101,166,106,97,83"/>
+</map>
+</div>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_a0f5f821bd9305f811abaf027fdbd6efb_icgraph.png" border="0" usemap="#aplayer_8h_a0f5f821bd9305f811abaf027fdbd6efb_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_a0f5f821bd9305f811abaf027fdbd6efb_icgraph" id="aplayer_8h_a0f5f821bd9305f811abaf027fdbd6efb_icgraph">
+<area shape="rect" title="Met à jour la position, la physique et l&#39;animation du joueur à chaque frame." alt="" coords="108,5,216,31"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="Fonction principale : Initialisation, Boucle de jeu et Nettoyage." alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="player_8h.html">player.h</a></li>
+    <li class="footer">Généré par <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

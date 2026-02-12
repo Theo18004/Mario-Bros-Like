@@ -1,0 +1,24 @@
+<map id="src/main.c" name="src/main.c">
+<area shape="rect" id="Node000001" title="Point d&#39;entrée principal du projet MarioBrosLike." alt="" coords="309,5,398,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="367,225,463,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="308,23,232,27,142,36,62,54,32,66,13,80,8,91,13,103,46,139,86,168,130,191,178,208,225,220,272,228,353,234,353,240,271,233,224,225,176,213,128,196,83,173,42,143,8,105,3,91,9,77,29,61,60,49,141,31,231,22,308,18"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="23,79,167,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="312,33,150,78,149,72,311,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="191,79,257,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="334,33,259,74,256,69,331,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="282,79,353,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="350,32,332,68,327,65,345,30"/>
+<area shape="rect" id="Node000006" href="$map_8h.html" title="Gestion du chargement de la carte et des niveaux." alt="" coords="290,152,353,177"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="360,30,369,64,370,85,366,105,357,125,344,143,340,140,352,123,361,103,365,84,363,65,355,32"/>
+<area shape="rect" id="Node000007" href="$player_8h.html" title="Définitions et prototypes pour la gestion du joueur." alt="" coords="377,152,452,177"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="363,30,388,78,410,137,405,139,383,80,358,32"/>
+<area shape="rect" id="Node000008" href="$camera_8h.html" title="Gestion de la vue (caméra) pour le suivi du joueur." alt="" coords="476,152,559,177"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="368,29,496,141,492,145,365,33"/>
+<area shape="rect" id="Node000009" href="$ennemi_8h.html" title="Définitions et prototypes pour la gestion des ennemis (Singes) en SDL2." alt="" coords="529,79,612,104"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="389,28,523,72,521,77,387,33"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="338,175,390,215,387,219,335,179"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="417,178,417,212,412,212,412,178"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="502,180,444,219,441,215,499,175"/>
+<area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="577,104,583,139,581,160,573,179,553,200,529,215,477,233,475,228,527,210,550,195,568,176,576,158,577,139,572,105"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="564,106,536,143,532,140,560,103"/>
+</map>

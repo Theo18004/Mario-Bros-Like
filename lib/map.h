@@ -1,14 +1,27 @@
+#ifndef MAP_H
+#define MAP_H
+
 #include <SDL2/SDL.h>
 
-// On définit la taille des blocs ici pour qu'elle soit accessible partout
-#define TILE_SIZE 40
+#define TILE_SIZE 16
+#define MAP_SCALE 2
+#define MAP_WIDTH 192
+#define MAP_HEIGHT 32
 
-/**
- * Charge une carte à partir d'une image.
- * @param filename : chemin du fichier image (ex: "assets/map.png")
- * @param platforms : pointeur vers le tableau de rectangles qui sera alloué
- * @param count : pointeur pour stocker le nombre de plateformes créées
- * @param playerPos : pointeur pour mettre à jour la position de départ du joueur
- */
-void loadMapFromImage(const char* filename, SDL_Rect** platforms, int* count, SDL_Rect* playerPos);
+typedef struct {
+    SDL_Texture* texture;
+    int columns;
+    int tileWidth;
+    int tileHeight;
+} Tileset;
 
+// Fonction pour charger les données CSV dans un tableau
+int load_map_from_csv(const char* filename, int* map_array);
+
+// Fonction pour dessiner une tuile spécifique
+void draw_tile(SDL_Renderer* renderer, Tileset* ts, int tileId, int x, int y, int scrollX, int scrollY);
+
+// Fonction pour dessiner toute la carte d'un coup
+void render_world(SDL_Renderer* renderer, int* map_array, Tileset* ts, int scrollX, int scrollY);
+
+#endif

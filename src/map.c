@@ -1,70 +1,87 @@
-#include "../lib/map.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include "map.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-void loadMapFromImage(const char* filename, SDL_Rect** platforms, int* count, SDL_Rect* playerPos) {
-    // 1. Chargement de l'image
-    SDL_Surface* mapSurface = IMG_Load(filename);
-    if (!mapSurface) {
-        printf("ERREUR : Impossible de charger la map '%s' : %s\n", filename, IMG_GetError());
-        return;
+/**
+ * Charge les IDs du fichier CSV dans le tableau map_array.
+ * Accepte les virgules et les points-virgules comme séparateurs.
+ */
+int load_map_from_csv(const char* filename, int* map_array) {
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        printf("Erreur : Impossible d'ouvrir le fichier de map : %s\n", filename);
+        return 0;
     }
 
-    // 2. Conversion au format RGBA standard pour lire les pixels sans erreur
-    SDL_Surface* formattedSurface = SDL_ConvertSurfaceFormat(mapSurface, SDL_PIXELFORMAT_RGBA8888, 0);
-    SDL_FreeSurface(mapSurface); // On libère l'originale qui ne sert plus
+    char line[4096];
+    int row = 0;
 
-    if (!formattedSurface) {
-        printf("ERREUR : Echec de conversion du format de l'image.\n");
-        return;
+    // Initialisation du tableau avec du vide (-1) par sécurité
+    for (int i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++) {
+        map_array[i] = -1;
     }
 
-    Uint32* pixels = (Uint32*)formattedSurface->pixels;
-    int w = formattedSurface->w;
-    int h = formattedSurface->h;
+    while (fgets(line, sizeof(line), file) && row < MAP_HEIGHT) {
+        // strtok gère les virgules, points-virgules et retours à la ligne
+        char* token = strtok(line, ",;\n\r");
+        int col = 0;
 
-    // 3. Allocation de la mémoire pour le tableau de plateformes
-    // On alloue le maximum possible (w * h), on pourrait optimiser plus tard
-    *platforms = malloc(sizeof(SDL_Rect) * (w * h));
-    if (*platforms == NULL) {
-        printf("ERREUR : Echec d'allocation mémoire pour les plateformes.\n");
-        SDL_FreeSurface(formattedSurface);
-        return;
+        while (token && col < MAP_WIDTH) {
+            map_array[row * MAP_WIDTH + col] = atoi(token);
+            token = strtok(NULL, ",;\n\r");
+            col++;
+        }
+        row++;
     }
-    
-    *count = 0;
 
-    // 4. Analyse des pixels (Ligne par ligne, puis colonne par colonne)
-    for (int y = 0; y < h; y++) {
-        for (int x = 0; x < w; x++) {
-            Uint32 pixel = pixels[y * w + x];
+    fclose(file);
+    printf("Map chargee avec succes (%d lignes lues).\n", row);
+    return 1;
+}
+
+/**
+ * Dessine une tuile individuelle en calculant sa position dans le tileset.
+ */
+void draw_tile(SDL_Renderer* renderer, Tileset* ts, int tileId, int x, int y, int scrollX, int scrollY) {
+    // Si l'ID est -1 (vide), on ne dessine rien
+    if (tileId < 0) return;
+
+    // Calcul de la position de la tuile dans l'image source (Terrain.png)
+    // ts->columns est le nombre de tuiles par ligne dans ton image
+    SDL_Rect src = {
+        (tileId % ts->columns) * ts->tileWidth,
+        (tileId / ts->columns) * ts->tileHeight,
+        ts->tileWidth,
+        ts->tileHeight
+    };
+
+    // Calcul de la position sur l'écran avec le décalage de la caméra
+    SDL_Rect dest = {
+        x - scrollX,
+        y - scrollY,
+        ts->tileWidth * MAP_SCALE,
+        ts->tileHeight * MAP_SCALE
+    };
+
+    SDL_RenderCopy(renderer, ts->texture, &src, &dest);
+}
+
+/**
+ * Parcourt toute la grille et dessine chaque tuile.
+ */
+void render_world(SDL_Renderer* renderer, int* map_array, Tileset* ts, int scrollX, int scrollY) {
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            int tileId = map_array[y * MAP_WIDTH + x];
             
-            Uint8 r, g, b, a;
-            SDL_GetRGBA(pixel, formattedSurface->format, &r, &g, &b, &a);
-
-            // NOIR (0,0,0) -> Création d'un bloc de mur
-            if (r == 0 && g == 0 && b == 0) {
-                (*platforms)[*count].x = x * TILE_SIZE;
-                (*platforms)[*count].y = y * TILE_SIZE;
-                (*platforms)[*count].w = TILE_SIZE;
-                (*platforms)[*count].h = TILE_SIZE;
-                (*count)++;
-            }
-            // BLEU (0,0,255) -> Position initiale du joueur
-            else if (r == 0 && g == 0 && b == 255) {
-                playerPos->x = x * TILE_SIZE;
-                playerPos->y = y * TILE_SIZE;
+            // On ne dessine que si ce n'est pas du vide
+            if (tileId != -1) {
+                draw_tile(renderer, ts, tileId, 
+                          x * TILE_SIZE * MAP_SCALE, 
+                          y * TILE_SIZE * MAP_SCALE, 
+                          scrollX, scrollY);
             }
         }
     }
-
-    // 5. Nettoyage et rapport final
-    SDL_FreeSurface(formattedSurface);
-    printf("--- CHARGEMENT MAP TERMINE ---\n");
-    printf("Fichier : %s (%dx%d pixels)\n", filename, w, h);
-    printf("Nombre de plateformes creees : %d\n", *count);
-    printf("Position joueur : x=%d, y=%d\n", playerPos->x, playerPos->y);
-    printf("------------------------------\n");
 }

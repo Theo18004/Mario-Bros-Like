@@ -1,7 +1,11 @@
 #include "player.h"
 #include "collision.h"
 
-// --- TES FONCTIONS DÉJÀ EXISTANTES ---
+/*
+* Gère le déplacement horizontal du joueur en fonction de l'input clavier. 
+* On utilise la collision horizontale pour valider le mouvement, c'est là qu'on vérifie si on fonce dans une tuile solide (6, 7 ou 8). 
+* Si une collision est détectée, le joueur est ajusté pour "coller" au mur et ne pas passer à travers.
+*/
 
 void avancer(Player* player, int speed) {
     const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -24,6 +28,12 @@ void avancer(Player* player, int speed) {
     HorizontaleCollision(player, (int*)player, moveX); 
 }
 
+/*
+    * Gère le saut du joueur. 
+    * Si la touche UP est pressée et que le joueur n'est pas déjà en train de sauter, on applique une force de saut (velocityY) et on change l'état d'animation. 
+    * La variable isJumping empêche de faire des doubles sauts.
+*/
+
 void saut(Player* player) {
     const Uint8* state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_UP] && !player->isJumping) {
@@ -33,12 +43,25 @@ void saut(Player* player) {
     }
 }
 
+/*
+    * Gère la gravité qui fait descendre le joueur. 
+    * À chaque frame, on ajoute une valeur de gravité à velocityY, ce qui fait que le joueur accélère vers le bas. 
+    * La collision verticale avec la tileMap (VerticaleCollision) s'assure que le joueur ne tombe pas à travers le sol.
+*/
 void descendre(Player* player) {
     // La gravité fait descendre le joueur
     player->velocityY += GRAVITY;
 }
 
 // --- LA FONCTION PRINCIPALE MISE À JOUR ---
+
+
+/*
+* Gère la mise à jour complète du joueur à chaque frame. 
+* On gère d'abord le déplacement horizontal avec avancer (qui utilise la collision horizontale), 
+* puis le saut, la gravité, et enfin la collision verticale pour arrêter le joueur quand il touche le sol ou le plafond. 
+* On ajuste aussi l'état d'animation en fonction de ce que fait le joueur. 
+*/
 
 void updatePlayer(Player* player, int* tileMap) {
     // 1. On utilise ta fonction avancer (qui gère l'input et la collision X)

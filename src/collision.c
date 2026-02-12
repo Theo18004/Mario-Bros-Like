@@ -7,6 +7,13 @@ int is_solid(int tileId) {
     return (tileId == 6 || tileId == 7 || tileId == 8 || tileId >= 28);
 }
 
+
+/*
+* Gère la collision horizontale du joueur avec la TileMap.
+ * moveX est la quantité de pixels que le joueur veut se déplacer horizontalement.
+ * Si une collision est détectée, on ajuste la position du joueur pour qu'il "colle" au mur.
+*/
+
 void HorizontaleCollision(Player* player, int* tileMap, int moveX) {
     player->rect.x += moveX;
 
@@ -31,6 +38,12 @@ void HorizontaleCollision(Player* player, int* tileMap, int moveX) {
     }
 }
 
+
+/*
+    * Gère la collision verticale du joueur avec la TileMap. 
+    * C'est ce qui arrête le joueur quand il touche le sol ou le plafond. 
+    * On ajuste la position du joueur pour qu'il "colle" au sol/plafond et on réinitialise la vélocité Y. 
+*/
 void VerticaleCollision(Player* player, int* tileMap) {
     player->rect.y += (int)player->velocityY;
 

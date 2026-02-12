@@ -85,6 +85,7 @@ Note importante : Ne lancez pas l'exécutable en faisant cd bin puis ./MarioBros
 | <kbd>←</kbd> <kbd>→</kbd> | **Mouvement** | Courir vers la gauche ou la droite |
 | <kbd>↑</kbd> | **Saut** | Sauter |
 | <kbd>↓</kbd> | **Fast Fall** | Accélérer la chute une fois en l'air |
+| <kbd>Echap</kbd> | **Quitter** | Fermer instantanément le jeu et revenir au bureau
 
 
 ⚙️ Fonctionnement Technique

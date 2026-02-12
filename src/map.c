@@ -1,11 +1,3 @@
-/**
- * @file map.c
- * @brief Implémentation du chargement de la carte.
- * @internal
- * Ce fichier contient la logique de lecture des pixels de l'image source 
- * et leur conversion en entités de jeu (plateformes et joueur).
- */
-
 #include "../lib/map.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

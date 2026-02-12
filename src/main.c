@@ -1,14 +1,11 @@
-/**
- * @file main.c
- * @brief Point d'entrée principal du jeu MarioBrosLike.
- */
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdlib.h> 
 #include "map.h"
 #include "player.h"
+#include "camera.h"
+
 
 // Fonction utilitaire pour charger une texture proprement
 SDL_Texture* loadTexture(SDL_Renderer* renderer, const char* path) {
@@ -28,22 +25,31 @@ int main(int argc, char* argv[]) {
     IMG_Init(IMG_INIT_PNG);
 
     SDL_Window* window = SDL_CreateWindow("Mario Bros Like - SDL2", 
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
+        
     
     // On active la VSYNC pour éviter que le jeu tourne trop vite
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    int screenW, screenH;
+    SDL_GetRendererOutputSize(renderer, &screenW, &screenH);
 
+    // initialisation de la caméra (pour suivre le joueur)
+    Camera cam = {0, 0, screenW, screenH};
     // --- 2. INITIALISATION JOUEUR ---
+    int playerW = 30; // Largeur de la hitbox
+    int playerH = 45; // Hauteur de la hitbox
+
     Player player = {
-        .rect = {0, 560, 40, 60}, // Hitbox physique (x, y, largeur, hauteur)
+        // x = 50 (un peu décalé du bord gauche)
+        // y = screenH - playerH (le bas de la hitbox touche exactement le bas de l'écran)
+        .rect = {50, screenH - playerH, playerW, playerH}, 
         .velocityY = 0.0f,
         .isJumping = 0,
         .animState = ANIM_IDLE,
         .facingLeft = 0,
-        .frameTimer = 0,
-        .frameIndex = 0
+        .frameTimer = 0.0f
     };
-
     // Chargement des Textures
     // Assurez-vous d'avoir le dossier "assets" à côté de l'exécutable
     player.texIdle = loadTexture(renderer, "assets/Idle.png");
@@ -63,6 +69,8 @@ int main(int argc, char* argv[]) {
     loadMapFromImage("assets/map.png", &worldPlatforms, &platformCount, &player.rect);
     SDL_Texture* mapBackground = loadTexture(renderer, "assets/map.png");
 
+
+
     // --- 4. BOUCLE PRINCIPALE ---
     int running = 1;
     SDL_Event e;
@@ -71,10 +79,19 @@ int main(int argc, char* argv[]) {
         // A. Gestion des événements
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) running = 0;
+
+            if (e.type == SDL_KEYDOWN) {
+                // Si la touche pressée est ECHAP
+                if (e.key.keysym.sym == SDLK_ESCAPE) {
+                    running = 0;
+                }
+            }
         }
+        
 
         // B. Mise à jour (Update)
-        updatePlayer(&player); 
+        updatePlayer(&player, worldPlatforms, platformCount, screenH);
+        updateCamera(&cam, player.rect, screenW, screenH);
 
         // C. Affichage (Render)
         SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255); // Bleu Ciel
@@ -83,12 +100,6 @@ int main(int argc, char* argv[]) {
         // 1. Fond
         if (mapBackground) {
             SDL_RenderCopy(renderer, mapBackground, NULL, NULL);
-        }
-
-        // 2. Plateformes
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        for (int i = 0; i < platformCount; i++) {
-            SDL_RenderFillRect(renderer, &worldPlatforms[i]);
         }
 
         // 3. Dessin du Joueur (Sprite)
@@ -134,14 +145,18 @@ int main(int argc, char* argv[]) {
             // On centre le sprite horizontalement sur la hitbox.
             // On aligne le bas du sprite avec le bas de la hitbox (les pieds).
             
-            // On peut grossir le sprite (scale) si nécessaire. Ici on garde la taille originale (x1.5 par exemple)
-            float scale = 1.5f; 
+            // On peut grossir le sprite (scale) si nécessaire. Ici on garde la taille originale (x0.8 par exemple)
+            // -- Calcul de la position sur l'écran (Destination) --
+            float scale = 0.8f; 
             int displayW = (int)(frameWidth * scale);
             int displayH = (int)(texH * scale);
 
+            // AJUSTEMENT : On ajoute quelques pixels (ex: 1) pour descendre le dessin
+            int piedsOffset = 1; 
+
             SDL_Rect destRect = {
-                .x = player.rect.x - (displayW - player.rect.w) / 2, // Centrage horizontal
-                .y = player.rect.y - (displayH - player.rect.h),     // Alignement par le bas
+                .x = player.rect.x - (displayW - player.rect.w) / 2 - cam.x, 
+                .y = player.rect.y - (displayH - player.rect.h) - cam.y + piedsOffset, // On ajoute le décalage ici
                 .w = displayW,
                 .h = displayH
             };

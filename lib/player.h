@@ -27,7 +27,7 @@ typedef struct {
     float frameTimer;
 } Player;
 
-void updatePlayer(Player* player, SDL_Rect* platforms, int platformCount,int screenH);
+void updatePlayer(Player* player, int* tileMap);
 void avancer(Player* player, int speed);
 void saut(Player* player);
 void descendre(Player* player);

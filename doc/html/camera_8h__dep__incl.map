@@ -1,0 +1,12 @@
+<map id="lib/camera.h" name="lib/camera.h">
+<area shape="rect" id="Node000001" title="Gestion de la vue (caméra) pour le suivi du joueur." alt="" coords="128,5,231,31"/>
+<area shape="rect" id="Node000002" href="$ennemi_8h.html" title="Définitions et prototypes pour la gestion des ennemis (Singes) en SDL2." alt="" coords="39,79,141,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,41,106,81,103,76,153,37"/>
+<area shape="rect" id="Node000004" href="$main_8c.html" title="Point d&#39;entrée principal du projet MarioBrosLike." alt="" coords="135,152,224,177"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="182,45,182,152,177,152,177,45"/>
+<area shape="rect" id="Node000005" href="$camera_8c.html" title="Implémentation des fonctions de la caméra." alt="" coords="217,79,323,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="206,37,257,76,254,81,203,41"/>
+<area shape="rect" id="Node000003" href="$ennemi_8c.html" title="Implémentation technique des singes avec SDL2." alt="" coords="5,152,111,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="82,118,66,153,61,151,77,116"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="117,110,166,150,163,154,113,115"/>
+</map>

@@ -40,7 +40,8 @@ Le moteur intègre les mécaniques suivantes :
 │   ├── main.c       # Point d'entrée et boucle de jeu principale
 │   ├── player.c     # Logique et physique du joueur
 │   ├── map.c        # Gestion du chargement et rendu de la Tilemap
-│   └── physics.c    # Moteur de collisions (AABB)
+│   ├── caméra.c        # Gestion de la caméra
+│   └── collision.c    # Moteur de collisions (AABB)
 ├── Makefile         # Script d'automatisation de la compilation
 └── README.md        # Documentation du projet
 ```

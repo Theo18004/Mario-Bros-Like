@@ -3,7 +3,7 @@
 
 
 #include <player.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 
 int collision( SDL_Rect a, SDL_Rect b);

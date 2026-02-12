@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MarioBrosLike: Référence du fichier src/player.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">MarioBrosLike
+   </div>
+   <div id="projectbrief">Moteur de jeu de plateforme 2D performant en C avec SDL2. Gère la physique, les collisions et le tilemapping.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('player_8c.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Référence du fichier player.c</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="player_8h_source.html">player.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Graphe des dépendances par inclusion de player.c:</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8c__incl.png" border="0" usemap="#asrc_2player_8c" loading="lazy" alt=""/></div>
+<map name="asrc_2player_8c" id="asrc_2player_8c">
+<area shape="rect" title=" " alt="" coords="5,5,101,31"/>
+<area shape="rect" href="player_8h.html" title=" " alt="" coords="16,79,91,104"/>
+<area shape="poly" title=" " alt="" coords="56,31,56,65,51,65,51,31"/>
+<area shape="rect" title=" " alt="" coords="5,152,101,177"/>
+<area shape="poly" title=" " alt="" coords="56,104,56,138,51,138,51,104"/>
+</map>
+</div>
+</div>
+<p><a href="player_8c_source.html">Aller au code source de ce fichier.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Fonctions</h2></td></tr>
+<tr class="memitem:a065d747963dee0929005eefd512e0632" id="r_a065d747963dee0929005eefd512e0632"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a065d747963dee0929005eefd512e0632">avancer</a> (<a class="el" href="structPlayer.html">Player</a> *player, int speed)</td></tr>
+<tr class="memdesc:a065d747963dee0929005eefd512e0632"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gère les déplacements horizontaux.  <br /></td></tr>
+<tr class="memitem:aa3885e7f8b280f7ae3c9699b165734cf" id="r_aa3885e7f8b280f7ae3c9699b165734cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3885e7f8b280f7ae3c9699b165734cf">saut</a> (<a class="el" href="structPlayer.html">Player</a> *player)</td></tr>
+<tr class="memdesc:aa3885e7f8b280f7ae3c9699b165734cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Déclenche un saut si le joueur est au sol.  <br /></td></tr>
+<tr class="memitem:a8b94c2c25b5cb061468b33e00fe9824a" id="r_a8b94c2c25b5cb061468b33e00fe9824a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b94c2c25b5cb061468b33e00fe9824a">descendre</a> (<a class="el" href="structPlayer.html">Player</a> *player)</td></tr>
+<tr class="memdesc:a8b94c2c25b5cb061468b33e00fe9824a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Permet au joueur de descendre plus rapidement.  <br /></td></tr>
+<tr class="memitem:a0f5f821bd9305f811abaf027fdbd6efb" id="r_a0f5f821bd9305f811abaf027fdbd6efb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f5f821bd9305f811abaf027fdbd6efb">updatePlayer</a> (<a class="el" href="structPlayer.html">Player</a> *player)</td></tr>
+<tr class="memdesc:a0f5f821bd9305f811abaf027fdbd6efb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Met à jour la position, la physique et l'animation du joueur à chaque frame.  <br /></td></tr>
+</table>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentation des fonctions</h2>
+<a id="a065d747963dee0929005eefd512e0632" name="a065d747963dee0929005eefd512e0632"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a065d747963dee0929005eefd512e0632">&#9670;&#160;</a></span>avancer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void avancer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>speed</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gère les déplacements horizontaux. </p>
+<p>Avance ou recule le joueur en fonction des touches fléchées. </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td>: pointeur vers la structure du joueur </td></tr>
+    <tr><td class="paramname">speed</td><td>: vitesse de déplacement (ex: 5 pixels par frame) Note : Cette fonction gère aussi la direction du regard du joueur (facingLeft) Exemple d'utilisation : avancer(&amp;player, 5);<ul>
+<li>Si la touche flèche droite est pressée, le joueur avance vers la droite et regarde à droite.</li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<ul>
+<li>Si la touche flèche gauche est pressée, le joueur recule vers la gauche et regarde à gauche.</li>
+<li>Si aucune touche n'est pressée, le joueur ne bouge pas et garde sa direction actuelle. Note : Cette fonction doit être appelée à chaque frame pour que le mouvement soit fluide. Note : La vitesse peut être ajustée pour rendre le jeu plus rapide ou plus lent. </li>
+</ul>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00019">19</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8c_a065d747963dee0929005eefd512e0632_icgraph.png" border="0" usemap="#aplayer_8c_a065d747963dee0929005eefd512e0632_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8c_a065d747963dee0929005eefd512e0632_icgraph" id="aplayer_8c_a065d747963dee0929005eefd512e0632_icgraph">
+<area shape="rect" title="Gère les déplacements horizontaux." alt="" coords="264,5,339,31"/>
+<area shape="rect" href="player_8c.html#a0f5f821bd9305f811abaf027fdbd6efb" title="Met à jour la position, la physique et l&#39;animation du joueur à chaque frame." alt="" coords="108,5,216,31"/>
+<area shape="poly" title=" " alt="" coords="250,21,216,21,216,15,250,15"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a8b94c2c25b5cb061468b33e00fe9824a" name="a8b94c2c25b5cb061468b33e00fe9824a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b94c2c25b5cb061468b33e00fe9824a">&#9670;&#160;</a></span>descendre()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void descendre </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Permet au joueur de descendre plus rapidement. </p>
+<p>Permet au joueur de descendre plus rapidement lorsqu'on appuie sur la touche flèche bas. </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td>: pointeur vers la structure du joueur Note : Cette fonction ajoute une force de gravité supplémentaire lorsque la touche flèche bas est pressée, ce qui fait que le joueur descend plus rapidement. Note : Cela peut être utile pour les jeux de plateforme où le joueur veut descendre rapidement d'une plateforme ou éviter un obstacle en sautant. Exemple d'utilisation : descendre(&amp;player);<ul>
+<li>Si la touche flèche bas est pressée, le joueur descend plus rapidement.</li>
+<li>Si la touche flèche bas n'est pas pressée, le joueur descend à la vitesse normale définie par GRAVITY. Note : Cette fonction doit être appelée à chaque frame pour que l'effet de descente rapide soit réactif. </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00062">62</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8c_a8b94c2c25b5cb061468b33e00fe9824a_icgraph.png" border="0" usemap="#aplayer_8c_a8b94c2c25b5cb061468b33e00fe9824a_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8c_a8b94c2c25b5cb061468b33e00fe9824a_icgraph" id="aplayer_8c_a8b94c2c25b5cb061468b33e00fe9824a_icgraph">
+<area shape="rect" title="Permet au joueur de descendre plus rapidement." alt="" coords="264,5,353,31"/>
+<area shape="rect" href="player_8c.html#a0f5f821bd9305f811abaf027fdbd6efb" title="Met à jour la position, la physique et l&#39;animation du joueur à chaque frame." alt="" coords="108,5,216,31"/>
+<area shape="poly" title=" " alt="" coords="250,21,216,21,216,15,250,15"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa3885e7f8b280f7ae3c9699b165734cf" name="aa3885e7f8b280f7ae3c9699b165734cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3885e7f8b280f7ae3c9699b165734cf">&#9670;&#160;</a></span>saut()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void saut </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Déclenche un saut si le joueur est au sol. </p>
+<p>Permet au joueur de sauter lorsqu'on appuie sur la touche flèche haut. </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td>: pointeur vers la structure du joueur Note : Le joueur ne peut sauter que s'il n'est pas déjà en train de sauter (isJumping == 0). Note : Lorsqu'on appuie sur la touche flèche haut, on applique une force de saut (JUMP_FORCE) à la vitesse verticale du joueur. Note : La gravité (GRAVITY) sera appliquée dans la fonction updatePlayer pour faire retomber le joueur après le saut. Exemple d'utilisation : saut(&amp;player);<ul>
+<li>Si la touche flèche haut est pressée et que le joueur n'est pas déjà en train de sauter, le joueur commence à sauter.</li>
+<li>Si la touche flèche haut est pressée mais que le joueur est déjà en train de sauter, rien ne se passe (pas de double saut). Note : Cette fonction doit être appelée à chaque frame pour que le saut soit réactif. </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00042">42</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8c_aa3885e7f8b280f7ae3c9699b165734cf_icgraph.png" border="0" usemap="#aplayer_8c_aa3885e7f8b280f7ae3c9699b165734cf_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8c_aa3885e7f8b280f7ae3c9699b165734cf_icgraph" id="aplayer_8c_aa3885e7f8b280f7ae3c9699b165734cf_icgraph">
+<area shape="rect" title="Déclenche un saut si le joueur est au sol." alt="" coords="264,5,315,31"/>
+<area shape="rect" href="player_8c.html#a0f5f821bd9305f811abaf027fdbd6efb" title="Met à jour la position, la physique et l&#39;animation du joueur à chaque frame." alt="" coords="108,5,216,31"/>
+<area shape="poly" title=" " alt="" coords="251,21,216,21,216,15,251,15"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0f5f821bd9305f811abaf027fdbd6efb" name="a0f5f821bd9305f811abaf027fdbd6efb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f5f821bd9305f811abaf027fdbd6efb">&#9670;&#160;</a></span>updatePlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void updatePlayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Met à jour la position, la physique et l'animation du joueur à chaque frame. </p>
+<p>Met à jour la position, la physique et l'animation du joueur à chaque frame. </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td>: pointeur vers la structure du joueur Note : Cette fonction doit être appelée à chaque frame pour que le jeu fonctionne correctement. Note : La fonction gère les inputs (avancer, sauter, descendre), applique la physique (gravité) et met à jour l'état de l'animation en fonction de ce que fait le joueur. Exemple d'utilisation : updatePlayer(&amp;player);<ul>
+<li>Si le joueur appuie sur les touches fléchées, il se déplace, saute ou descend plus rapidement.</li>
+<li>La gravité est appliquée pour faire retomber le joueur après un saut.</li>
+<li>L'état de l'animation est mis à jour pour refléter si le joueur est en train de courir, sauter ou rester immobile. Note : Cette fonction est le cœur de la logique du joueur et doit être appelée à chaque frame pour que le jeu soit fluide et réactif. Note : La gestion de l'animation est basique pour l'instant, mais elle peut être améliorée en ajoutant des sprites et en gérant les différentes frames d'animation. Note : La gestion des collisions avec les plateformes n'est pas encore implémentée dans cette fonction, elle sera ajoutée plus tard. </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00086">86</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe d'appel pour cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8c_a0f5f821bd9305f811abaf027fdbd6efb_cgraph.png" border="0" usemap="#aplayer_8c_a0f5f821bd9305f811abaf027fdbd6efb_cgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8c_a0f5f821bd9305f811abaf027fdbd6efb_cgraph" id="aplayer_8c_a0f5f821bd9305f811abaf027fdbd6efb_cgraph">
+<area shape="rect" title="Met à jour la position, la physique et l&#39;animation du joueur à chaque frame." alt="" coords="5,55,113,80"/>
+<area shape="rect" href="player_8c.html#a065d747963dee0929005eefd512e0632" title="Gère les déplacements horizontaux." alt="" coords="169,5,243,31"/>
+<area shape="poly" title=" " alt="" coords="97,52,155,32,156,37,99,57"/>
+<area shape="rect" href="player_8c.html#a8b94c2c25b5cb061468b33e00fe9824a" title="Permet au joueur de descendre plus rapidement." alt="" coords="161,55,251,80"/>
+<area shape="poly" title=" " alt="" coords="113,65,148,65,148,70,113,70"/>
+<area shape="rect" href="player_8c.html#aa3885e7f8b280f7ae3c9699b165734cf" title="Déclenche un saut si le joueur est au sol." alt="" coords="181,104,231,129"/>
+<area shape="poly" title=" " alt="" coords="99,78,168,101,166,106,97,83"/>
+</map>
+</div>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8c_a0f5f821bd9305f811abaf027fdbd6efb_icgraph.png" border="0" usemap="#aplayer_8c_a0f5f821bd9305f811abaf027fdbd6efb_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8c_a0f5f821bd9305f811abaf027fdbd6efb_icgraph" id="aplayer_8c_a0f5f821bd9305f811abaf027fdbd6efb_icgraph">
+<area shape="rect" title="Met à jour la position, la physique et l&#39;animation du joueur à chaque frame." alt="" coords="108,5,216,31"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="player_8c.html">player.c</a></li>
+    <li class="footer">Généré par <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

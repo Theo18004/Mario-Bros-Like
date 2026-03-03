@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MarioBrosLike: 🎮 MarioBrosLike</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">MarioBrosLike
+   </div>
+   <div id="projectbrief">Moteur de jeu de plateforme 2D performant en C avec SDL2. Gère la physique, les collisions et le tilemapping.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('md_README.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">🎮 MarioBrosLike </div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p><a class="anchor" id="autotoc_md0"></a></p>
+<blockquote class="doxtable">
+<p><b>Projet étudiant de L2 Informatique</b> - Université du Mans. <br  />
+ <em>Début du développement : 13 janvier 2026</em> </p>
+</blockquote>
+<p>Ce projet est un moteur de jeu de plateforme rétro performant écrit en C avec la bibliothèque SDL2. Il implémente les fondamentaux d'un jeu 2D : physique, collisions, tilemapping et entités animées.</p>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
+👥 L'Équipe</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft">Membre   </th><th class="markdownTableHeadCenter">Formation   </th><th class="markdownTableHeadCenter">Établissement    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><b>Angot Mathis</b>   </td><td class="markdownTableBodyCenter">L2 Informatique   </td><td class="markdownTableBodyCenter">Le Mans Université    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><b>Anfray Alban</b>   </td><td class="markdownTableBodyCenter">L2 Informatique   </td><td class="markdownTableBodyCenter">Le Mans Université    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><b>Caillon Elouan</b>   </td><td class="markdownTableBodyCenter">L2 Informatique   </td><td class="markdownTableBodyCenter">Le Mans Université    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><b>Ernault Théo</b>   </td><td class="markdownTableBodyCenter">L2 Informatique   </td><td class="markdownTableBodyCenter">Le Mans Université   </td></tr>
+</table>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
+✨ Fonctionnalités</h1>
+<p>Le moteur intègre les mécaniques suivantes :</p>
+<ul>
+<li><b>Déplacements Fluides</b> : Gestion précise de la physique du joueur (course avec inertie) et sauts paraboliques avec une gravité réaliste.</li>
+<li><b>Système de Tilemap</b> : Chargement et rendu de niveaux basés sur des tuiles.</li>
+<li><b>Collisions Précises</b> : Détection et résolution des collisions avec le sol et les plateformes.</li>
+<li><b>Game Loop Optimisée</b> : Boucle de jeu fluide avec gestion du temps et synchronisation verticale (VSync).</li>
+<li><b>Animations Dynamiques</b> : Machine à états gérant les sprites (Idle, Run, Jump) et la direction du regard.</li>
+</ul>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
+📂 Structure du Projet</h1>
+<div class="fragment"><div class="line">.</div>
+<div class="line">├── assets/          # Sprites, tuiles et images (.png)</div>
+<div class="line">├── include/         # Fichiers d&#39;en-tête (.h)</div>
+<div class="line">├── src/             # Code source (.c)</div>
+<div class="line">│   ├── main.c       # Point d&#39;entrée et boucle de jeu principale</div>
+<div class="line">│   ├── player.c     # Logique et physique du joueur</div>
+<div class="line">│   ├── map.c        # Gestion du chargement et rendu de la Tilemap</div>
+<div class="line">│   ├── caméra.c        # Gestion de la caméra</div>
+<div class="line">│   └── collision.c    # Moteur de collisions (AABB)</div>
+<div class="line">├── Makefile         # Script d&#39;automatisation de la compilation</div>
+<div class="line">└── README.md        # Documentation du projet</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
+🛠️ Prérequis</h1>
+<p>Pour compiler et exécuter ce projet, vous devez disposer des bibliothèques de développement SDL2 installées sur votre machine. Linux (Debian/Ubuntu/Mint)</p>
+<div class="fragment"><div class="line">sudo apt-get update</div>
+<div class="line">sudo apt-get install build-essential libsdl2-dev libsdl2-image-dev</div>
+</div><!-- fragment --><p>🚀 Compilation &amp; Lancement</p>
+<p>Le projet utilise un Makefile pour automatiser la compilation et la gestion des ressources.</p>
+<p>Compilation : Ouvrez un terminal à la racine du projet et lancez la commande :</p>
+<div class="fragment"><div class="line">make</div>
+</div><!-- fragment --><p> Cela générera l'exécutable dans le dossier bin/.</p>
+<p>Lancement : Pour jouer, utilisez la commande suivante (elle assure que le jeu trouve bien le dossier assets/) : </p><div class="fragment"><div class="line">make run</div>
+</div><!-- fragment --><p> Nettoyage : Pour supprimer les fichiers temporaires (.o) et l'exécutable : </p><div class="fragment"><div class="line">make clean</div>
+</div><!-- fragment --><p> Note importante : Ne lancez pas l'exécutable en faisant cd bin puis ./MarioBrosLike. Le jeu a besoin d'être lancé depuis la racine pour charger les images situées dans assets/.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+🕹️ Contrôles</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadCenter">Touche   </th><th class="markdownTableHeadLeft">Action   </th><th class="markdownTableHeadLeft">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><kbd>←</kbd> <kbd>→</kbd>   </td><td class="markdownTableBodyLeft"><b>Mouvement</b>   </td><td class="markdownTableBodyLeft">Courir vers la gauche ou la droite    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><kbd>↑</kbd>   </td><td class="markdownTableBodyLeft"><b>Saut</b>   </td><td class="markdownTableBodyLeft">Sauter    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><kbd>↓</kbd>   </td><td class="markdownTableBodyLeft"><b>Fast Fall</b>   </td><td class="markdownTableBodyLeft">Accélérer la chute une fois en l'air    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><kbd>Echap</kbd>   </td><td class="markdownTableBodyLeft"><b>Quitter</b>   </td><td class="markdownTableBodyLeft">Fermer instantanément le jeu et revenir au bureau   </td></tr>
+</table>
+<p>⚙️ Fonctionnement Technique Chargement de Niveau par Image (temporaire)</p>
+<p>Machine à États (Animation)</p>
+<p>Le système d'animation gère les transitions entre les sprites selon l'état physique du joueur : </p><pre class="fragment">IDLE : Le joueur est immobile au sol.
+
+RUN : Le joueur se déplace horizontalement.
+
+JUMP : Le joueur est en l'air (vélocité Y négative ou positive).
+</pre><p>Chaque état possède sa propre vitesse d'animation et son nombre de frames, gérés par un timer interne (frameTimer). </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Généré par <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

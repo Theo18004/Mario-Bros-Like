@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h> 
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
 
     // Initialisation Map
     int* tileMap = malloc(MAP_WIDTH * MAP_HEIGHT * sizeof(int));
-    if (!load_map_from_csv("assets/Maps/map_v1.3.csv", tileMap)) {
+    if (!load_map_from_csv("assets/Maps/map_v2.2.csv", tileMap)) {
         free(tileMap);
         // Nettoyage rapide avant de partir
         SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window);
@@ -91,10 +91,11 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texIdle = IMG_LoadTexture(renderer, "assets/Personnage/Idle.png");
     SDL_Texture* texRun  = IMG_LoadTexture(renderer, "assets/Personnage/Run.png");
     SDL_Texture* texJump = IMG_LoadTexture(renderer, "assets/Personnage/Jump.png");
+    SDL_Texture* texDead = IMG_LoadTexture(renderer, "assets/Personnage/Dead.png");
 
     // --- 5. Initialisation Objets ---
     Player player;
-    init_player(&player, 100, 100);
+    init_player(&player, 20, 1000); // Position de départ du joueur sur la terre
 
     Score score;
     init_score(&score, 10, 10); // Position en haut à gauche
@@ -123,6 +124,7 @@ int main(int argc, char* argv[]) {
         update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
 
+        SDL_SetRenderDrawColor(renderer, 27, 45, 45, 255);
         SDL_RenderClear(renderer);
 
         draw_parallax_bg(renderer, bg1, camera.x, camera.y, 0.05f, 0.0f, logicalW, logicalH, 0); 
@@ -140,7 +142,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump);
+        render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump, texDead);
         render_score(renderer, &score);
         SDL_RenderPresent(renderer);
         SDL_Delay(16);
@@ -150,7 +152,7 @@ int main(int argc, char* argv[]) {
     free(tileMap);
     SDL_DestroyTexture(bg1); SDL_DestroyTexture(bg2); SDL_DestroyTexture(bg3); 
     SDL_DestroyTexture(bg4); SDL_DestroyTexture(bg5); SDL_DestroyTexture(terrainTex); 
-    SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump);
+    SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
     
     SDL_DestroyRenderer(renderer); 
     SDL_DestroyWindow(window);

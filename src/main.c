@@ -10,7 +10,8 @@
 #include "player.h"
 #include "camera.h"
 #include "defs.h"
-#include "menu.h" // Inclusion du menu
+#include "menu.h"
+#include "score.h"
 
 #define TILE_SIZE 16      
 #define MAP_SCALE 2       
@@ -60,7 +61,7 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    // --- 3. Configuration Jeu (S'il a cliqué JOUER) ---
+    // --- 3. Configuration Jeu  ---
     
     // IMPORTANT : On remet la "Logical Size" pour le Pixel Art du jeu
     float aspectRatio = (float)physicalW / (float)physicalH;
@@ -95,6 +96,9 @@ int main(int argc, char* argv[]) {
     Player player;
     init_player(&player, 100, 100);
 
+    Score score;
+    init_score(&score, 10, 10); // Position en haut à gauche
+
     Camera camera;
     camera.w = logicalW;
     camera.h = logicalH;
@@ -116,6 +120,7 @@ int main(int argc, char* argv[]) {
 
         const Uint8* keys = SDL_GetKeyboardState(NULL);
         update_player(&player, keys, tileMap);
+        update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
 
         SDL_RenderClear(renderer);
@@ -136,7 +141,7 @@ int main(int argc, char* argv[]) {
         }
 
         render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump);
-
+        render_score(renderer, &score);
         SDL_RenderPresent(renderer);
         SDL_Delay(16);
     }
@@ -150,7 +155,7 @@ int main(int argc, char* argv[]) {
     SDL_DestroyRenderer(renderer); 
     SDL_DestroyWindow(window);
     
-    TTF_Quit(); // Important de quitter TTF
+    TTF_Quit(); 
     IMG_Quit();
     SDL_Quit();
     return 0;

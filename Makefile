@@ -1,10 +1,15 @@
 # Nom de l'exécutable
 TARGET = bin/MarioBrosLike
 
-# Compilateur et options
+# Compilateur
 CC = gcc
-CFLAGS = -Wall -Wextra -Ilib -g $(shell pkg-config --cflags sdl2 SDL2_image)
-LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image) -lm
+
+# --- CONFIGURATION DES FLAGS ---
+# CFLAGS : Ajout de SDL2_ttf pour la compilation (trouve SDL_ttf.h)
+CFLAGS = -Wall -Wextra -Ilib -g $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
+
+# LDFLAGS : Ajout de SDL2_ttf pour l'édition de liens (trouve la lib)
+LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf) -lm
 
 # Dossiers
 SRC_DIR = src
@@ -16,7 +21,7 @@ OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(TARGET)
 
-# Édition de liens (Juste la compilation, PAS de copie d'assets)
+# Édition de liens
 $(TARGET): $(OBJS)
 	@mkdir -p bin
 	$(CC) $(OBJS) -o $(TARGET) $(LDFLAGS)
@@ -27,8 +32,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # --- COMMANDE POUR LANCER LE JEU ---
-# Tapez "make run" pour jouer. 
-# Cela lance l'exécutable depuis la racine, donc il verra le dossier "assets"
 run: $(TARGET)
 	./$(TARGET)
 

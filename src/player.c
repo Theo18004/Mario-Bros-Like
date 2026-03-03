@@ -31,6 +31,18 @@ void update_player(Player* p, const Uint8* keys, int* map) {
         if (check_collision(p->rect, map)) p->rect.x -= (int)speed;
     }
 
+    //Bloqué le joueur au bordure de la map
+    int mapPixelWidth = TILE_SIZE * MAP_SCALE * MAP_WIDTH; 
+    //Bloqué à gauche de la map
+    if ( p->rect.x < 0) {
+        p->rect.x = 0;
+    }
+
+    //Bloqué à droite de la map 
+    if ( p->rect.x + p->rect.w > mapPixelWidth) {
+        p->rect.x = mapPixelWidth - p->rect.w;
+    }
+
     // --- Saut ---
     if (keys[SDL_SCANCODE_UP] && p->onGround) {
         p->velY = -12.0f;

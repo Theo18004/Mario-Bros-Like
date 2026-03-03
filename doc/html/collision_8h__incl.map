@@ -1,0 +1,8 @@
+<map id="lib/collision.h" name="lib/collision.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,113,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="11,152,107,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="59,32,50,79,50,110,55,138,50,139,45,110,45,78,54,31"/>
+<area shape="rect" id="Node000003" href="$player_8h.html" title=" " alt="" coords="59,79,134,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="68,30,87,65,82,68,63,32"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="93,106,74,141,69,139,88,103"/>
+</map>

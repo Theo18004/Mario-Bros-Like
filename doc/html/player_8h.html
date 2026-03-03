@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MarioBrosLike: Référence du fichier lib/player.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">MarioBrosLike
+   </div>
+   <div id="projectbrief">Moteur de jeu de plateforme 2D performant en C avec SDL2. Gère la physique, les collisions et le tilemapping.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('player_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Référence du fichier player.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;SDL2/SDL.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Graphe des dépendances par inclusion de player.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h__incl.png" border="0" usemap="#alib_2player_8h" loading="lazy" alt=""/></div>
+<map name="alib_2player_8h" id="alib_2player_8h">
+<area shape="rect" title=" " alt="" coords="6,5,101,31"/>
+<area shape="rect" title=" " alt="" coords="5,79,101,104"/>
+<area shape="poly" title=" " alt="" coords="56,31,56,65,51,65,51,31"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+Ce graphe montre quels fichiers incluent directement ou indirectement ce fichier :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h__dep__incl.png" border="0" usemap="#alib_2player_8hdep" loading="lazy" alt=""/></div>
+<map name="alib_2player_8hdep" id="alib_2player_8hdep">
+<area shape="rect" title=" " alt="" coords="141,5,236,31"/>
+<area shape="rect" href="collision_8h.html" title=" " alt="" coords="43,79,151,104"/>
+<area shape="poly" title=" " alt="" coords="165,41,113,81,110,76,162,37"/>
+<area shape="rect" href="player_8c.html" title=" " alt="" coords="141,152,237,177"/>
+<area shape="poly" title=" " alt="" coords="191,45,191,152,186,152,186,45"/>
+<area shape="rect" href="main_8c.html" title=" " alt="" coords="227,79,316,104"/>
+<area shape="poly" title=" " alt="" coords="214,38,260,76,256,80,211,42"/>
+<area shape="rect" href="collision_8c.html" title=" " alt="" coords="5,152,116,177"/>
+<area shape="poly" title=" " alt="" coords="87,117,69,153,64,151,82,115"/>
+<area shape="poly" title=" " alt="" coords="124,110,175,150,172,154,120,114"/>
+</map>
+</div>
+</div>
+<p><a href="player_8h_source.html">Aller au code source de ce fichier.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Structures de données</h2></td></tr>
+<tr class="memitem:Player" id="r_Player"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPlayer.html">Player</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a6801baa546c6112d19eb095111d24720" id="r_a6801baa546c6112d19eb095111d24720"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6801baa546c6112d19eb095111d24720">GRAVITY</a>&#160;&#160;&#160;0.5f</td></tr>
+<tr class="memitem:ab8d0cabcc33a510ffa8cfadde6cd9ded" id="r_ab8d0cabcc33a510ffa8cfadde6cd9ded"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8d0cabcc33a510ffa8cfadde6cd9ded">JUMP_FORCE</a>&#160;&#160;&#160;-12.0f</td></tr>
+<tr class="memitem:aece11b592c2adb1490c86a2a2bed475c" id="r_aece11b592c2adb1490c86a2a2bed475c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aece11b592c2adb1490c86a2a2bed475c">GROUND_Y</a>&#160;&#160;&#160;540</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Énumérations</h2></td></tr>
+<tr class="memitem:ae14d5cd4a1a6c41237f81f3ae6e8a075" id="r_ae14d5cd4a1a6c41237f81f3ae6e8a075"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075">AnimState</a> { <a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075aed7d27993ddd345e399d8c599a9151c1">ANIM_IDLE</a>
+, <a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075a043851bf2fd588c4905428f95dd9711e">ANIM_RUN</a>
+, <a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075a9c491919d57a5d79da4fe052b5f0a5bc">ANIM_JUMP</a>
+ }</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Fonctions</h2></td></tr>
+<tr class="memitem:a5684b8a81cce4e5d122ac78a3fdcf251" id="r_a5684b8a81cce4e5d122ac78a3fdcf251"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5684b8a81cce4e5d122ac78a3fdcf251">updatePlayer</a> (<a class="el" href="structPlayer.html">Player</a> *player, int *tileMap)</td></tr>
+<tr class="memitem:a065d747963dee0929005eefd512e0632" id="r_a065d747963dee0929005eefd512e0632"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a065d747963dee0929005eefd512e0632">avancer</a> (<a class="el" href="structPlayer.html">Player</a> *player, int speed)</td></tr>
+<tr class="memitem:aa3885e7f8b280f7ae3c9699b165734cf" id="r_aa3885e7f8b280f7ae3c9699b165734cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3885e7f8b280f7ae3c9699b165734cf">saut</a> (<a class="el" href="structPlayer.html">Player</a> *player)</td></tr>
+<tr class="memitem:a8b94c2c25b5cb061468b33e00fe9824a" id="r_a8b94c2c25b5cb061468b33e00fe9824a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b94c2c25b5cb061468b33e00fe9824a">descendre</a> (<a class="el" href="structPlayer.html">Player</a> *player)</td></tr>
+</table>
+<a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Documentation des macros</h2>
+<a id="a6801baa546c6112d19eb095111d24720" name="a6801baa546c6112d19eb095111d24720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6801baa546c6112d19eb095111d24720">&#9670;&#160;</a></span>GRAVITY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GRAVITY&#160;&#160;&#160;0.5f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8h_source.html#l00007">7</a> du fichier <a class="el" href="player_8h_source.html">player.h</a>.</p>
+
+</div>
+</div>
+<a id="aece11b592c2adb1490c86a2a2bed475c" name="aece11b592c2adb1490c86a2a2bed475c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aece11b592c2adb1490c86a2a2bed475c">&#9670;&#160;</a></span>GROUND_Y</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GROUND_Y&#160;&#160;&#160;540</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8h_source.html#l00009">9</a> du fichier <a class="el" href="player_8h_source.html">player.h</a>.</p>
+
+</div>
+</div>
+<a id="ab8d0cabcc33a510ffa8cfadde6cd9ded" name="ab8d0cabcc33a510ffa8cfadde6cd9ded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8d0cabcc33a510ffa8cfadde6cd9ded">&#9670;&#160;</a></span>JUMP_FORCE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define JUMP_FORCE&#160;&#160;&#160;-12.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8h_source.html#l00008">8</a> du fichier <a class="el" href="player_8h_source.html">player.h</a>.</p>
+
+</div>
+</div>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Documentation du type de l'énumération</h2>
+<a id="ae14d5cd4a1a6c41237f81f3ae6e8a075" name="ae14d5cd4a1a6c41237f81f3ae6e8a075"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae14d5cd4a1a6c41237f81f3ae6e8a075">&#9670;&#160;</a></span>AnimState</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#ae14d5cd4a1a6c41237f81f3ae6e8a075">AnimState</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Valeurs énumérées</th></tr><tr><td class="fieldname"><a id="ae14d5cd4a1a6c41237f81f3ae6e8a075aed7d27993ddd345e399d8c599a9151c1" name="ae14d5cd4a1a6c41237f81f3ae6e8a075aed7d27993ddd345e399d8c599a9151c1"></a>ANIM_IDLE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ae14d5cd4a1a6c41237f81f3ae6e8a075a043851bf2fd588c4905428f95dd9711e" name="ae14d5cd4a1a6c41237f81f3ae6e8a075a043851bf2fd588c4905428f95dd9711e"></a>ANIM_RUN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ae14d5cd4a1a6c41237f81f3ae6e8a075a9c491919d57a5d79da4fe052b5f0a5bc" name="ae14d5cd4a1a6c41237f81f3ae6e8a075a9c491919d57a5d79da4fe052b5f0a5bc"></a>ANIM_JUMP&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8h_source.html#l00012">12</a> du fichier <a class="el" href="player_8h_source.html">player.h</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentation des fonctions</h2>
+<a id="a065d747963dee0929005eefd512e0632" name="a065d747963dee0929005eefd512e0632"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a065d747963dee0929005eefd512e0632">&#9670;&#160;</a></span>avancer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void avancer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>speed</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00010">10</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe d'appel pour cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_a065d747963dee0929005eefd512e0632_cgraph.png" border="0" usemap="#aplayer_8h_a065d747963dee0929005eefd512e0632_cgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_a065d747963dee0929005eefd512e0632_cgraph" id="aplayer_8h_a065d747963dee0929005eefd512e0632_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,80,31"/>
+<area shape="rect" href="collision_8c.html#a090a2cc1a1759ca03dbd6cc361b88f56" title=" " alt="" coords="128,5,281,31"/>
+<area shape="poly" title=" " alt="" coords="80,15,114,15,114,21,80,21"/>
+<area shape="rect" href="collision_8c.html#aa202449282460206230776f7454d89d2" title=" " alt="" coords="329,5,400,31"/>
+<area shape="poly" title=" " alt="" coords="281,15,316,15,316,21,281,21"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a8b94c2c25b5cb061468b33e00fe9824a" name="a8b94c2c25b5cb061468b33e00fe9824a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b94c2c25b5cb061468b33e00fe9824a">&#9670;&#160;</a></span>descendre()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void descendre </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00051">51</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_a8b94c2c25b5cb061468b33e00fe9824a_icgraph.png" border="0" usemap="#aplayer_8h_a8b94c2c25b5cb061468b33e00fe9824a_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_a8b94c2c25b5cb061468b33e00fe9824a_icgraph" id="aplayer_8h_a8b94c2c25b5cb061468b33e00fe9824a_icgraph">
+<area shape="rect" title=" " alt="" coords="264,5,353,31"/>
+<area shape="rect" href="player_8c.html#a5684b8a81cce4e5d122ac78a3fdcf251" title=" " alt="" coords="108,5,216,31"/>
+<area shape="poly" title=" " alt="" coords="250,21,216,21,216,15,250,15"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa3885e7f8b280f7ae3c9699b165734cf" name="aa3885e7f8b280f7ae3c9699b165734cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3885e7f8b280f7ae3c9699b165734cf">&#9670;&#160;</a></span>saut()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void saut </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00037">37</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_aa3885e7f8b280f7ae3c9699b165734cf_icgraph.png" border="0" usemap="#aplayer_8h_aa3885e7f8b280f7ae3c9699b165734cf_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_aa3885e7f8b280f7ae3c9699b165734cf_icgraph" id="aplayer_8h_aa3885e7f8b280f7ae3c9699b165734cf_icgraph">
+<area shape="rect" title=" " alt="" coords="264,5,315,31"/>
+<area shape="rect" href="player_8c.html#a5684b8a81cce4e5d122ac78a3fdcf251" title=" " alt="" coords="108,5,216,31"/>
+<area shape="poly" title=" " alt="" coords="251,21,216,21,216,15,251,15"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5684b8a81cce4e5d122ac78a3fdcf251" name="a5684b8a81cce4e5d122ac78a3fdcf251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5684b8a81cce4e5d122ac78a3fdcf251">&#9670;&#160;</a></span>updatePlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void updatePlayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structPlayer.html">Player</a> *</td>          <td class="paramname"><span class="paramname"><em>player</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *</td>          <td class="paramname"><span class="paramname"><em>tileMap</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="player_8c_source.html#l00066">66</a> du fichier <a class="el" href="player_8c_source.html">player.c</a>.</p>
+<div class="dynheader">
+Voici le graphe d'appel pour cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_a5684b8a81cce4e5d122ac78a3fdcf251_cgraph.png" border="0" usemap="#aplayer_8h_a5684b8a81cce4e5d122ac78a3fdcf251_cgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_a5684b8a81cce4e5d122ac78a3fdcf251_cgraph" id="aplayer_8h_a5684b8a81cce4e5d122ac78a3fdcf251_cgraph">
+<area shape="rect" title=" " alt="" coords="5,80,113,105"/>
+<area shape="rect" href="player_8c.html#a8b94c2c25b5cb061468b33e00fe9824a" title=" " alt="" coords="193,5,283,31"/>
+<area shape="poly" title=" " alt="" coords="82,78,160,40,179,32,181,37,162,44,85,82"/>
+<area shape="rect" href="collision_8c.html#a090a2cc1a1759ca03dbd6cc361b88f56" title=" " alt="" coords="161,55,315,80"/>
+<area shape="poly" title=" " alt="" coords="113,82,147,77,148,83,114,88"/>
+<area shape="rect" href="player_8c.html#aa3885e7f8b280f7ae3c9699b165734cf" title=" " alt="" coords="213,104,263,129"/>
+<area shape="poly" title=" " alt="" coords="114,97,199,109,199,114,113,103"/>
+<area shape="rect" href="collision_8c.html#a2f63e2530ecd94de3b62b195ca7d40e1" title=" " alt="" coords="171,153,305,179"/>
+<area shape="poly" title=" " alt="" coords="86,103,162,138,184,146,182,151,160,143,84,108"/>
+<area shape="rect" href="collision_8c.html#aa202449282460206230776f7454d89d2" title=" " alt="" coords="363,104,433,129"/>
+<area shape="poly" title=" " alt="" coords="281,77,350,99,348,104,279,83"/>
+<area shape="poly" title=" " alt="" coords="279,151,348,129,350,134,281,156"/>
+</map>
+</div>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="player_8h_a5684b8a81cce4e5d122ac78a3fdcf251_icgraph.png" border="0" usemap="#aplayer_8h_a5684b8a81cce4e5d122ac78a3fdcf251_icgraph" loading="lazy" alt=""/></div>
+<map name="aplayer_8h_a5684b8a81cce4e5d122ac78a3fdcf251_icgraph" id="aplayer_8h_a5684b8a81cce4e5d122ac78a3fdcf251_icgraph">
+<area shape="rect" title=" " alt="" coords="108,5,216,31"/>
+<area shape="rect" href="main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="player_8h.html">player.h</a></li>
+    <li class="footer">Généré par <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

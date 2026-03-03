@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MarioBrosLike:  Fichier source de src/map.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">MarioBrosLike
+   </div>
+   <div id="projectbrief">Moteur de jeu de plateforme 2D performant en C avec SDL2. Gère la physique, les collisions et le tilemapping.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('map_8c_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">map.c</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="map_8c.html">Aller à la documentation de ce fichier.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="map_8h.html">map.h</a>&quot;</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;string.h&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span></div>
+<div class="foldopen" id="foldopen00010" data-start="{" data-end="}">
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="map_8c.html#ac7fe9606658192cab8171caa1202ddf9">   10</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="map_8c.html#ac7fe9606658192cab8171caa1202ddf9">load_map_from_csv</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* filename, <span class="keywordtype">int</span>* map_array) {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    FILE* file = fopen(filename, <span class="stringliteral">&quot;r&quot;</span>);</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keywordflow">if</span> (!file) {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        printf(<span class="stringliteral">&quot;Erreur : Impossible d&#39;ouvrir le fichier de map : %s\n&quot;</span>, filename);</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    }</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">char</span> line[4096];</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">int</span> row = 0;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="comment">// Initialisation du tableau avec du vide (-1) par sécurité</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <a class="code hl_define" href="map_8h.html#aa037a6d6a4f04d51c7ec1c9ee9054e76">MAP_WIDTH</a> * <a class="code hl_define" href="map_8h.html#a529d5ebb449edf31d9835d13f4fb9f89">MAP_HEIGHT</a>; i++) {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        map_array[i] = -1;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    }</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordflow">while</span> (fgets(line, <span class="keyword">sizeof</span>(line), file) &amp;&amp; row &lt; <a class="code hl_define" href="map_8h.html#a529d5ebb449edf31d9835d13f4fb9f89">MAP_HEIGHT</a>) {</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="comment">// strtok gère les virgules, points-virgules et retours à la ligne</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keywordtype">char</span>* token = strtok(line, <span class="stringliteral">&quot;,;\n\r&quot;</span>);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keywordtype">int</span> col = 0;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordflow">while</span> (token &amp;&amp; col &lt; <a class="code hl_define" href="map_8h.html#aa037a6d6a4f04d51c7ec1c9ee9054e76">MAP_WIDTH</a>) {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            map_array[row * <a class="code hl_define" href="map_8h.html#aa037a6d6a4f04d51c7ec1c9ee9054e76">MAP_WIDTH</a> + col] = atoi(token);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            token = strtok(NULL, <span class="stringliteral">&quot;,;\n\r&quot;</span>);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            col++;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        }</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        row++;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    }</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    fclose(file);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    printf(<span class="stringliteral">&quot;Map chargee avec succes (%d lignes lues).\n&quot;</span>, row);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>}</div>
+</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span></div>
+<div class="foldopen" id="foldopen00046" data-start="{" data-end="}">
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="map_8c.html#ab04eaefd956e72778e26b302012a302f">   46</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="map_8c.html#ab04eaefd956e72778e26b302012a302f">draw_tile</a>(SDL_Renderer* renderer, <a class="code hl_struct" href="structTileset.html">Tileset</a>* ts, <span class="keywordtype">int</span> tileId, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> scrollX, <span class="keywordtype">int</span> scrollY) {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="comment">// Si l&#39;ID est -1 (vide), on ne dessine rien</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordflow">if</span> (tileId &lt; 0) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="comment">// Calcul de la position de la tuile dans l&#39;image source (Terrain.png)</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="comment">// ts-&gt;columns est le nombre de tuiles par ligne dans ton image</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    SDL_Rect src = {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        (tileId % ts-&gt;<a class="code hl_variable" href="structTileset.html#abfcd84bff4688bfe33215b0eab85e42f">columns</a>) * ts-&gt;<a class="code hl_variable" href="structTileset.html#a477770a6cc81a9a53bf5928ebd5c88a9">tileWidth</a>,</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        (tileId / ts-&gt;<a class="code hl_variable" href="structTileset.html#abfcd84bff4688bfe33215b0eab85e42f">columns</a>) * ts-&gt;<a class="code hl_variable" href="structTileset.html#a62c8b00674890f60189f1ace74aeee88">tileHeight</a>,</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        ts-&gt;<a class="code hl_variable" href="structTileset.html#a477770a6cc81a9a53bf5928ebd5c88a9">tileWidth</a>,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        ts-&gt;<a class="code hl_variable" href="structTileset.html#a62c8b00674890f60189f1ace74aeee88">tileHeight</a></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    };</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="comment">// Calcul de la position sur l&#39;écran avec le décalage de la caméra</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    SDL_Rect dest = {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        x - scrollX,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        y - scrollY,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        ts-&gt;<a class="code hl_variable" href="structTileset.html#a477770a6cc81a9a53bf5928ebd5c88a9">tileWidth</a> * <a class="code hl_define" href="map_8h.html#a3556d1687a98523bda1a30405c486c77">MAP_SCALE</a>,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        ts-&gt;<a class="code hl_variable" href="structTileset.html#a62c8b00674890f60189f1ace74aeee88">tileHeight</a> * <a class="code hl_define" href="map_8h.html#a3556d1687a98523bda1a30405c486c77">MAP_SCALE</a></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    };</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    SDL_RenderCopy(renderer, ts-&gt;<a class="code hl_variable" href="structTileset.html#a8dfe67665fd14271be4d0eb3b40c79a8">texture</a>, &amp;src, &amp;dest);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>}</div>
+</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span></div>
+<div class="foldopen" id="foldopen00073" data-start="{" data-end="}">
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="map_8c.html#ab94ae90a85770e761da105f834c51cf2">   73</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="map_8c.html#ab94ae90a85770e761da105f834c51cf2">render_world</a>(SDL_Renderer* renderer, <span class="keywordtype">int</span>* map_array, <a class="code hl_struct" href="structTileset.html">Tileset</a>* ts, <span class="keywordtype">int</span> scrollX, <span class="keywordtype">int</span> scrollY) {</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> y = 0; y &lt; <a class="code hl_define" href="map_8h.html#a529d5ebb449edf31d9835d13f4fb9f89">MAP_HEIGHT</a>; y++) {</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> x = 0; x &lt; <a class="code hl_define" href="map_8h.html#aa037a6d6a4f04d51c7ec1c9ee9054e76">MAP_WIDTH</a>; x++) {</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>            <span class="keywordtype">int</span> tileId = map_array[y * <a class="code hl_define" href="map_8h.html#aa037a6d6a4f04d51c7ec1c9ee9054e76">MAP_WIDTH</a> + x];</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            <span class="comment">// On ne dessine que si ce n&#39;est pas du vide</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>            <span class="keywordflow">if</span> (tileId != -1) {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                <a class="code hl_function" href="map_8c.html#ab04eaefd956e72778e26b302012a302f">draw_tile</a>(renderer, ts, tileId, </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                          x * <a class="code hl_define" href="map_8h.html#a62ecd70800687eb2d625af180c4210d7">TILE_SIZE</a> * <a class="code hl_define" href="map_8h.html#a3556d1687a98523bda1a30405c486c77">MAP_SCALE</a>, </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                          y * <a class="code hl_define" href="map_8h.html#a62ecd70800687eb2d625af180c4210d7">TILE_SIZE</a> * <a class="code hl_define" href="map_8h.html#a3556d1687a98523bda1a30405c486c77">MAP_SCALE</a>, </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>                          scrollX, scrollY);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            }</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        }</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    }</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>}</div>
+</div>
+<div class="ttc" id="amap_8c_html_ab04eaefd956e72778e26b302012a302f"><div class="ttname"><a href="map_8c.html#ab04eaefd956e72778e26b302012a302f">draw_tile</a></div><div class="ttdeci">void draw_tile(SDL_Renderer *renderer, Tileset *ts, int tileId, int x, int y, int scrollX, int scrollY)</div><div class="ttdef"><b>Definition</b> <a href="#l00046">map.c:46</a></div></div>
+<div class="ttc" id="amap_8c_html_ab94ae90a85770e761da105f834c51cf2"><div class="ttname"><a href="map_8c.html#ab94ae90a85770e761da105f834c51cf2">render_world</a></div><div class="ttdeci">void render_world(SDL_Renderer *renderer, int *map_array, Tileset *ts, int scrollX, int scrollY)</div><div class="ttdef"><b>Definition</b> <a href="#l00073">map.c:73</a></div></div>
+<div class="ttc" id="amap_8c_html_ac7fe9606658192cab8171caa1202ddf9"><div class="ttname"><a href="map_8c.html#ac7fe9606658192cab8171caa1202ddf9">load_map_from_csv</a></div><div class="ttdeci">int load_map_from_csv(const char *filename, int *map_array)</div><div class="ttdef"><b>Definition</b> <a href="#l00010">map.c:10</a></div></div>
+<div class="ttc" id="amap_8h_html"><div class="ttname"><a href="map_8h.html">map.h</a></div></div>
+<div class="ttc" id="amap_8h_html_a3556d1687a98523bda1a30405c486c77"><div class="ttname"><a href="map_8h.html#a3556d1687a98523bda1a30405c486c77">MAP_SCALE</a></div><div class="ttdeci">#define MAP_SCALE</div><div class="ttdef"><b>Definition</b> <a href="map_8h_source.html#l00007">map.h:7</a></div></div>
+<div class="ttc" id="amap_8h_html_a529d5ebb449edf31d9835d13f4fb9f89"><div class="ttname"><a href="map_8h.html#a529d5ebb449edf31d9835d13f4fb9f89">MAP_HEIGHT</a></div><div class="ttdeci">#define MAP_HEIGHT</div><div class="ttdef"><b>Definition</b> <a href="map_8h_source.html#l00009">map.h:9</a></div></div>
+<div class="ttc" id="amap_8h_html_a62ecd70800687eb2d625af180c4210d7"><div class="ttname"><a href="map_8h.html#a62ecd70800687eb2d625af180c4210d7">TILE_SIZE</a></div><div class="ttdeci">#define TILE_SIZE</div><div class="ttdef"><b>Definition</b> <a href="map_8h_source.html#l00006">map.h:6</a></div></div>
+<div class="ttc" id="amap_8h_html_aa037a6d6a4f04d51c7ec1c9ee9054e76"><div class="ttname"><a href="map_8h.html#aa037a6d6a4f04d51c7ec1c9ee9054e76">MAP_WIDTH</a></div><div class="ttdeci">#define MAP_WIDTH</div><div class="ttdef"><b>Definition</b> <a href="map_8h_source.html#l00008">map.h:8</a></div></div>
+<div class="ttc" id="astructTileset_html"><div class="ttname"><a href="structTileset.html">Tileset</a></div><div class="ttdef"><b>Definition</b> <a href="map_8h_source.html#l00011">map.h:11</a></div></div>
+<div class="ttc" id="astructTileset_html_a477770a6cc81a9a53bf5928ebd5c88a9"><div class="ttname"><a href="structTileset.html#a477770a6cc81a9a53bf5928ebd5c88a9">Tileset::tileWidth</a></div><div class="ttdeci">int tileWidth</div><div class="ttdef"><b>Definition</b> <a href="map_8h_source.html#l00014">map.h:14</a></div></div>
+<div class="ttc" id="astructTileset_html_a62c8b00674890f60189f1ace74aeee88"><div class="ttname"><a href="structTileset.html#a62c8b00674890f60189f1ace74aeee88">Tileset::tileHeight</a></div><div class="ttdeci">int tileHeight</div><div class="ttdef"><b>Definition</b> <a href="map_8h_source.html#l00015">map.h:15</a></div></div>
+<div class="ttc" id="astructTileset_html_a8dfe67665fd14271be4d0eb3b40c79a8"><div class="ttname"><a href="structTileset.html#a8dfe67665fd14271be4d0eb3b40c79a8">Tileset::texture</a></div><div class="ttdeci">SDL_Texture * texture</div><div class="ttdef"><b>Definition</b> <a href="map_8h_source.html#l00012">map.h:12</a></div></div>
+<div class="ttc" id="astructTileset_html_abfcd84bff4688bfe33215b0eab85e42f"><div class="ttname"><a href="structTileset.html#abfcd84bff4688bfe33215b0eab85e42f">Tileset::columns</a></div><div class="ttdeci">int columns</div><div class="ttdef"><b>Definition</b> <a href="map_8h_source.html#l00013">map.h:13</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="map_8c.html">map.c</a></li>
+    <li class="footer">Généré par <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

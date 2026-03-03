@@ -1,0 +1,10 @@
+<map id="src/ennemi.c" name="src/ennemi.c">
+<area shape="rect" id="Node000001" title="Implémentation technique des singes avec SDL2." alt="" coords="5,5,111,31"/>
+<area shape="rect" id="Node000002" href="$ennemi_8h.html" title="Définitions et prototypes pour la gestion des ennemis (Singes) en SDL2." alt="" coords="17,79,99,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,31,61,65,55,65,55,31"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="10,225,106,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="57,105,49,137,47,177,54,212,49,213,42,178,44,137,52,104"/>
+<area shape="rect" id="Node000004" href="$camera_8h.html" title="Gestion de la vue (caméra) pour le suivi du joueur." alt="" coords="57,152,139,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="67,103,87,139,82,141,62,106"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,179,74,215,69,212,89,176"/>
+</map>

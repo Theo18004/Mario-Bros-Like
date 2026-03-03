@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MarioBrosLike:  Fichier source de lib/ennemi.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">MarioBrosLike
+   </div>
+   <div id="projectbrief">Moteur de jeu de plateforme 2D performant en C avec SDL2. Gère la physique, les collisions et le tilemapping.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('ennemi_8h_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">ennemi.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="ennemi_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#ifndef MONKEY_H</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#define MONKEY_H</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;SDL2/SDL.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="camera_8h.html">camera.h</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="ennemi_8h.html#a44feaab33a0a53c4914be059d78a0f60">   14</a></span><span class="preprocessor">#define MONKEY_COLS 4          </span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="ennemi_8h.html#a72db38d2899fc5a6e317d8af30b14cdb">   15</a></span><span class="preprocessor">#define MONKEY_ROWS 4          </span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="ennemi_8h.html#a49349fceeb1581d4267525f52067b0fc">   16</a></span><span class="preprocessor">#define MONKEY_TOTAL_FRAMES 16 </span><span class="preprocessor"></span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span></div>
+<div class="foldopen" id="foldopen00023" data-start="{" data-end="};">
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="structMonkey.html">   23</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="structMonkey.html#a07f660bdd7cb7cb79657c011e43d9714">   24</a></span>    SDL_Point <a class="code hl_variable" href="structMonkey.html#a07f660bdd7cb7cb79657c011e43d9714">position</a>;  </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="structMonkey.html#acba43c5b40ece116771617a9f65ffb23">   25</a></span>    SDL_Point <a class="code hl_variable" href="structMonkey.html#acba43c5b40ece116771617a9f65ffb23">size</a>;      </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="structMonkey.html#a548565119e6f02b1fb9834486fc928f2">   26</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="structMonkey.html#a548565119e6f02b1fb9834486fc928f2">speed</a>;         </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="structMonkey.html#a70d2c2ca746e5508db05a4c53853e3c5">   27</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structMonkey.html#a70d2c2ca746e5508db05a4c53853e3c5">direction</a>;       </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="structMonkey.html#a2d309cd2611c7b1ed2ca0c89e6b2b98c">   29</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structMonkey.html#a2d309cd2611c7b1ed2ca0c89e6b2b98c">currentFrame</a>;    </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structMonkey.html#a26441a074edc1f4080ad883cd2b7263d">   30</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="structMonkey.html#a26441a074edc1f4080ad883cd2b7263d">frameTimer</a>;    </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="structMonkey.html#a5db9eecb37c905b930b245f65dfbdf2c">   31</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="structMonkey.html#a5db9eecb37c905b930b245f65dfbdf2c">animFPS</a>;       </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="structMonkey.html#acee53fd1cc62fd6f38fcaeeb2809f58e">   33</a></span>    SDL_Texture* <a class="code hl_variable" href="structMonkey.html#acee53fd1cc62fd6f38fcaeeb2809f58e">spriteSheet</a>; </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>} <a class="code hl_struct" href="structMonkey.html">Monkey</a>;</div>
+</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><a class="code hl_struct" href="structMonkey.html">Monkey</a> <a class="code hl_function" href="ennemi_8h.html#a6b3ae68fdd23c0d2203092130602bb42">InitMonkey</a>(SDL_Texture* texture, SDL_Point pos, <span class="keywordtype">float</span> speed);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keywordtype">void</span> <a class="code hl_function" href="ennemi_8h.html#ac167fcdad5c6134a30e7bbe1a47c89d6">UpdateMonkey</a>(<a class="code hl_struct" href="structMonkey.html">Monkey</a> *m, <span class="keywordtype">float</span> deltaTime);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keywordtype">void</span> <a class="code hl_function" href="ennemi_8h.html#abcf468539876abc2126d504e0b641a99">DrawMonkey</a>(SDL_Renderer* renderer, <a class="code hl_struct" href="structMonkey.html">Monkey</a>* m, <a class="code hl_struct" href="structCamera.html">Camera</a> cam);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="acamera_8h_html"><div class="ttname"><a href="camera_8h.html">camera.h</a></div><div class="ttdoc">Gestion de la vue (caméra) pour le suivi du joueur.</div></div>
+<div class="ttc" id="aennemi_8h_html_a6b3ae68fdd23c0d2203092130602bb42"><div class="ttname"><a href="ennemi_8h.html#a6b3ae68fdd23c0d2203092130602bb42">InitMonkey</a></div><div class="ttdeci">Monkey InitMonkey(SDL_Texture *texture, SDL_Point pos, float speed)</div><div class="ttdoc">Initialise un singe avec une texture SDL2.</div><div class="ttdef"><b>Definition</b> <a href="ennemi_8c_source.html#l00009">ennemi.c:9</a></div></div>
+<div class="ttc" id="aennemi_8h_html_abcf468539876abc2126d504e0b641a99"><div class="ttname"><a href="ennemi_8h.html#abcf468539876abc2126d504e0b641a99">DrawMonkey</a></div><div class="ttdeci">void DrawMonkey(SDL_Renderer *renderer, Monkey *m, Camera cam)</div><div class="ttdoc">Affiche le singe en tenant compte de la caméra.</div><div class="ttdef"><b>Definition</b> <a href="ennemi_8c_source.html#l00040">ennemi.c:40</a></div></div>
+<div class="ttc" id="aennemi_8h_html_ac167fcdad5c6134a30e7bbe1a47c89d6"><div class="ttname"><a href="ennemi_8h.html#ac167fcdad5c6134a30e7bbe1a47c89d6">UpdateMonkey</a></div><div class="ttdeci">void UpdateMonkey(Monkey *m, float deltaTime)</div><div class="ttdoc">Met à jour la position et l&#39;animation du singe.</div><div class="ttdef"><b>Definition</b> <a href="ennemi_8c_source.html#l00028">ennemi.c:28</a></div></div>
+<div class="ttc" id="astructCamera_html"><div class="ttname"><a href="structCamera.html">Camera</a></div><div class="ttdoc">Structure définissant la zone de vue du jeu.</div><div class="ttdef"><b>Definition</b> <a href="camera_8h_source.html#l00018">camera.h:18</a></div></div>
+<div class="ttc" id="astructMonkey_html"><div class="ttname"><a href="structMonkey.html">Monkey</a></div><div class="ttdoc">Structure représentant un ennemi de type singe (Version SDL2).</div><div class="ttdef"><b>Definition</b> <a href="#l00023">ennemi.h:23</a></div></div>
+<div class="ttc" id="astructMonkey_html_a07f660bdd7cb7cb79657c011e43d9714"><div class="ttname"><a href="structMonkey.html#a07f660bdd7cb7cb79657c011e43d9714">Monkey::position</a></div><div class="ttdeci">SDL_Point position</div><div class="ttdef"><b>Definition</b> <a href="#l00024">ennemi.h:24</a></div></div>
+<div class="ttc" id="astructMonkey_html_a26441a074edc1f4080ad883cd2b7263d"><div class="ttname"><a href="structMonkey.html#a26441a074edc1f4080ad883cd2b7263d">Monkey::frameTimer</a></div><div class="ttdeci">float frameTimer</div><div class="ttdef"><b>Definition</b> <a href="#l00030">ennemi.h:30</a></div></div>
+<div class="ttc" id="astructMonkey_html_a2d309cd2611c7b1ed2ca0c89e6b2b98c"><div class="ttname"><a href="structMonkey.html#a2d309cd2611c7b1ed2ca0c89e6b2b98c">Monkey::currentFrame</a></div><div class="ttdeci">int currentFrame</div><div class="ttdef"><b>Definition</b> <a href="#l00029">ennemi.h:29</a></div></div>
+<div class="ttc" id="astructMonkey_html_a548565119e6f02b1fb9834486fc928f2"><div class="ttname"><a href="structMonkey.html#a548565119e6f02b1fb9834486fc928f2">Monkey::speed</a></div><div class="ttdeci">float speed</div><div class="ttdef"><b>Definition</b> <a href="#l00026">ennemi.h:26</a></div></div>
+<div class="ttc" id="astructMonkey_html_a5db9eecb37c905b930b245f65dfbdf2c"><div class="ttname"><a href="structMonkey.html#a5db9eecb37c905b930b245f65dfbdf2c">Monkey::animFPS</a></div><div class="ttdeci">float animFPS</div><div class="ttdef"><b>Definition</b> <a href="#l00031">ennemi.h:31</a></div></div>
+<div class="ttc" id="astructMonkey_html_a70d2c2ca746e5508db05a4c53853e3c5"><div class="ttname"><a href="structMonkey.html#a70d2c2ca746e5508db05a4c53853e3c5">Monkey::direction</a></div><div class="ttdeci">int direction</div><div class="ttdef"><b>Definition</b> <a href="#l00027">ennemi.h:27</a></div></div>
+<div class="ttc" id="astructMonkey_html_acba43c5b40ece116771617a9f65ffb23"><div class="ttname"><a href="structMonkey.html#acba43c5b40ece116771617a9f65ffb23">Monkey::size</a></div><div class="ttdeci">SDL_Point size</div><div class="ttdef"><b>Definition</b> <a href="#l00025">ennemi.h:25</a></div></div>
+<div class="ttc" id="astructMonkey_html_acee53fd1cc62fd6f38fcaeeb2809f58e"><div class="ttname"><a href="structMonkey.html#acee53fd1cc62fd6f38fcaeeb2809f58e">Monkey::spriteSheet</a></div><div class="ttdeci">SDL_Texture * spriteSheet</div><div class="ttdef"><b>Definition</b> <a href="#l00033">ennemi.h:33</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a href="ennemi_8h.html">ennemi.h</a></li>
+    <li class="footer">Généré par <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

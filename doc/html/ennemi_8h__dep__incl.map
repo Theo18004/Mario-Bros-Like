@@ -1,0 +1,7 @@
+<map id="lib/ennemi.h" name="lib/ennemi.h">
+<area shape="rect" id="Node000001" title="Définitions et prototypes pour la gestion des ennemis (Singes) en SDL2." alt="" coords="67,5,169,31"/>
+<area shape="rect" id="Node000002" href="$ennemi_8c.html" title="Implémentation technique des singes avec SDL2." alt="" coords="5,79,111,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,43,70,80,66,77,97,40"/>
+<area shape="rect" id="Node000003" href="$main_8c.html" title="Point d&#39;entrée principal du projet MarioBrosLike." alt="" coords="135,79,224,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="139,40,171,77,167,80,135,43"/>
+</map>

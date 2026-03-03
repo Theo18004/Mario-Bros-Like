@@ -6,7 +6,8 @@
 typedef enum {
     STATE_IDLE,
     STATE_RUN,
-    STATE_JUMP
+    STATE_JUMP,
+    STATE_DEAD
 } PlayerState;
 
 // Structure regroupant tout ce qui concerne le joueur
@@ -26,6 +27,6 @@ void update_player(Player* p, const Uint8* keys, int* map);
 
 // Dessine le joueur avec l'animation correcte
 void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY, 
-                   SDL_Texture* texIdle, SDL_Texture* texRun, SDL_Texture* texJump);
+                   SDL_Texture* texIdle, SDL_Texture* texRun, SDL_Texture* texJump, SDL_Texture* texDead);
 
 #endif

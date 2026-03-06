@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <SDL.h>
+#include "score.h"
 
 typedef enum {
     STATE_IDLE,
@@ -16,6 +17,7 @@ typedef struct {
     float velY;         // Vitesse verticale
     int facingRight;    // 1 = Droite, 0 = Gauche
     int onGround;       // 1 = Sol, 0 = Air
+    int lives;          // Nombre de vies 
     PlayerState state;  // État actuel
 } Player;
 
@@ -23,7 +25,7 @@ typedef struct {
 void init_player(Player* p, int x, int y);
 
 // Met à jour la position et l'état (Physique + Inputs)
-void update_player(Player* p, const Uint8* keys, int* map);
+void update_player(Player* p, const Uint8* keys, int* map, Score* s);;
 
 // Dessine le joueur avec l'animation correcte
 void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY, 

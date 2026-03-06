@@ -12,6 +12,8 @@
 #include "defs.h"
 #include "menu.h"
 #include "score.h"
+#include "mort.h"
+#include "interface.h"
 
 #define TILE_SIZE 16      
 #define MAP_SCALE 2       
@@ -92,10 +94,13 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texRun  = IMG_LoadTexture(renderer, "assets/Personnage/Run.png");
     SDL_Texture* texJump = IMG_LoadTexture(renderer, "assets/Personnage/Jump.png");
     SDL_Texture* texDead = IMG_LoadTexture(renderer, "assets/Personnage/Dead.png");
+    SDL_Texture* texFullHeart = IMG_LoadTexture(renderer, "assets/Interface/FullHeart.png");
+    //SDL_Texture* texEmptyHeart = IMG_LoadTexture(renderer, "assets/Interface/BreakHeart.png");  A VOIR SI ON LE MET OU PAS
 
     // --- 5. Initialisation Objets ---
     Player player;
     init_player(&player, 20, 1000); // Position de départ du joueur sur la terre
+    player.lives = 3; // Initialisation du nombre de vies
 
     Score score;
     init_score(&score, 10, 10); // Position en haut à gauche
@@ -118,9 +123,8 @@ int main(int argc, char* argv[]) {
             if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) 
                 running = 0;
         }
-
         const Uint8* keys = SDL_GetKeyboardState(NULL);
-        update_player(&player, keys, tileMap);
+        update_player(&player, keys, tileMap, &score);
         update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
 
@@ -144,6 +148,8 @@ int main(int argc, char* argv[]) {
 
         render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump, texDead);
         render_score(renderer, &score);
+        render_lives(renderer, texFullHeart, player.lives);
+        render_progress_bar(renderer, player.rect.x, mapPixelWidth);
         SDL_RenderPresent(renderer);
         SDL_Delay(16);
     }

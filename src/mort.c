@@ -1,4 +1,6 @@
 #include "mort.h"
+#include "score.h"
+#include "interface.h"
 
 // Vérifie toutes les conditions qui peuvent tuer le joueur ( hors map / enemis)
 int verifier_conditions_mort(Player* p, int mapPixelHeight){
@@ -12,8 +14,8 @@ int verifier_conditions_mort(Player* p, int mapPixelHeight){
             //On lance le timer au moment de l'impact avec le sol
             if (momentImpactSol == 0) momentImpactSol = SDL_GetTicks();
 
-            // Si 2000ms (2s) se sont écoulées depuis l'impact on respawn le joueur
-            if (SDL_GetTicks() - momentImpactSol > 2000) {
+            // Délai de 1s avant respawn  
+            if (SDL_GetTicks() - momentImpactSol > 1000) {
                 momentImpactSol = 0;
                 return 1; 
             }
@@ -33,26 +35,25 @@ int verifier_conditions_mort(Player* p, int mapPixelHeight){
 
     //Si il touche un trap ( à faire )
 
-    return 0; // Pas de condition de mort vérifiée
+    return 0; 
 }
 
 
 // Gère l'action de mourir ( animation / respawn)
-void gerer_mort_joueur(Player* p, int spawnX, int spawnY){
+void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s){
 
     //On vérifie que le joueur est bien mort
-     if (p->state != STATE_DEAD){
+    if (p->state != STATE_DEAD){
         return;
-     }
+    }
 
-     // Ajouter une animation de mort ( à faire )
-
-
-     // Respawn
+    // Respawn et modification du score et des vies
     if (p->state == STATE_DEAD){
         p->rect.x = spawnX;
         p->rect.y = spawnY;
         p->velY = 0;
         p->state = STATE_IDLE; 
+        p->lives--; 
+        reset_score(s); 
     }
 }

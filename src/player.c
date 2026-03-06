@@ -2,6 +2,7 @@
 #include "collision.h"
 #include "defs.h"
 #include "mort.h"
+#include "score.h"
 
 void init_player(Player* p, int x, int y) {
     p->rect.x = x;
@@ -14,7 +15,7 @@ void init_player(Player* p, int x, int y) {
     p->state = STATE_IDLE;
 }
 
-void update_player(Player* p, const Uint8* keys, int* map) {
+void update_player(Player* p, const Uint8* keys, int* map, Score* s){
 
     int mapPixelHeight = TILE_SIZE * MAP_SCALE * MAP_HEIGHT;
     int mapPixelWidth = TILE_SIZE * MAP_SCALE * MAP_WIDTH;
@@ -22,7 +23,7 @@ void update_player(Player* p, const Uint8* keys, int* map) {
 
     // On verifie si le joueurs est mort avant de faire les calculs de mouvement*
     if (verifier_conditions_mort(p, mapPixelHeight)) {
-        gerer_mort_joueur(p, 20, 1000);
+        gerer_mort_joueur(p, 20, 1000, s);
         return; 
     }
 

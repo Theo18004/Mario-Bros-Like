@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 
     // Initialisation Map
     int* tileMap = malloc(MAP_WIDTH * MAP_HEIGHT * sizeof(int));
-    if (!load_map_from_csv("assets/Maps/map_v2.2.csv", tileMap)) {
+    if (!load_map_from_csv("assets/Maps/map_v3.csv", tileMap)) {
         free(tileMap);
         // Nettoyage rapide avant de partir
         SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window);
@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
     }
 
     // --- 4. Chargement Assets Jeu ---
-    SDL_Texture* terrainTex = IMG_LoadTexture(renderer, "assets/Terrain/Terrain (16x16).png");
+    SDL_Texture* terrainTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTileset.png");
     Tileset ts = { terrainTex, 22, 16, 16 };
     
     SDL_Texture* bg1 = IMG_LoadTexture(renderer, "assets/Sprites/Background/sky.png");

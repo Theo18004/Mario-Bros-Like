@@ -46,19 +46,44 @@ void update_player(Player* p, const Uint8* keys, int* map, Score* s){
     // Si le joueur est en vie, on traite les mouvements normalement
     p->state = STATE_IDLE; // Reset état par défaut
 
-    // --- Mouvement X ---
+   // --- Mouvement X avec Step-Up pour Diagonales ---
     float speed = 5.0f;
-    if (keys[SDL_SCANCODE_LEFT]) {
-        p->rect.x -= (int)speed;
-        p->facingRight = 0;
+    int oldX = p->rect.x;
+    int oldY = p->rect.y;
+    int max_step = 10; 
+    
+    if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT]) {
+        if (keys[SDL_SCANCODE_LEFT]) {
+            p->rect.x -= (int)speed;
+            p->facingRight = 0;
+        } else {
+            p->rect.x += (int)speed;
+            p->facingRight = 1;
+        }
         p->state = STATE_RUN;
-        if (check_collision(p->rect, map)) p->rect.x += (int)speed;
-    }
-    else if (keys[SDL_SCANCODE_RIGHT]) {
-        p->rect.x += (int)speed;
-        p->facingRight = 1;
-        p->state = STATE_RUN;
-        if (check_collision(p->rect, map)) p->rect.x -= (int)speed;
+
+        // Si on touche la pente
+        if (check_collision(p->rect, map)) {
+            int success = 0;
+            // On monte légèrement pour suivre la pente
+            for (int i = 1; i <= max_step; i++) {
+                p->rect.y = oldY - i;
+                if (!check_collision(p->rect, map)) {
+                    success = 1;
+                    p->velY = 0; 
+                    break;
+                }
+            }
+
+            // Si c'est un vrai mur on bloque le joueur
+            if (!success) {
+                p->rect.x = oldX;
+                p->rect.y = oldY;
+                p->state = STATE_IDLE;
+            }
+        }
+    } else {
+        if (p->onGround) p->state = STATE_IDLE;
     }
 
     //Bloqué le joueur au bordure de la map
@@ -97,18 +122,26 @@ void update_player(Player* p, const Uint8* keys, int* map, Score* s){
         }
     }
 
-    // --- Capteur de Sol (Correction Jump Infini) ---
+    // --- Capteur de Sol (Sticky Ground pour pentes) ---
     SDL_Rect groundCheck = p->rect;
-    groundCheck.y += 1;
+    
+    // On regarde 4 pixels plus bas au lieu de 1 pour "coller" à la pente
+    groundCheck.y += 4; 
+    
     if (check_collision(groundCheck, map) && p->velY >= 0) {
         p->onGround = 1;
+        // Si on est sur une pente et qu'on ne saute pas, on force la vitesse Y à 0
+        if (p->velY > 0) p->velY = 0; 
     } else {
         p->onGround = 0;
     }
 
-    // --- Correction État ---
+    // --- Correction État Animation ---
     if (!p->onGround) {
         p->state = STATE_JUMP;
+    } else if (p->state == STATE_JUMP) {
+        // Si on vient d'atterrir, on repasse en IDLE ou RUN
+        p->state = (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT]) ? STATE_RUN : STATE_IDLE;
     }
 
 }

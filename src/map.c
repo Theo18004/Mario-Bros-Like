@@ -35,25 +35,23 @@ void draw_tile(SDL_Renderer* renderer, Tileset* ts, int tileId, int x, int y, in
     SDL_RenderCopy(renderer, ts->texture, &src, &dest);
 }
 
-void draw_parallax_bg(SDL_Renderer* renderer, SDL_Texture* tex, int scrollX, int scrollY, float speedX, float speedY, int screenW, int screenH, int offsetY) {
+
+void draw_parallax_bg(SDL_Renderer* renderer, SDL_Texture* tex, int scrollX, int scrollY, float speedX, float speedY, int screenW, int screenH, int startX, int offsetY) {
     (void)screenH;
     if (!tex) return;
+
     int tw, th;
     SDL_QueryTexture(tex, NULL, NULL, &tw, &th);
-    int finalW = tw * MAP_SCALE;
+    int finalW = tw * MAP_SCALE; 
     int finalH = th * MAP_SCALE;
-    int posX = -(int)(scrollX * speedX) % finalW;
+    int relativeX = (int)((startX - scrollX) * speedX);
+    int posX = relativeX % finalW;
+    if (posX > 0) posX -= finalW;
     int posY = offsetY - (int)(scrollY * speedY);
+
     SDL_Rect dest = { posX, posY, finalW, finalH };
-    SDL_RenderCopy(renderer, tex, NULL, &dest);
-    
-    // Répétition pour écrans larges
-    if (dest.x + finalW < screenW) {
-        dest.x += finalW;
+    while (dest.x < screenW) {
         SDL_RenderCopy(renderer, tex, NULL, &dest);
-        if (dest.x + finalW < screenW) { 
-             dest.x += finalW;
-             SDL_RenderCopy(renderer, tex, NULL, &dest);
-        }
+        dest.x += finalW; 
     }
 }

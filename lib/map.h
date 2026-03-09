@@ -18,6 +18,6 @@ int load_map_from_csv(const char* filename, int* map_array);
 void draw_tile(SDL_Renderer* renderer, Tileset* ts, int tileId, int x, int y, int scrollX, int scrollY);
 
 // Dessine les arrières-plans (Parallaxe)
-void draw_parallax_bg(SDL_Renderer* renderer, SDL_Texture* tex, int scrollX, int scrollY, float speedX, float speedY, int screenW, int screenH, int offsetY);
+void draw_parallax_bg(SDL_Renderer* renderer, SDL_Texture* tex, int scrollX, int scrollY, float speedX, float speedY, int screenW, int screenH, int startX, int offsetY);
 
 #endif

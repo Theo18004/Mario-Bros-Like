@@ -153,3 +153,10 @@ void render_score(SDL_Renderer* renderer, Score* s) {
         }
     }
 }
+
+void reset_score(Score* s) {
+    if (s != NULL) {
+        s->value = 0; // Ou le champ que tu utilises pour stocker le score
+        // Réinitialise aussi la position si nécessaire
+    }
+}

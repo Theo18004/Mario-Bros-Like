@@ -11,7 +11,7 @@ typedef struct {
 
 void init_score(Score* s, int x, int y);
 void update_score(Score* s, int player_x);
-
+void reset_score(Score* s);
 void render_score(SDL_Renderer* renderer, Score* s);
 
 #endif

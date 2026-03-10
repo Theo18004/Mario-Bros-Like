@@ -141,7 +141,7 @@ int main(int argc, char* argv[]) {
         update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
 
-        // --- NOUVEAU : Sauvegarde des scores en temps réel ---
+// ---Sauvegarde des scores en temps réel ---
         static int meilleur_score = 0;
         static int score_affichage_fin = 0;
 
@@ -149,8 +149,8 @@ int main(int argc, char* argv[]) {
         if (score.value > meilleur_score) {
             meilleur_score = score.value;
         }
-        // On garde en mémoire le dernier score valide avant la mort
-        if (score.value > 0) {
+        
+        if (player.lives > 0) {
             score_affichage_fin = score.value; 
         }
         // ----------------------------------------------------

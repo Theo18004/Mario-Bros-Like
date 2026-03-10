@@ -1,10 +1,16 @@
+/**
+ * @file defs.h
+ * @brief Constantes globales et réglages du moteur de jeu.
+ */
+
 #ifndef DEFS_H
 #define DEFS_H
 
-#define TILE_SIZE 16      
-#define MAP_SCALE 2       
-#define MAP_WIDTH 445 
-#define MAP_HEIGHT 38  
-#define REFERENCE_HEIGHT 600 
+#define TILE_SIZE 16        /**< Taille de base d'une tuile (pixels) */
+#define MAP_SCALE 2         /**< Facteur d'agrandissement de l'affichage */
+#define MAP_WIDTH 270       /**< Nombre de tuiles en largeur */
+#define MAP_HEIGHT 38       /**< Nombre de tuiles en hauteur */
+#define REFERENCE_HEIGHT 600 /**< Hauteur de référence pour la mise à l'échelle */
+#define TILE_SOLID 7        /**< Identifiant d'une tuile solide générique */
 
 #endif

@@ -1,48 +1,27 @@
+/**
+ * @file menu.h
+ * @brief Système de menus (principal, options) et gestion des paramètres.
+ */
+
 #ifndef MENU_H
 #define MENU_H
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-// Variables globales
-extern int volume;
-extern int luminosite;
+extern int volume;      /**< Volume global du jeu */
+extern int luminosite;  /**< Luminosité de l'écran */
 
-// Codes de retour du menu
+/** @enum MenuResult */
 typedef enum {
-    MENU_QUIT = 0,
-    MENU_PLAY = 1,
-    MENU_OPTIONS = 2
+    MENU_QUIT = 0, /**< L'utilisateur veut quitter */
+    MENU_PLAY = 1, /**< L'utilisateur veut lancer la partie */
+    MENU_OPTIONS = 2 /**< L'utilisateur est dans les options */
 } MenuResult;
 
-/**
- * charge les parametres enregistrer
- */
 void charger_parametres();
-
-/**
- * sauvegarde les parametres
- */
 void sauvegarder_parametres();
-
-/**
- * Affiche le menu et attend une action du joueur.
- * @param renderer Le renderer SDL déjà créé dans le main
- * @param width Largeur réelle de la fenêtre
- * @param height Hauteur réelle de la fenêtre
- * @return L'action choisie (JOUER, QUITTER, etc.)
- */
 MenuResult afficher_menu(SDL_Renderer* renderer, int width, int height);
-
-
-/**
- * Affiche le menu paramètre
- * @param renderer Le renderer SDL déjà créé dans le main
- * @param width Largeur réelle de la fenêtre
- * @param height Hauteur réelle de la fenêtre
- * @param font Police d'écriture
- * @param textBG Image de fond
- */
 void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font* font, SDL_Texture* texBG);
 
 #endif

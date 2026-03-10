@@ -1,33 +1,37 @@
+/**
+ * @file player.h
+ * @brief Gestion du joueur (états, physique et rendu).
+ */
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
 #include <SDL.h>
 #include "score.h"
 
+/** @enum PlayerState */
 typedef enum {
-    STATE_IDLE,
-    STATE_RUN,
-    STATE_JUMP,
-    STATE_DEAD
+    STATE_IDLE, /**< Au repos */
+    STATE_RUN,  /**< En train de courir */
+    STATE_JUMP, /**< Dans les airs */
+    STATE_DEAD  /**< En cours d'animation de mort */
 } PlayerState;
 
-// Structure regroupant tout ce qui concerne le joueur
+/**
+ * @struct Player
+ * @brief Structure regroupant les données du personnage principal.
+ */
 typedef struct {
-    SDL_Rect rect;      // Hitbox physique (x, y, w, h)
-    float velY;         // Vitesse verticale
-    int facingRight;    // 1 = Droite, 0 = Gauche
-    int onGround;       // 1 = Sol, 0 = Air
-    int lives;          // Nombre de vies 
-    PlayerState state;  // État actuel
+    SDL_Rect rect;      /**< Hitbox et position */
+    float velY;         /**< Vélocité verticale */
+    int facingRight;    /**< Orientation du regard */
+    int onGround;       /**< Est au sol ? */
+    int lives;          /**< Nombre de vies restantes */
+    PlayerState state;  /**< État actuel pour les animations */
 } Player;
 
-// Initialise le joueur
 void init_player(Player* p, int x, int y);
-
-// Met à jour la position et l'état (Physique + Inputs)
-void update_player(Player* p, const Uint8* keys, int* map, Score* s);;
-
-// Dessine le joueur avec l'animation correcte
+void update_player(Player* p, const Uint8* keys, int* map, Score* s);
 void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY, 
                    SDL_Texture* texIdle, SDL_Texture* texRun, SDL_Texture* texJump, SDL_Texture* texDead);
 

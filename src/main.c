@@ -20,7 +20,7 @@
 #include "score.h"
 #include "mort.h"
 #include "interface.h"
-#include "ennemi.h" // Nouveau header pour les ennemis
+#include "ennemi.h" 
 
 #define TILE_SIZE 16      
 #define MAP_SCALE 2       
@@ -32,17 +32,15 @@
 /**
  * @brief Fonction main.
  */
-
 int main(int argc, char* argv[]) {
     (void)argc;
     (void)argv;
 
-// --- 1. Initialisation Globale ---
+    // --- 1. Initialisation Globale ---
     if (SDL_Init(SDL_INIT_VIDEO) < 0) return 1;
     IMG_Init(IMG_INIT_PNG);
     if (TTF_Init() == -1) return 1;
 
-    // NOUVEAU : On charge la police ici !
     TTF_Font* font = TTF_OpenFont("police.ttf", 32); 
     if (font == NULL) {
         font = TTF_OpenFont("/info/etu/l2info/s2300803/Mario-Bros-Like-main/assets/police.ttf", 32); 
@@ -51,7 +49,7 @@ int main(int argc, char* argv[]) {
         printf("Erreur : impossible de charger la police ! %s\n", TTF_GetError());
     }
 
-    SDL_Window* window = SDL_CreateWindow("Mario-Like (Ennemis Rouges)", 
+    SDL_Window* window = SDL_CreateWindow("Mario-Like (Loup & Thwomp)", 
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
     
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -65,7 +63,6 @@ int main(int argc, char* argv[]) {
     // --- 2. Lancement du Menu ---
     MenuResult menuChoix = afficher_menu(renderer, physicalW, physicalH);
     if (menuChoix == MENU_QUIT) {
-        // Nettoyage rapide
         SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window);
         TTF_Quit(); IMG_Quit(); SDL_Quit();
         return 0;
@@ -95,21 +92,29 @@ int main(int argc, char* argv[]) {
     SDL_Texture* bg4 = IMG_LoadTexture(renderer, "assets/Sprites/Background/cloud1.png");
     SDL_Texture* bg5 = IMG_LoadTexture(renderer, "assets/Sprites/Background/cloud2.png");
 
-    // Textures Joueur (Réutilisées pour l'ennemi)
+    // Textures Joueur
     SDL_Texture* texIdle = IMG_LoadTexture(renderer, "assets/Personnage/Idle.png");
     SDL_Texture* texRun  = IMG_LoadTexture(renderer, "assets/Personnage/Run.png");
     SDL_Texture* texJump = IMG_LoadTexture(renderer, "assets/Personnage/Jump.png");
     SDL_Texture* texDead = IMG_LoadTexture(renderer, "assets/Personnage/Dead.png");
     SDL_Texture* texFullHeart = IMG_LoadTexture(renderer, "assets/Interface/FullHeart.png");
 
+    // Textures Ennemis
+    SDL_Texture* texLoup = IMG_LoadTexture(renderer, "assets/Ennemi/wolfsheet.png");
+    SDL_Texture* texThwomp = IMG_LoadTexture(renderer, "assets/Ennemi/thwomp.png");
+
     // --- 5. Initialisation Objets ---
     Player player;
-    init_player(&player, 20, 1000); // Position de départ
+    init_player(&player, 20, 1000); 
     player.lives = 3;
 
-    // Création d'un ennemi
+    // Création du Loup
     Ennemi mechant;
-    init_ennemi(&mechant, 600, 1000); // Placé plus loin sur la carte
+    init_loupas(&mechant, 600, 1000);
+
+    // Création du Thwomp
+    Thwomp blocPiquant;
+    init_thwomp(&blocPiquant, 650, 900);
 
     Score score;
     init_score(&score, 10, 10);
@@ -135,43 +140,38 @@ int main(int argc, char* argv[]) {
 
         const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-   // -- Mises à jour --
+        // -- Mises à jour --
         update_player(&player, keys, tileMap, &score);
-        update_ennemi(&mechant, tileMap);
+        update_loupas(&mechant, tileMap); // Attention : ton include s'appelle loupas.h maintenant
+        update_thwomp(&blocPiquant, &player, tileMap);
         update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
 
-// ---Sauvegarde des scores en temps réel ---
+        // --- Sauvegarde des scores en temps réel ---
         static int meilleur_score = 0;
         static int score_affichage_fin = 0;
 
-        // On actualise le meilleur score pendant qu'on joue
-        if (score.value > meilleur_score) {
-            meilleur_score = score.value;
-        }
-        
-        if (player.lives > 0) {
-            score_affichage_fin = score.value; 
-        }
-        // ----------------------------------------------------
-        // -- Gestion Collision Joueur/Ennemi --
-       
+        if (score.value > meilleur_score) { meilleur_score = score.value; }
+        if (player.lives > 0) { score_affichage_fin = score.value; }
+
+        // -- Gestion Collision Joueur/Loup --
         if (player.state != STATE_DEAD && mechant.vivant && SDL_HasIntersection(&player.rect, &mechant.rect)) {
-            
-            // Si le joueur tombe (velY > 0) ET que ses pieds touchent le haut de l'ennemi
             if (player.velY > 0 && (player.rect.y + player.rect.h) < (mechant.rect.y + 30)) {
-                mechant.vivant = 0;   // L'ennemi meurt
-                player.velY = -12.0f; // Le joueur rebondit sur lui
-            } 
-            // Sinon (touché sur le côté ou par le bas) : le joueur meurt
-            else {
-                player.state = STATE_DEAD; // Le joueur meurt
-                player.velY = -10.0f;      // Petit bond d'agonie
-                
-                // (Le joueur ne pourra plus bouger car dans update_player, 
-                // STATE_DEAD ignore les touches clavier et applique juste la gravité)
+                mechant.vivant = 0;   
+                player.velY = -12.0f; 
+            } else {
+                player.state = STATE_DEAD; 
+                player.velY = -10.0f;      
             }
         }
+
+        // -- Gestion Collision Joueur/Thwomp --
+        if (player.state != STATE_DEAD && blocPiquant.vivant && SDL_HasIntersection(&player.rect, &blocPiquant.rect)) {
+            // Un Thwomp est mortel dans tous les cas
+            player.state = STATE_DEAD; 
+            player.velY = -10.0f;      
+        }
+
         // -- Rendu --
         SDL_SetRenderDrawColor(renderer, 27, 45, 45, 255);
         SDL_RenderClear(renderer);
@@ -194,60 +194,51 @@ int main(int argc, char* argv[]) {
         }
 
         // Entités
-        render_ennemi(renderer, &mechant, camera.x, camera.y, texIdle, texRun);
+        // On affiche les objets de l'arrière plan vers le premier plan
+        render_thwomp(renderer, &blocPiquant, camera.x, camera.y, texThwomp);
+        render_loupas(renderer, &mechant, camera.x, camera.y, texLoup);
         render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump, texDead);
 
 
         // ==========================================
         // --- MODE DEBUG : AFFICHAGE DES HITBOXES ---
         // ==========================================
-        
-        // On active la transparence pour bien voir les sprites en dessous
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-        // 1. Hitbox du Joueur (en Vert semi-transparent)
+        // 1. Joueur
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 128); 
-        SDL_Rect debugPlayerRect = { 
-            player.rect.x - camera.x, 
-            player.rect.y - camera.y, 
-            player.rect.w, 
-            player.rect.h 
-        };
-        SDL_RenderFillRect(renderer, &debugPlayerRect); // Remplissage
-        
-        // Bordure de la hitbox du joueur (en Vert fluo)
+        SDL_Rect debugPlayerRect = { player.rect.x - camera.x, player.rect.y - camera.y, player.rect.w, player.rect.h };
+        SDL_RenderFillRect(renderer, &debugPlayerRect); 
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderDrawRect(renderer, &debugPlayerRect); 
 
-        // 2. Hitbox de l'Ennemi (en Rouge semi-transparent), s'il est vivant
+        // 2. Loup
         if (mechant.vivant) {
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 128); 
-            SDL_Rect debugEnnemiRect = { 
-                mechant.rect.x - camera.x, 
-                mechant.rect.y - camera.y, 
-                mechant.rect.w, 
-                mechant.rect.h 
-            };
-            SDL_RenderFillRect(renderer, &debugEnnemiRect); // Remplissage
-            
-            // Bordure de la hitbox de l'ennemi (en Rouge vif)
+            SDL_Rect debugEnnemiRect = { mechant.rect.x - camera.x, mechant.rect.y - camera.y, mechant.rect.w, mechant.rect.h };
+            SDL_RenderFillRect(renderer, &debugEnnemiRect); 
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
             SDL_RenderDrawRect(renderer, &debugEnnemiRect);
         }
-        
-        // On désactive la transparence pour le reste du jeu (optionnel mais plus propre)
+
+        // 3. Thwomp
+        if (blocPiquant.vivant) {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 128); // Hitbox bleue pour le Thwomp
+            SDL_Rect debugThwompRect = { blocPiquant.rect.x - camera.x, blocPiquant.rect.y - camera.y, blocPiquant.rect.w, blocPiquant.rect.h };
+            SDL_RenderFillRect(renderer, &debugThwompRect); 
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+            SDL_RenderDrawRect(renderer, &debugThwompRect);
+        }
+
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
         // ==========================================
-
-
-
 
         // Interface
         render_score(renderer, &score);
         render_lives(renderer, texFullHeart, player.lives);
         render_progress_bar(renderer, player.rect.x, mapPixelWidth);
 
-        // --- EFFET LUMINOSITÉ ---
+        // Effet luminosité
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 - luminosite); 
         SDL_Rect fullScreen = {0, 0, physicalW, physicalH};
@@ -255,12 +246,8 @@ int main(int argc, char* argv[]) {
 
         SDL_RenderPresent(renderer);
 
-        // ==========================================
-        // --- GESTION DU GAME OVER ET MEILLEUR SCORE ---
-        // ==========================================
+        // --- GESTION DU GAME OVER ---
         if (player.lives <= 0) {
-
-            // On récupère la taille de l'écran pour centrer le texte
             int w, h;
             SDL_RenderGetLogicalSize(renderer, &w, &h);
             if (w == 0) SDL_GetRendererOutputSize(renderer, &w, &h);
@@ -268,44 +255,33 @@ int main(int argc, char* argv[]) {
             while (gameOverScreen) {
                 SDL_Event e;
                 while (SDL_PollEvent(&e)) {
-                    if (e.type == SDL_QUIT) {
-                        gameOverScreen = 0;
-                        running = 0; // Ferme complètement le programme
-                    }
-                    if (e.type == SDL_KEYDOWN) {
-                        if (e.key.keysym.scancode == SDL_SCANCODE_SPACE || 
-                            e.key.keysym.scancode == SDL_SCANCODE_RETURN) {
-                            gameOverScreen = 0; 
-                        }
+                    if (e.type == SDL_QUIT) { gameOverScreen = 0; running = 0; }
+                    if (e.type == SDL_KEYDOWN && (e.key.keysym.scancode == SDL_SCANCODE_SPACE || e.key.keysym.scancode == SDL_SCANCODE_RETURN)) {
+                        gameOverScreen = 0; 
                     }
                 }
 
-               
                 SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
                 SDL_RenderClear(renderer);
 
-                // Affichage du texte si la police est bien chargée
                 if (font != NULL) { 
                     SDL_Color rouge = {255, 50, 50, 255};
                     SDL_Color blanc = {255, 255, 255, 255};
                     char buffer[100];
 
-                    // Dessiner "GAME OVER"
                     SDL_Surface* sGO = TTF_RenderText_Solid(font, "GAME OVER", rouge);
                     SDL_Texture* tGO = SDL_CreateTextureFromSurface(renderer, sGO);
                     SDL_Rect rGO = { w/2 - sGO->w/2, h/2 - 100, sGO->w, sGO->h };
                     SDL_RenderCopy(renderer, tGO, NULL, &rGO);
                     SDL_FreeSurface(sGO); SDL_DestroyTexture(tGO);
 
-                    // Dessiner les Scores
-                   sprintf(buffer, "Score : %d   |   Meilleur Score : %d", score_affichage_fin, meilleur_score);
+                    sprintf(buffer, "Score : %d   |   Meilleur Score : %d", score_affichage_fin, meilleur_score);
                     SDL_Surface* sScore = TTF_RenderText_Solid(font, buffer, blanc);
                     SDL_Texture* tScore = SDL_CreateTextureFromSurface(renderer, sScore);
                     SDL_Rect rScore = { w/2 - sScore->w/2, h/2, sScore->w, sScore->h };
                     SDL_RenderCopy(renderer, tScore, NULL, &rScore);
                     SDL_FreeSurface(sScore); SDL_DestroyTexture(tScore);
 
-                    // Dessiner l'instruction
                     SDL_Surface* sInst = TTF_RenderText_Solid(font, "Appuyez sur ESPACE pour revenir", blanc);
                     SDL_Texture* tInst = SDL_CreateTextureFromSurface(renderer, sInst);
                     SDL_Rect rInst = { w/2 - sInst->w/2, h/2 + 100, sInst->w, sInst->h };
@@ -316,25 +292,25 @@ int main(int argc, char* argv[]) {
                 SDL_RenderPresent(renderer);
                 SDL_Delay(16); 
             }
-            // 3. REINITIALISATION DU JEU
           
+            // REINITIALISATION DU JEU
             init_player(&player, 20, 1000);  
-            
             player.lives = 3;
-            
-            init_ennemi(&mechant, 600, 1000); 
+            init_loupas(&mechant, 600, 1000); 
+            init_thwomp(&blocPiquant, 800, 850); 
             init_score(&score, score.rect.x, score.rect.y);
             score_affichage_fin = 0;
         }
     }
+    
     // --- 7. Nettoyage ---
     free(tileMap);
     SDL_DestroyTexture(bg1); SDL_DestroyTexture(bg2); SDL_DestroyTexture(bg3); 
     SDL_DestroyTexture(bg4); SDL_DestroyTexture(bg5); SDL_DestroyTexture(terrainTex); 
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
+    SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); // Libération des textures des ennemis
     SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window);
     TTF_Quit(); IMG_Quit(); SDL_Quit();
 
     return 0;
-    
 }

@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-int luminosite = 100; 
+int luminosite = 2000; 
 int volume = 50;
 
 // permet de sauvegarder les parametres

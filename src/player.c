@@ -1,3 +1,7 @@
+/**
+ * @file player.c
+ * @brief Physique, contrôles et animation du joueur.
+ */
 #include "player.h"
 #include "collision.h"
 #include "defs.h"

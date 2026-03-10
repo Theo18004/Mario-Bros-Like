@@ -1,3 +1,7 @@
+/**
+ * @file score.c
+ * @brief Système de score rendu par primitives de dessin.
+ */
 #include "score.h"
 #include <SDL2/SDL.h>
 

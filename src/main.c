@@ -37,10 +37,19 @@ int main(int argc, char* argv[]) {
     (void)argc;
     (void)argv;
 
-    // --- 1. Initialisation Globale ---
+// --- 1. Initialisation Globale ---
     if (SDL_Init(SDL_INIT_VIDEO) < 0) return 1;
     IMG_Init(IMG_INIT_PNG);
     if (TTF_Init() == -1) return 1;
+
+    // NOUVEAU : On charge la police ici !
+    TTF_Font* font = TTF_OpenFont("police.ttf", 32); 
+    if (font == NULL) {
+        font = TTF_OpenFont("/info/etu/l2info/s2300803/Mario-Bros-Like-main/assets/police.ttf", 32); 
+    }
+    if (font == NULL) {
+        printf("Erreur : impossible de charger la police ! %s\n", TTF_GetError());
+    }
 
     SDL_Window* window = SDL_CreateWindow("Mario-Like (Ennemis Rouges)", 
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -126,12 +135,25 @@ int main(int argc, char* argv[]) {
 
         const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-        // -- Mises à jour --
+   // -- Mises à jour --
         update_player(&player, keys, tileMap, &score);
         update_ennemi(&mechant, tileMap);
         update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
 
+        // --- NOUVEAU : Sauvegarde des scores en temps réel ---
+        static int meilleur_score = 0;
+        static int score_affichage_fin = 0;
+
+        // On actualise le meilleur score pendant qu'on joue
+        if (score.value > meilleur_score) {
+            meilleur_score = score.value;
+        }
+        // On garde en mémoire le dernier score valide avant la mort
+        if (score.value > 0) {
+            score_affichage_fin = score.value; 
+        }
+        // ----------------------------------------------------
         // -- Gestion Collision Joueur/Ennemi --
        
         if (player.state != STATE_DEAD && mechant.vivant && SDL_HasIntersection(&player.rect, &mechant.rect)) {
@@ -232,9 +254,79 @@ int main(int argc, char* argv[]) {
         SDL_RenderFillRect(renderer, &fullScreen);
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(16);
-    }
 
+        // ==========================================
+        // --- GESTION DU GAME OVER ET MEILLEUR SCORE ---
+        // ==========================================
+        if (player.lives <= 0) {
+
+            // On récupère la taille de l'écran pour centrer le texte
+            int w, h;
+            SDL_RenderGetLogicalSize(renderer, &w, &h);
+            if (w == 0) SDL_GetRendererOutputSize(renderer, &w, &h);
+            int gameOverScreen = 1;
+            while (gameOverScreen) {
+                SDL_Event e;
+                while (SDL_PollEvent(&e)) {
+                    if (e.type == SDL_QUIT) {
+                        gameOverScreen = 0;
+                        running = 0; // Ferme complètement le programme
+                    }
+                    if (e.type == SDL_KEYDOWN) {
+                        if (e.key.keysym.scancode == SDL_SCANCODE_SPACE || 
+                            e.key.keysym.scancode == SDL_SCANCODE_RETURN) {
+                            gameOverScreen = 0; 
+                        }
+                    }
+                }
+
+               
+                SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
+                SDL_RenderClear(renderer);
+
+                // Affichage du texte si la police est bien chargée
+                if (font != NULL) { 
+                    SDL_Color rouge = {255, 50, 50, 255};
+                    SDL_Color blanc = {255, 255, 255, 255};
+                    char buffer[100];
+
+                    // Dessiner "GAME OVER"
+                    SDL_Surface* sGO = TTF_RenderText_Solid(font, "GAME OVER", rouge);
+                    SDL_Texture* tGO = SDL_CreateTextureFromSurface(renderer, sGO);
+                    SDL_Rect rGO = { w/2 - sGO->w/2, h/2 - 100, sGO->w, sGO->h };
+                    SDL_RenderCopy(renderer, tGO, NULL, &rGO);
+                    SDL_FreeSurface(sGO); SDL_DestroyTexture(tGO);
+
+                    // Dessiner les Scores
+                   sprintf(buffer, "Score : %d   |   Meilleur Score : %d", score_affichage_fin, meilleur_score);
+                    SDL_Surface* sScore = TTF_RenderText_Solid(font, buffer, blanc);
+                    SDL_Texture* tScore = SDL_CreateTextureFromSurface(renderer, sScore);
+                    SDL_Rect rScore = { w/2 - sScore->w/2, h/2, sScore->w, sScore->h };
+                    SDL_RenderCopy(renderer, tScore, NULL, &rScore);
+                    SDL_FreeSurface(sScore); SDL_DestroyTexture(tScore);
+
+                    // Dessiner l'instruction
+                    SDL_Surface* sInst = TTF_RenderText_Solid(font, "Appuyez sur ESPACE pour revenir", blanc);
+                    SDL_Texture* tInst = SDL_CreateTextureFromSurface(renderer, sInst);
+                    SDL_Rect rInst = { w/2 - sInst->w/2, h/2 + 100, sInst->w, sInst->h };
+                    SDL_RenderCopy(renderer, tInst, NULL, &rInst);
+                    SDL_FreeSurface(sInst); SDL_DestroyTexture(tInst);
+                }
+
+                SDL_RenderPresent(renderer);
+                SDL_Delay(16); 
+            }
+            // 3. REINITIALISATION DU JEU
+          
+            init_player(&player, 20, 1000);  
+            
+            player.lives = 3;
+            
+            init_ennemi(&mechant, 600, 1000); 
+            init_score(&score, score.rect.x, score.rect.y);
+            score_affichage_fin = 0;
+        }
+    }
     // --- 7. Nettoyage ---
     free(tileMap);
     SDL_DestroyTexture(bg1); SDL_DestroyTexture(bg2); SDL_DestroyTexture(bg3); 
@@ -244,4 +336,5 @@ int main(int argc, char* argv[]) {
     TTF_Quit(); IMG_Quit(); SDL_Quit();
 
     return 0;
+    
 }

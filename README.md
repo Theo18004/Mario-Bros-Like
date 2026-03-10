@@ -27,6 +27,7 @@ Le moteur intègre les mécaniques suivantes :
 * **Collisions Précises** : Détection et résolution des collisions avec le sol et les plateformes.
 * **Game Loop Optimisée** : Boucle de jeu fluide avec gestion du temps et synchronisation verticale (VSync).
 * **Animations Dynamiques** : Machine à états gérant les sprites (Idle, Run, Jump) et la direction du regard.
+* **Système d'enemis** : Gestion des mouvements de patrouille, détection des collisions et interactions avec le joueur (dégâts, élimination).
 
 ---
 
@@ -34,16 +35,23 @@ Le moteur intègre les mécaniques suivantes :
 
 ```bash
 .
-├── assets/          # Sprites, tuiles et images (.png)
-├── include/         # Fichiers d'en-tête (.h)
+├── assets/          # Sprites, tuiles, images et autres ressources
+├── doc/             # Documentation supplémentaire du projet
+├── lib/             # Bibliothèques externes et dépendances
+├── obj/             # Fichiers objets (.o) générés lors de la compilation
 ├── src/             # Code source (.c)
+│   ├── camera.c     # Gestion du déplacement et du focus de la caméra
+│   ├── collision.c  # Moteur et détection des collisions
+│   ├── ennemi.c     # Logique, comportements et IA des ennemis
+│   ├── interface.c  # Gestion de l'interface utilisateur (HUD) en jeu
 │   ├── main.c       # Point d'entrée et boucle de jeu principale
-│   ├── player.c     # Logique et physique du joueur
-│   ├── map.c        # Gestion du chargement et rendu de la Tilemap
-│   ├── caméra.c        # Gestion de la caméra
-│   └── collision.c    # Moteur de collisions 
+│   ├── map.c        # Gestion du chargement et rendu de la carte (Tilemap)
+│   ├── menu.c       # Gestion de l'écran titre et des menus de navigation
+│   ├── mort.c       # Gestion des conditions de défaite et de l'écran de Game Over
+│   ├── player.c     # Logique, contrôles et physique du joueur
+│   └── score.c      # Calcul, mise à jour et affichage du score
 ├── Makefile         # Script d'automatisation de la compilation
-└── README.md        # Documentation du projet
+└── README.md        # Fichier de présentation et documentation principale
 ```
 
 ## 🛠️ Prérequis
@@ -101,5 +109,7 @@ Le système d'animation gère les transitions entre les sprites selon l'état ph
     RUN : Le joueur se déplace horizontalement.
 
     JUMP : Le joueur est en l'air (vélocité Y négative ou positive).
+
+    DEAD : Le joueur tombe et se couche sur le sol. 
 
 Chaque état possède sa propre vitesse d'animation et son nombre de frames, gérés par un timer interne (frameTimer).

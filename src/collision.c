@@ -11,13 +11,13 @@
  * @return 1 si solide, 0 sinon.
  */
 int is_full(int tile_id) {
-    if ((tile_id >= 6 && tile_id <= 8)   || 
-        (tile_id >= 28 && tile_id <= 30) || 
-        (tile_id >= 50 && tile_id <= 52) || 
-        tile_id == 34 && tile_id == 264 || 
-        tile_id == 265 && tile_id == 286 || 
-        tile_id == 308 && tile_id == 309 ||
-        tile_id >= 12 && tile_id <= 14){
+    if ((tile_id >= 6 && tile_id <= 8)|| 
+        (tile_id >= 28 && tile_id <= 30)|| 
+        (tile_id >= 50 && tile_id <= 52)|| 
+        tile_id == 34 || tile_id == 264 || 
+        tile_id == 265 || tile_id == 286 || 
+        tile_id == 308 || tile_id == 309 ||
+        tile_id == 12 || tile_id == 14){
         return 1;
     }
     return 0;

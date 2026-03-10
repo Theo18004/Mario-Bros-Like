@@ -50,6 +50,9 @@ int main(int argc, char* argv[]) {
     int physicalW, physicalH;
     SDL_GetRendererOutputSize(renderer, &physicalW, &physicalH);
 
+    // charger parametre sauvegarder
+    charger_parametres();
+
     // --- 2. Lancement du Menu ---
     MenuResult menuChoix = afficher_menu(renderer, physicalW, physicalH);
     if (menuChoix == MENU_QUIT) {
@@ -170,6 +173,12 @@ int main(int argc, char* argv[]) {
         render_score(renderer, &score);
         render_lives(renderer, texFullHeart, player.lives);
         render_progress_bar(renderer, player.rect.x, mapPixelWidth);
+
+        // --- EFFET LUMINOSITÉ ---
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 - luminosite); 
+        SDL_Rect fullScreen = {0, 0, physicalW, physicalH};
+        SDL_RenderFillRect(renderer, &fullScreen);
 
         SDL_RenderPresent(renderer);
         SDL_Delay(16);

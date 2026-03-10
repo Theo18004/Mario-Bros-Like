@@ -4,8 +4,8 @@
 
 #include <stdio.h>
 
-int luminosite = 2000; 
-int volume = 50;
+int luminosite = 255; // valeur max : 255
+int volume = 50; // valeur max 100
 
 // permet de sauvegarder les parametres
 void sauvegarder_parametres() {
@@ -143,12 +143,6 @@ MenuResult afficher_menu(SDL_Renderer* renderer, int width, int height) {
             SDL_RenderFillRect(renderer, &rectQuitter);
         }
 
-        // --- APPLIQUER LA LUMINOSITÉ PARTOUT ---
-        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 - luminosite); 
-        SDL_Rect fullScreen = {0, 0, width, height};
-        SDL_RenderFillRect(renderer, &fullScreen);
-
         // Textes boutons centrés
         SDL_Rect posJ = { rectJouer.x + (rectJouer.w - tRectJ.w)/2, rectJouer.y + (rectJouer.h - tRectJ.h)/2, tRectJ.w, tRectJ.h };
         SDL_RenderCopy(renderer, txtJouer, NULL, &posJ);
@@ -158,6 +152,12 @@ MenuResult afficher_menu(SDL_Renderer* renderer, int width, int height) {
 
         SDL_Rect posQ = { rectQuitter.x + (rectQuitter.w - tRectQ.w)/2, rectQuitter.y + (rectQuitter.h - tRectQ.h)/2, tRectQ.w, tRectQ.h };
         SDL_RenderCopy(renderer, txtQuitter, NULL, &posQ);
+
+        // --- APPLIQUER LA LUMINOSITÉ PARTOUT ---
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 - luminosite); 
+        SDL_Rect fullScreen = {0, 0, width, height};
+        SDL_RenderFillRect(renderer, &fullScreen);
 
         SDL_RenderPresent(renderer);
         SDL_Delay(16);
@@ -241,12 +241,12 @@ void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font
         SDL_RenderCopy(renderer, txtSon, NULL, &posSon);
         SDL_RenderCopy(renderer, txtLum, NULL, &posLum);
 
-        // Fond des barres (Gris foncé)
+        // Fond des barres
         SDL_SetRenderDrawColor(renderer, 60, 60, 60, 255);
         SDL_RenderFillRect(renderer, &barSon);
         SDL_RenderFillRect(renderer, &barLum);
 
-        // Remplissage des barres (Vert pour le son, Bleu pour la lum par ex)
+        // Remplissage des barres
         SDL_SetRenderDrawColor(renderer, 46, 204, 113, 255); // Vert
         SDL_Rect fillSon = { barSon.x, barSon.y, (volume * barSon.w) / 100, barSon.h };
         SDL_RenderFillRect(renderer, &fillSon);

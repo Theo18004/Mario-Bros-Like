@@ -11,7 +11,7 @@
 void init_player(Player* p, int x, int y) {
     p->rect.x = x;
     p->rect.y = y;
-    p->rect.w = 30; // Largeur Hitbox
+    p->rect.w = 20; // Largeur Hitbox
     p->rect.h = 48; // Hauteur Hitbox
     p->velY = 0.0f;
     p->facingRight = 1;
@@ -19,43 +19,36 @@ void init_player(Player* p, int x, int y) {
     p->state = STATE_IDLE;
 }
 
-void update_player(Player* p, const Uint8* keys, int* map, Score* s){
-
+void update_player(Player* p, const Uint8* keys, int* map, Score* s) {
     int mapPixelHeight = TILE_SIZE * MAP_SCALE * MAP_HEIGHT;
     int mapPixelWidth = TILE_SIZE * MAP_SCALE * MAP_WIDTH;
 
-
-    // On verifie si le joueurs est mort avant de faire les calculs de mouvement*
+    // --- 1. Vérification de la mort (chute) ---
     if (verifier_conditions_mort(p, mapPixelHeight)) {
-        gerer_mort_joueur(p, 20, 1000, s);
+        gerer_mort_joueur(p, 20, 1000, s); 
         return; 
     }
 
     if (p->state == STATE_DEAD) {
-        int limiteSolChute = mapPixelHeight - 65; // limite chute pour arret animation de mort avant respawn (mettre le même dans mort.c)
-
-        //On laisse tomber le joueur jusqu'à la limite choisie pour qu'on puisse voir l'animation de mort avant de le faire respawn
-        if (p->rect.y < limiteSolChute) {
-            p->velY += 0.2f; 
-            p->rect.y += (int)p->velY;
-        } 
-        else {
-            // on bloque le joueur averc l'animation pour qu'on puisse voir l'animation de mort avant de respawn
-            p->rect.y = limiteSolChute;
-            p->velY = 0; 
-        }
-        return; 
+        p->velY += 0.6f;
+        p->rect.y += (int)p->velY;
+        return;
     }
 
-    // Si le joueur est en vie, on traite les mouvements normalement
-    p->state = STATE_IDLE; // Reset état par défaut
-
-   // --- Mouvement X avec Step-Up pour Diagonales ---
-    float speed = 5.0f;
+    // --- 2. Initialisation de la frame ---
+    int wasOnGround = p->onGround;
+    p->state = STATE_IDLE; 
     int oldX = p->rect.x;
     int oldY = p->rect.y;
-    int max_step = 10; 
-    
+
+    // --- 3. Saut (Avec la FLÈCHE DU HAUT) ---
+    if (keys[SDL_SCANCODE_UP] && p->onGround) {
+        p->velY = -12.0f; // Force du saut
+        p->onGround = 0;
+    }
+
+    // --- 4. Mouvements sur l'axe X ---
+    float speed = 5.0f;
     if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT]) {
         if (keys[SDL_SCANCODE_LEFT]) {
             p->rect.x -= (int)speed;
@@ -64,90 +57,83 @@ void update_player(Player* p, const Uint8* keys, int* map, Score* s){
             p->rect.x += (int)speed;
             p->facingRight = 1;
         }
+        
         p->state = STATE_RUN;
 
-        // Si on touche la pente
+        // Si on rentre dans un mur ou une pente
         if (check_collision(p->rect, map)) {
             int success = 0;
-            // On monte légèrement pour suivre la pente
-            for (int i = 1; i <= max_step; i++) {
-                p->rect.y = oldY - i;
-                if (!check_collision(p->rect, map)) {
-                    success = 1;
-                    p->velY = 0; 
-                    break;
+            int max_step = 10;
+            
+            // On tente de monter la pente/marche
+            if (wasOnGround) {
+                for (int i = 1; i <= max_step; i++) {
+                    p->rect.y = oldY - i;
+                    if (!check_collision(p->rect, map)) {
+                        success = 1;
+                        break;
+                    }
                 }
             }
 
-            // Si c'est un vrai mur on bloque le joueur
+            // Si c'est un vrai mur trop haut
             if (!success) {
-                p->rect.x = oldX;
-                p->rect.y = oldY;
-                p->state = STATE_IDLE;
+                p->rect.y = oldY; // On annule la montée
+                
+                // --- LA CORRECTION EST ICI ---
+                // Au lieu d'annuler complètement le mouvement X et laisser un écart,
+                // on repousse le joueur pixel par pixel pour qu'il soit COLLÉ au mur.
+                if (keys[SDL_SCANCODE_RIGHT]) {
+                    while (check_collision(p->rect, map)) p->rect.x -= 1;
+                } else if (keys[SDL_SCANCODE_LEFT]) {
+                    while (check_collision(p->rect, map)) p->rect.x += 1;
+                }
             }
         }
-    } else {
-        if (p->onGround) p->state = STATE_IDLE;
     }
 
-    //Bloqué le joueur au bordure de la map
-    //Bloqué à gauche de la map
-    if ( p->rect.x < 0) {
-        p->rect.x = 0;
-    }
-
-    //Bloqué à droite de la map 
-    if ( p->rect.x + p->rect.w > mapPixelWidth) {
+    // Bloquer les bords de la map en X
+    if (p->rect.x < 0) p->rect.x = 0;
+    if (p->rect.x + p->rect.w > mapPixelWidth) {
         p->rect.x = mapPixelWidth - p->rect.w;
     }
 
-    // --- Saut ---
-    if (keys[SDL_SCANCODE_UP] && p->onGround) {
-        p->velY = -12.0f;
-        p->onGround = 0;
-    }
+    // --- 5. Gravité et axe Y ---
+    p->velY += 0.6f; 
+    if (p->velY > 15.0f) p->velY = 15.0f; // Vitesse de chute max
 
-    // --- Physique Y ---
-    p->velY += 0.6f;
     p->rect.y += (int)p->velY;
-    p->onGround = 0;
+    p->onGround = 0; 
 
+    // Résolution des collisions Y par "Pushback"
     if (check_collision(p->rect, map)) {
-        if (p->velY > 0) { // Atterrissage
-            int tileSize = TILE_SIZE * MAP_SCALE;
-            p->rect.y = ((p->rect.y + p->rect.h) / tileSize) * tileSize - p->rect.h;
-            if (check_collision(p->rect, map)) p->rect.y -= 1;
+        if (p->velY > 0) { 
+            while (check_collision(p->rect, map)) {
+                p->rect.y -= 1; 
+            }
+            p->velY = 0;
+            p->onGround = 1; 
+        } 
+        else if (p->velY < 0) { 
+            while (check_collision(p->rect, map)) {
+                p->rect.y += 1; 
+            }
             p->velY = 0;
         }
-        else if (p->velY < 0) { // Plafond
-            int tileSize = TILE_SIZE * MAP_SCALE;
-            p->rect.y = (p->rect.y / tileSize + 1) * tileSize;
-            p->velY = 0;
-        }
-    }
-
-    // --- Capteur de Sol (Sticky Ground pour pentes) ---
-    SDL_Rect groundCheck = p->rect;
-    
-    // On regarde 4 pixels plus bas au lieu de 1 pour "coller" à la pente
-    groundCheck.y += 4; 
-    
-    if (check_collision(groundCheck, map) && p->velY >= 0) {
-        p->onGround = 1;
-        // Si on est sur une pente et qu'on ne saute pas, on force la vitesse Y à 0
-        if (p->velY > 0) p->velY = 0; 
     } else {
-        p->onGround = 0;
+        p->rect.y += 1;
+        if (check_collision(p->rect, map)) {
+            p->onGround = 1; 
+        }
+        p->rect.y -= 1; 
     }
 
-    // --- Correction État Animation ---
+    // --- 6. Choix final de l'animation ---
     if (!p->onGround) {
         p->state = STATE_JUMP;
-    } else if (p->state == STATE_JUMP) {
-        // Si on vient d'atterrir, on repasse en IDLE ou RUN
-        p->state = (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT]) ? STATE_RUN : STATE_IDLE;
+    } else if (p->rect.x == oldX && (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT])) { 
+        p->state = STATE_IDLE;
     }
-
 }
 
 void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY, 
@@ -167,7 +153,7 @@ void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY,
         nbFrames = 3;
     }
     
-    // On met les animations à jour en fonction du temps pour que ça soit fluide et pas lié au framerate
+    // On met les animations à jour en fonction du temps
     if (currentTexture) {
         int texW, texH;
         SDL_QueryTexture(currentTexture, NULL, NULL, &texW, &texH);
@@ -181,18 +167,33 @@ void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY,
         } else if (p->state == STATE_JUMP) {
             currentFrame = (SDL_GetTicks() / 100) % nbFrames;
         } else if (p->state == STATE_DEAD) {
-            if (deathStartTime == 0) deathStartTime = SDL_GetTicks(); // lance un timer pour l'animation de mort
+            if (deathStartTime == 0) deathStartTime = SDL_GetTicks(); 
             currentFrame = (SDL_GetTicks() - deathStartTime) / 150;
-            if (currentFrame >= nbFrames) currentFrame = nbFrames - 1; // utilise le timer pour bloquer sur l'animation sur ventre à la fin
+            if (currentFrame >= nbFrames) currentFrame = nbFrames - 1; 
         } else {
             deathStartTime = 0;
             currentFrame = (SDL_GetTicks() / 150) % nbFrames;
         }
 
         SDL_Rect srcP = { currentFrame * singleFrameW, 0, singleFrameW, texH };
+        
+        // Taille d'affichage à l'écran
         int displaySize = 64;
-        // Centrage Hitbox 
-        SDL_Rect destP = { p->rect.x - scrollX - 17, p->rect.y - scrollY - 16, displaySize, displaySize };
+
+        
+        // 1. Centrage horizontal : (Taille de l'image - Taille de la Hitbox) / 2
+        int offsetX = (displaySize - p->rect.w) / 2; 
+        
+        // 2. Alignement vertical : On aligne les pieds de l'image avec le bas de la hitbox
+        int offsetY = displaySize - p->rect.h;       
+
+        
+        SDL_Rect destP = { 
+            p->rect.x - scrollX - offsetX, 
+            p->rect.y - scrollY - offsetY, 
+            displaySize, 
+            displaySize 
+        };
         
         SDL_RendererFlip flip = (p->facingRight) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         SDL_RenderCopyEx(renderer, currentTexture, &srcP, &destP, 0, NULL, flip);

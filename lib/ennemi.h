@@ -6,7 +6,7 @@
 #ifndef ENNEMI_H
 #define ENNEMI_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "player.h"
 
 /**

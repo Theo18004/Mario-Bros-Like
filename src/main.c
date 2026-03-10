@@ -133,17 +133,23 @@ int main(int argc, char* argv[]) {
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
 
         // -- Gestion Collision Joueur/Ennemi --
-        if (mechant.vivant && SDL_HasIntersection(&player.rect, &mechant.rect)) {
-            // Si le joueur tombe sur l'ennemi (vitesse Y positive et au-dessus)
-            if (player.velY > 0 && player.rect.y + player.rect.h < mechant.rect.y + 20) {
-                mechant.vivant = 0;
-                player.velY = -10.0f; // Petit rebond
-            } else if (player.state != STATE_DEAD) {
-                // Le joueur touche l'ennemi de côté : il meurt ou perd une vie
-                gerer_mort_joueur(&player, 20, 1000, &score);
+       
+        if (player.state != STATE_DEAD && mechant.vivant && SDL_HasIntersection(&player.rect, &mechant.rect)) {
+            
+            // Si le joueur tombe (velY > 0) ET que ses pieds touchent le haut de l'ennemi
+            if (player.velY > 0 && (player.rect.y + player.rect.h) < (mechant.rect.y + 30)) {
+                mechant.vivant = 0;   // L'ennemi meurt
+                player.velY = -12.0f; // Le joueur rebondit sur lui
+            } 
+            // Sinon (touché sur le côté ou par le bas) : le joueur meurt
+            else {
+                player.state = STATE_DEAD; // Le joueur meurt
+                player.velY = -10.0f;      // Petit bond d'agonie
+                
+                // (Le joueur ne pourra plus bouger car dans update_player, 
+                // STATE_DEAD ignore les touches clavier et applique juste la gravité)
             }
         }
-
         // -- Rendu --
         SDL_SetRenderDrawColor(renderer, 27, 45, 45, 255);
         SDL_RenderClear(renderer);
@@ -168,6 +174,51 @@ int main(int argc, char* argv[]) {
         // Entités
         render_ennemi(renderer, &mechant, camera.x, camera.y, texIdle, texRun);
         render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump, texDead);
+
+
+        // ==========================================
+        // --- MODE DEBUG : AFFICHAGE DES HITBOXES ---
+        // ==========================================
+        
+        // On active la transparence pour bien voir les sprites en dessous
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+        // 1. Hitbox du Joueur (en Vert semi-transparent)
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 128); 
+        SDL_Rect debugPlayerRect = { 
+            player.rect.x - camera.x, 
+            player.rect.y - camera.y, 
+            player.rect.w, 
+            player.rect.h 
+        };
+        SDL_RenderFillRect(renderer, &debugPlayerRect); // Remplissage
+        
+        // Bordure de la hitbox du joueur (en Vert fluo)
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderDrawRect(renderer, &debugPlayerRect); 
+
+        // 2. Hitbox de l'Ennemi (en Rouge semi-transparent), s'il est vivant
+        if (mechant.vivant) {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 128); 
+            SDL_Rect debugEnnemiRect = { 
+                mechant.rect.x - camera.x, 
+                mechant.rect.y - camera.y, 
+                mechant.rect.w, 
+                mechant.rect.h 
+            };
+            SDL_RenderFillRect(renderer, &debugEnnemiRect); // Remplissage
+            
+            // Bordure de la hitbox de l'ennemi (en Rouge vif)
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            SDL_RenderDrawRect(renderer, &debugEnnemiRect);
+        }
+        
+        // On désactive la transparence pour le reste du jeu (optionnel mais plus propre)
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+        // ==========================================
+
+
+
 
         // Interface
         render_score(renderer, &score);

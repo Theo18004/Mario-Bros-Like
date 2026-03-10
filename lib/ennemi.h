@@ -1,0 +1,68 @@
+/**
+ * @file ennemi.h
+ * @brief Gestion des entités ennemies (Loup).
+ */
+
+#ifndef ENNEMI_H
+#define ENNEMI_H
+
+#include <SDL.h>
+#include "player.h"
+
+/**
+ * @enum ThwompState
+ * @brief Les différents états du Thwomp.
+ */
+typedef enum {
+    THWOMP_IDLE,     /**< Attend en hauteur */
+    THWOMP_FALLING,  /**< Tombe rapidement vers le sol */
+    THWOMP_GROUNDED, /**< Écrasé au sol (en pause) */
+    THWOMP_RISING    /**< Remonte lentement à sa position initiale */
+} ThwompState;
+
+/**
+ * @struct Ennemi
+ * @brief Données d'un ennemi Loup patrouilleur.
+ */
+typedef struct {
+    SDL_Rect rect;      /**< Hitbox de l'ennemi */
+    float velY;         /**< Vélocité verticale */
+    float speed;        /**< Vitesse de marche */
+    int direction;      /**< 1 pour droite, -1 pour gauche */
+    int onGround;       /**< État au sol */
+    PlayerState state;  /**< État d'animation */
+    int vivant;         /**< 1 si actif, 0 si supprimé */
+} Ennemi;
+
+/**
+ * @struct Thwomp
+ * @brief Données de l'ennemi Thwomp.
+ */
+typedef struct {
+    SDL_Rect rect;       /**< Hitbox du Thwomp */
+    int startY;          /**< Hauteur d'origine (plafond) */
+    float velY;          /**< Vélocité de chute */
+    ThwompState state;   /**< État actuel */
+    Uint32 groundTimer;  /**< Chronomètre pour le temps d'arrêt au sol */
+    int vivant;          /**< 1 si actif, 0 si supprimé */
+} Thwomp;
+
+void init_loupas(Ennemi* e, int x, int y);
+void update_loupas(Ennemi* e, int* map);
+
+/**
+ * @brief Affiche l'ennemi Loup en animant sa Sprite Sheet.
+ * @param renderer Le renderer SDL.
+ * @param e Pointeur vers l'ennemi.
+ * @param scrollX Décalage caméra X.
+ * @param scrollY Décalage caméra Y.
+ * @param texEnnemi La sprite sheet du loup (wolfsheet.png).
+ */
+void render_loupas(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, 
+                   SDL_Texture* texEnnemi);
+
+void init_thwomp(Thwomp* t, int x, int y);
+void update_thwomp(Thwomp* t, Player* p, int* map);
+void render_thwomp(SDL_Renderer* renderer, Thwomp* t, int scrollX, int scrollY, SDL_Texture* texThwomp);
+
+#endif

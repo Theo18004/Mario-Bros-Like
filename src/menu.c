@@ -28,7 +28,7 @@ void charger_parametres() {
             luminosite = 255;
         }
         fclose(fichier);
-        printf("Paramètres chargés depuis le fichier.\n");
+        printf("Parametres charges depuis le fichier.\n");
     } else {
         // Si le fichier n'existe pas encore (premier lancement)
         volume = 50;

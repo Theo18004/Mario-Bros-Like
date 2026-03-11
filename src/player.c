@@ -19,17 +19,10 @@ void init_player(Player* p, int x, int y) {
     p->state = STATE_IDLE;
 }
 
-void update_player(Player* p, const Uint8* keys, int* map, Score* s) {
-    int mapPixelHeight = TILE_SIZE * MAP_SCALE * MAP_HEIGHT;
+void update_player(Player* p, const Uint8* keys, int* map) {
     int mapPixelWidth = TILE_SIZE * MAP_SCALE * MAP_WIDTH;
 
-    // --- 1. Vérification de la mort (chute) ---
-    if (verifier_conditions_mort(p, mapPixelHeight)) {
-        gerer_mort_joueur(p, 20, 1000, s); 
-        return; 
-    }
-
-    if (p->state == STATE_DEAD) {
+    if (p->state == STATE_DEAD){
         p->velY += 0.6f;
         p->rect.y += (int)p->velY;
         return;
@@ -41,7 +34,7 @@ void update_player(Player* p, const Uint8* keys, int* map, Score* s) {
     int oldX = p->rect.x;
     int oldY = p->rect.y;
 
-    // --- 3. Saut (Avec la FLÈCHE DU HAUT) ---
+    // --- 3. Saut ---
     if (keys[SDL_SCANCODE_UP] && p->onGround) {
         p->velY = -12.0f; // Force du saut
         p->onGround = 0;
@@ -65,7 +58,7 @@ void update_player(Player* p, const Uint8* keys, int* map, Score* s) {
             int success = 0;
             int max_step = 10;
             
-            // On tente de monter la pente/marche
+            // On tente de monter la pente/escalier  
             if (wasOnGround) {
                 for (int i = 1; i <= max_step; i++) {
                     p->rect.y = oldY - i;
@@ -76,13 +69,8 @@ void update_player(Player* p, const Uint8* keys, int* map, Score* s) {
                 }
             }
 
-            // Si c'est un vrai mur trop haut
             if (!success) {
-                p->rect.y = oldY; // On annule la montée
-                
-                // --- LA CORRECTION EST ICI ---
-                // Au lieu d'annuler complètement le mouvement X et laisser un écart,
-                // on repousse le joueur pixel par pixel pour qu'il soit COLLÉ au mur.
+                p->rect.y = oldY; 
                 if (keys[SDL_SCANCODE_RIGHT]) {
                     while (check_collision(p->rect, map)) p->rect.x -= 1;
                 } else if (keys[SDL_SCANCODE_LEFT]) {
@@ -134,6 +122,7 @@ void update_player(Player* p, const Uint8* keys, int* map, Score* s) {
     } else if (p->rect.x == oldX && (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT])) { 
         p->state = STATE_IDLE;
     }
+    return;
 }
 
 void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY, 

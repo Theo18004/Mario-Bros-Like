@@ -11,6 +11,7 @@
 
 // Initialisation
 void init_score(Score* s, int x, int y) {
+    s->bonus = 0;
     s->value = 0;
     s->max_x = 0;
     s->rect.x = x;
@@ -24,8 +25,8 @@ void init_score(Score* s, int x, int y) {
 void update_score(Score* s, int player_x) {
     if (player_x > s->max_x) {
         s->max_x = player_x;
-        s->value = s->max_x / 20; 
     }
+    s->value = (s->max_x / 20) + s->bonus;
 }
 
 // Fonction qui dessine un chiffre en Pixel Art
@@ -160,6 +161,7 @@ void render_score(SDL_Renderer* renderer, Score* s) {
 
 void reset_score(Score* s) {
     if (s != NULL) {
+        s->bonus = 0;
         s->value = 0;
         s->max_x = 0;
     }

@@ -14,6 +14,7 @@
  */
 typedef struct {
     int value;    /**< Valeur du score actuel */
+    int bonus;   /**< Bonus accumulé (Pièces / Monstres) */
     int max_x;    /**< Distance maximum atteinte par le joueur */
     SDL_Rect rect; /**< Position d'affichage du score */
 } Score;

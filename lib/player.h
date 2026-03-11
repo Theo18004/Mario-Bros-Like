@@ -31,7 +31,7 @@ typedef struct {
 } Player;
 
 void init_player(Player* p, int x, int y);
-void update_player(Player* p, const Uint8* keys, int* map, Score* s);
+void update_player(Player* p, const Uint8* keys, int* map);
 void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY, 
                    SDL_Texture* texIdle, SDL_Texture* texRun, SDL_Texture* texJump, SDL_Texture* texDead);
 

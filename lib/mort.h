@@ -7,7 +7,11 @@
 #define MORT_H
 
 #include "player.h"
+#include "ennemi.h"  
+#include "Items.h"   
 #include "score.h"
+#include "camera.h"
+
 
 /**
  * @brief Vérifie si le joueur tombe hors de la carte.
@@ -19,5 +23,11 @@ int verifier_conditions_mort(Player* p, int mapPixelHeight);
  * @brief Déclenche la mort du joueur et réinitialise sa position.
  */
 void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s);
+
+/**
+ * @brief Réinitialise l'intégralité du niveau (joueur, monstres, pièces, caméra).
+    * @param total_reset Si 1, réinitialise aussi les vies et le score.
+ */
+void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Piece* pieces, Score* s, Camera* cam, int total_reset);
 
 #endif

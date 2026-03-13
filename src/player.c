@@ -17,6 +17,8 @@ void init_player(Player* p, int x, int y) {
     p->facingRight = 1;
     p->onGround = 0;
     p->state = STATE_IDLE;
+    p->checkpointX = x; 
+    p->checkpointY = y;
 }
 
 void update_player(Player* p, const Uint8* keys, int* map) {
@@ -35,15 +37,15 @@ void update_player(Player* p, const Uint8* keys, int* map) {
     int oldY = p->rect.y;
 
     // --- 3. Saut ---
-    if (keys[SDL_SCANCODE_UP] && p->onGround) {
+    if ((keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_W]) && p->onGround) {
         p->velY = -12.0f; // Force du saut
         p->onGround = 0;
     }
 
     // --- 4. Mouvements sur l'axe X ---
     float speed = 5.0f;
-    if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT]) {
-        if (keys[SDL_SCANCODE_LEFT]) {
+    if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT] || keys[SDL_SCANCODE_A] || keys[SDL_SCANCODE_D]) {
+        if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_A]) {
             p->rect.x -= (int)speed;
             p->facingRight = 0;
         } else {
@@ -71,9 +73,12 @@ void update_player(Player* p, const Uint8* keys, int* map) {
 
             if (!success) {
                 p->rect.y = oldY; 
-                if (keys[SDL_SCANCODE_RIGHT]) {
+                // Si on allait vers la droite (oldX était plus petit)
+                if (p->rect.x > oldX) {
                     while (check_collision(p->rect, map)) p->rect.x -= 1;
-                } else if (keys[SDL_SCANCODE_LEFT]) {
+                } 
+                // Si on allait vers la gauche (oldX était plus grand)
+                else if (p->rect.x < oldX) {
                     while (check_collision(p->rect, map)) p->rect.x += 1;
                 }
             }

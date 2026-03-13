@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
         printf("Erreur : impossible de charger la police ! %s\n", TTF_GetError());
     }
 
-    SDL_Window* window = SDL_CreateWindow("Mario Bros Like", 
+    SDL_Window* window = SDL_CreateWindow("Mario-Like (Loup & Thwomp)", 
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
     
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
     SDL_RenderSetLogicalSize(renderer, logicalW, logicalH);
 
     // Initialisation Map
-    int* tileMap = malloc(MAP_WIDTH * MAP_HEIGHT * sizeof(int));
+    int* tileMap = (int*)malloc(MAP_WIDTH * MAP_HEIGHT * sizeof(int));
     if (!load_map_from_csv("assets/Maps/map_v3.csv", tileMap)) {
         free(tileMap);
         return 1;
@@ -83,6 +83,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* bg4 = IMG_LoadTexture(renderer, "assets/Sprites/Background/cloud1.png");
     SDL_Texture* bg5 = IMG_LoadTexture(renderer, "assets/Sprites/Background/cloud2.png");
     SDL_Texture* bg6 = IMG_LoadTexture(renderer, "assets/Sprites/Background/Donjon.png");
+    SDL_Texture* bg7 = IMG_LoadTexture(renderer, "assets/Sprites/Background/Desert.png");
 
     // Textures Joueur
     SDL_Texture* texIdle = IMG_LoadTexture(renderer, "assets/Personnage/Idle.png");
@@ -96,11 +97,12 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texThwomp = IMG_LoadTexture(renderer, "assets/Ennemi/thwompEdit.png");
 
     //Textures Items
-    SDL_Texture* texCoin = IMG_LoadTexture(renderer, "assets/Items/coin.png");
+    SDL_Texture* texCoin = IMG_LoadTexture(renderer, "assets/Items/coin50.png");
+    SDL_Texture* texCheckpoint = IMG_LoadTexture(renderer, "assets/Items/Checkpoint.png");
 
     // --- 5. Initialisation Objets ---
     Player player;
-    init_player(&player, 8600, 1000); 
+    init_player(&player, 20, 900); 
     player.lives = 3;
 
     // Création du Loup
@@ -113,7 +115,7 @@ int main(int argc, char* argv[]) {
     init_thwomp(&mesThwomps[0], 8960, 672);
     init_thwomp(&mesThwomps[1], 9120, 672);
     init_thwomp(&mesThwomps[2], 9280, 672);
-    init_thwomp(&mesThwomps[3], 9344, 672);
+    //init_thwomp(&mesThwomps[3], 9344, 672);
     init_thwomp(&mesThwomps[4], 9408, 672);
     init_thwomp(&mesThwomps[5], 9568, 672);
     init_thwomp(&mesThwomps[6], 9728, 672);
@@ -126,13 +128,25 @@ int main(int argc, char* argv[]) {
         mesPieces[i].rect.h = 32;
         mesPieces[i].vivant = 1;
     }
-    mesPieces[0].rect.x = 400; mesPieces[0].rect.y = 800;
-    mesPieces[1].rect.x = 500; mesPieces[1].rect.y = 800;
-    mesPieces[2].rect.x = 600; mesPieces[2].rect.y = 800;
-    mesPieces[3].rect.x = 1000; mesPieces[3].rect.y = 700;
-    mesPieces[4].rect.x = 1100; mesPieces[4].rect.y = 700;
+    mesPieces[0].rect.x = 1088; mesPieces[0].rect.y = 1024;
+    mesPieces[1].rect.x = 2144; mesPieces[1].rect.y = 544;
+    mesPieces[2].rect.x = 4352; mesPieces[2].rect.y = 576;
+    //mesPieces[3].rect.x = 1000; mesPieces[3].rect.y = 700;
+    //mesPieces[4].rect.x = 1100; mesPieces[4].rect.y = 700;
     
-
+    // Création des checkpoints
+    Checkpoint mesCheckpoints[NB_CHECKPOINTS];
+    mesCheckpoints[0].rect.x = 4096; 
+    mesCheckpoints[0].rect.y = 896;
+    mesCheckpoints[0].rect.w = 64;   
+    mesCheckpoints[0].rect.h = 64;
+    mesCheckpoints[0].actif = 0;   
+    
+    mesCheckpoints[1].rect.x = 10176; 
+    mesCheckpoints[1].rect.y = 928;
+    mesCheckpoints[1].rect.w = 64;   
+    mesCheckpoints[1].rect.h = 64;
+    mesCheckpoints[1].actif = 0;   
 
     Score score;
     init_score(&score, 10, 10);
@@ -212,6 +226,20 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        // -- Gestion des Checkpoint --
+        for (int i = 0; i < NB_CHECKPOINTS; i++) {
+            if (mesCheckpoints[i].actif == 0) {
+                if (SDL_HasIntersection(&player.rect, &mesCheckpoints[i].rect)) {
+                    mesCheckpoints[i].actif = 1;
+                    mesCheckpoints[i].animStart = SDL_GetTicks(); 
+                    player.checkpointX = mesCheckpoints[i].rect.x; 
+                    player.checkpointY = mesCheckpoints[i].rect.y; 
+                    
+                    printf("Checkpoint %d atteint !\n", i);
+                }
+            }
+        }
+
         // -- Rendu --
         SDL_SetRenderDrawColor(renderer, 27, 45, 45, 255);
         SDL_RenderClear(renderer);
@@ -224,7 +252,7 @@ int main(int argc, char* argv[]) {
         draw_parallax_bg(renderer, bg3, camera.x, camera.y, 0.40f, 0.1f, logicalW, logicalH, 0, 350);
 
         int startDonjonX = 128 * 32; // Début (Tuile 128)
-        int endDonjonX = 317 * 32;   // Fin (Tuile 317)
+        int endDonjonX = 318 * 32;   // Fin (Tuile 317)
 
         int xStartEcran = startDonjonX - camera.x;
         int xEndEcran = endDonjonX - camera.x;
@@ -250,6 +278,32 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        int startDesertX = 318 * 32; 
+        int endDesertX = MAP_WIDTH * 32;  
+
+        int xStartEcran2 = startDesertX - camera.x;
+        int xEndEcran2 = endDesertX - camera.x;
+
+        SDL_Rect clip2;
+        clip2.x = xStartEcran2;
+        clip2.y = 0;
+        clip2.w = xEndEcran2 - xStartEcran2; 
+        clip2.h = logicalH;
+
+        SDL_RenderSetClipRect(renderer, &clip2);
+        draw_parallax_bg(renderer, bg7, camera.x, camera.y, 0.7f, 0.0f, logicalW, logicalH, startDesertX, -300);
+        SDL_RenderSetClipRect(renderer, NULL);
+
+        // Dessin de la Map
+        for (int y = 0; y < MAP_HEIGHT; y++) { 
+            for (int x = 0; x < MAP_WIDTH; x++) {
+                int tilePixelX = x * TILE_SIZE * MAP_SCALE;
+                if (tilePixelX > camera.x - 64 && tilePixelX < camera.x + logicalW + 64) {
+                    draw_tile(renderer, &ts, tileMap[y * MAP_WIDTH + x], tilePixelX, y * TILE_SIZE * MAP_SCALE, camera.x, camera.y);
+                }
+            }
+        }
+
         // Entités
         // On affiche les objets de l'arrière plan vers le premier plan
         for (int i = 0; i < NB_THWOMPS; i++) {
@@ -257,6 +311,10 @@ int main(int argc, char* argv[]) {
         }
         render_loupas(renderer, &mechant, camera.x, camera.y, texLoup);
         render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump, texDead);
+
+        for (int i = 0; i < NB_CHECKPOINTS; i++) {
+            render_checkpoint(renderer, texCheckpoint, &mesCheckpoints[i], camera.x, camera.y);
+        }
 
         for (int i = 0; i < NB_PIECES; i++) {
             if (mesPieces[i].vivant) {
@@ -331,7 +389,7 @@ int main(int argc, char* argv[]) {
     SDL_DestroyTexture(bg4); SDL_DestroyTexture(bg5); SDL_DestroyTexture(bg6); SDL_DestroyTexture(terrainTex); 
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
     SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp);
-    SDL_DestroyTexture(texCoin);
+    SDL_DestroyTexture(texCoin); SDL_DestroyTexture(texCheckpoint);
     if (font) TTF_CloseFont(font); 
     SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window);
     TTF_Quit(); IMG_Quit(); SDL_Quit();

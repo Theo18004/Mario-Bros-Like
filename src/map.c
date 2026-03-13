@@ -12,9 +12,19 @@ int load_map_from_csv(const char* filename, int* map_array) {
         printf("Erreur: Impossible d'ouvrir %s\n", filename);
         return 0;
     }
-    char line[10240]; 
+
+    // 1. ALLOCATION DYNAMIQUE (Sur le Tas, empêche le crash)
+    int max_line_length = 500000; // Un demi-million de caractères !
+    char* line = (char*)malloc(max_line_length * sizeof(char));
+    
+    if (line == NULL) {
+        printf("Erreur: Plus de memoire disponible !\n");
+        fclose(file);
+        return 0;
+    }
+
     int row = 0;
-    while (fgets(line, sizeof(line), file) && row < MAP_HEIGHT) {
+    while (fgets(line, max_line_length, file) && row < MAP_HEIGHT) {
         char* token = strtok(line, ",");
         int col = 0;
         while (token && col < MAP_WIDTH) {
@@ -24,7 +34,11 @@ int load_map_from_csv(const char* filename, int* map_array) {
         }
         row++;
     }
+    
+    // 2. NETTOYAGE OBLIGATOIRE (On rend la mémoire à l'ordinateur)
+    free(line);
     fclose(file);
+    
     return 1;
 }
 

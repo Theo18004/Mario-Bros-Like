@@ -29,4 +29,16 @@ typedef struct {
  */
 void render_coin(SDL_Renderer* renderer, SDL_Texture* texCoin, int x, int y, int camX, int camY);
 
+#define NB_CHECKPOINTS 3
+
+typedef struct {
+    SDL_Rect rect; 
+    int actif;  
+    Uint32 animStart;    
+} Checkpoint;
+
+// Déclaration de la fonction pour l'afficher
+void render_checkpoint(SDL_Renderer* renderer, SDL_Texture* texDrapeau, Checkpoint* d, int camX, int camY);
+
+
 #endif

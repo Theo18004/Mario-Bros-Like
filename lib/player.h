@@ -28,6 +28,8 @@ typedef struct {
     int onGround;       /**< Est au sol ? */
     int lives;          /**< Nombre de vies restantes */
     PlayerState state;  /**< État actuel pour les animations */
+    int checkpointX;
+    int checkpointY;
 } Player;
 
 void init_player(Player* p, int x, int y);

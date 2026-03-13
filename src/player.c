@@ -175,10 +175,10 @@ void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY,
         int displaySize = 64;
 
         
-        // 1. Centrage horizontal : (Taille de l'image - Taille de la Hitbox) / 2
+        // Centrage horizontal (Taille de l'image - Taille de la Hitbox) / 2
         int offsetX = (displaySize - p->rect.w) / 2; 
         
-        // 2. Alignement vertical : On aligne les pieds de l'image avec le bas de la hitbox
+        // Alignement vertical, On aligne les pieds de l'image avec le bas de la hitbox
         int offsetY = displaySize - p->rect.h;       
 
         

@@ -31,7 +31,7 @@ void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s){
 
 
 void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Piece* pieces, Score* s, Camera* cam, int total_reset) {
-    // 1. Replacer le joueur au point de départ
+    // Replacer le joueur au point de départ
     if (total_reset){
         p->lives = 3;
         p->checkpointX = 20; 
@@ -40,7 +40,7 @@ void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Piece* pieces, Score*
     } 
     init_player(p, p->checkpointX, p->checkpointY);
 
-    // 2. Réinitialiser les ennemis
+    // Réinitialiser les ennemis
     init_loupas(loup, 600, 1050); 
     loup->vivant = 1;
     
@@ -52,12 +52,12 @@ void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Piece* pieces, Score*
     init_thwomp(&thwomps[5], 9728, 672);
     init_thwomp(&thwomps[6], 9888, 672);
 
-    // 3. Faire réapparaître les pièces
+    // Faire réapparaître les pièces
     for (int i = 0; i < NB_PIECES; i++) {
         pieces[i].vivant = 1;
     }
 
-    // 4. Remettre la caméra et le score
+    // Remettre la caméra et le score
     cam->x = 0; cam->y = 0;
     if (total_reset) {
         init_score(s, s->rect.x, s->rect.y);

@@ -35,18 +35,16 @@ void render_checkpoint(SDL_Renderer* renderer, SDL_Texture* texCheckpoint, Check
     int currentFrame = 0;
     
     if (d->actif == 1) {
-        // 1. On calcule combien de millisecondes se sont écoulées depuis le contact
+        // On calcule combien de millisecondes se sont écoulées depuis le contact
         Uint32 timeElapsed = SDL_GetTicks() - d->animStart;
         
-        // 2. On calcule on en est à quelle frame (50ms par frame)
+        // On calcule on en est à quelle frame (50ms par frame)
         currentFrame = timeElapsed / 50; 
         
-        // 3. LA MAGIE : Si on dépasse la dernière frame (25), on reste bloqué dessus !
         if (currentFrame >= nbFrames) {
             currentFrame = nbFrames - 1; 
         }
     } else {
-        // Si non touché : frame 0
         currentFrame = 0; 
     }
 

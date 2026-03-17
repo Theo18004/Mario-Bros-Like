@@ -13,9 +13,10 @@
  * @brief Vérifie si un rectangle entre en collision avec des blocs solides.
  * @param rect Le rectangle à tester (hitbox).
  * @param map Le tableau représentant la carte.
+ * @param check_demi Indique les demi-plateformes 
  * @return 1 si collision, 0 sinon.
  */
-int check_collision(SDL_Rect rect, int* map);
+int check_collision(SDL_Rect rect, int* map, int check_demi);
 
 /** @brief Vérifie si une tuile est un bloc plein. */
 int is_full(int tile_id);

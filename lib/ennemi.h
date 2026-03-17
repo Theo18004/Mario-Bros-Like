@@ -47,6 +47,16 @@ typedef struct {
     int vivant;          /**< 1 si actif, 0 si supprimé */
 } Thwomp;
 
+
+typedef struct {
+    SDL_Rect rect;  /**< Position et taille du Podoboo */
+    int minY;       /**< Limite haute */
+    int maxY;       /**< Limite basse */
+    float speedY;   /**< Vitesse de déplacement vertical */
+    int vivant;     /**< 1 si actif, 0 si supprimé */
+} Podoboo;
+#define NB_PODOBOO 11
+
 void init_loupas(Ennemi* e, int x, int y);
 void update_loupas(Ennemi* e, int* map);
 
@@ -64,5 +74,9 @@ void render_loupas(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY,
 void init_thwomp(Thwomp* t, int x, int y);
 void update_thwomp(Thwomp* t, Player* p, int* map);
 void render_thwomp(SDL_Renderer* renderer, Thwomp* t, int scrollX, int scrollY, SDL_Texture* texThwomp);
+
+void init_podoboo(Podoboo* p, int posX, int limYBas, int limYHaut);
+void update_podoboo(Podoboo* p);
+void render_podoboo(SDL_Renderer* renderer, Podoboo* p, int camX, int camY, SDL_Texture* texPodoboo);
 
 #endif

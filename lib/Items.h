@@ -19,7 +19,7 @@ typedef struct {
 /** @def NB_PIECES
  * @brief Nombre total de pièces présentes dans le niveau.
  */
-#define NB_PIECES 5
+#define NB_PIECES 3
 
 /**
  * @brief Affiche une pièce à l'écran.

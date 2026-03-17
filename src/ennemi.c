@@ -6,6 +6,10 @@
 #include "collision.h"
 #include "defs.h"
 
+//==============================================================
+//========================Loupas================================
+//==============================================================
+
 void init_loupas(Ennemi* e, int x, int y) {
     e->rect.x = x; 
     e->rect.y = y;
@@ -85,6 +89,12 @@ void render_loupas(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY,
     
     SDL_RenderCopyEx(renderer, texEnnemi, &src, &dest, 0, NULL, flip);
 }
+
+
+//==============================================================
+//========================Thwomp================================
+//==============================================================
+
 
 void init_thwomp(Thwomp* t, int x, int y) {
     t->rect.x = x; 
@@ -187,6 +197,11 @@ void render_thwomp(SDL_Renderer* renderer, Thwomp* t, int camX, int camY, SDL_Te
 }
 
 
+//==============================================================
+//========================Podoboo===============================
+//==============================================================
+
+
 void init_podoboo(Podoboo* p, int posX, int limYBas, int limYHaut) {
     p->rect.x = posX;
     p->rect.y = limYBas; // Il commence en bas (caché dans la lave)
@@ -229,4 +244,172 @@ void render_podoboo(SDL_Renderer* renderer, Podoboo* p, int camX, int camY, SDL_
 
     SDL_RendererFlip flip = (p->speedY > 0) ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(renderer, texPodoboo, &src, &dest, 0, NULL, flip);
+}
+
+
+//==============================================================
+//========================Coquilas==============================
+//==============================================================
+
+void init_coquilas(Coquilas* c, int x, int y) {
+    c->rect.x = x; 
+    c->rect.y = y;
+    c->rect.w = 40; 
+    c->rect.h = 28; 
+
+    c->velY = 0.0f; 
+    c->speed = 2.0f; 
+    c->direction = -1; 
+    c->onGround = 0;
+    c->state = STATE_RUN; 
+    c->vivant = 1;
+}
+
+void update_coquilas(Coquilas* c, int* map) {
+    if (!c->vivant) return;
+    int oldX = c->rect.x;
+    int tileSize = TILE_SIZE * MAP_SCALE;
+
+    c->rect.x += (int)(c->speed * c->direction);
+    if (check_collision(c->rect, map, 0)) {
+        c->rect.x = oldX;
+        c->direction *= -1;
+    }
+
+    SDL_Rect testVide = c->rect;
+    testVide.y += 5;
+    if (c->direction > 0) testVide.x += c->rect.w;
+    else testVide.x -= 5;
+    testVide.w = 5;
+
+    if (!check_collision(testVide, map, 0) && c->onGround) {
+        c->rect.x = oldX;
+        c->direction *= -1;
+    }
+
+    c->velY += 0.6f;
+    c->rect.y += (int)c->velY;
+    if (check_collision(c->rect, map, 0)) {
+        c->rect.y = ((c->rect.y + c->rect.h) / tileSize) * tileSize - c->rect.h;
+        c->velY = 0; c->onGround = 1;
+    } else c->onGround = 0;
+}
+
+
+void render_coquilas(SDL_Renderer* renderer, Coquilas* c, int scrollX, int scrollY, SDL_Texture* texCoquilas) {
+    if (!c->vivant || !texCoquilas) return;
+
+    int frameW = 350; 
+    int frameH = 256; 
+    int nbFrames = 4;
+    
+    int currentFrame = (SDL_GetTicks() / 150) % nbFrames;
+
+    SDL_Rect src;
+    src.x = currentFrame * frameW; 
+    src.y = 0;
+    src.w = frameW;
+    src.h = frameH;
+
+    int displayW = 40; 
+    int displayH = 30; 
+    int offsetX = (c->rect.w - displayW) / 2; 
+    int offsetY = c->rect.h - displayH; 
+
+    SDL_Rect dest = { 
+        c->rect.x - scrollX + offsetX, 
+        c->rect.y - scrollY + offsetY, 
+        displayW, 
+        displayH 
+    };
+
+    SDL_RendererFlip flip = (c->direction > 0) ? SDL_FLIP_NONE: SDL_FLIP_HORIZONTAL ;
+    SDL_RenderCopyEx(renderer, texCoquilas, &src, &dest, 0, NULL, flip);
+}
+
+
+//==============================================================
+//========================Jean-Claude===========================
+//==============================================================
+
+
+void init_jc(Ennemi* e, int x, int y) {
+    e->rect.x = x; 
+    e->rect.y = y;
+    e->rect.w = 24; 
+    e->rect.h = 44; 
+    e->velY = 0.0f; 
+    e->speed = 1.0f; 
+    e->direction = -1; 
+    e->onGround = 0;
+    e->state = STATE_RUN; 
+    e->vivant = 1;
+}
+
+
+
+void update_jc(Ennemi* e, int* map) {
+
+    if (!e->vivant) return;
+
+    int oldX = e->rect.x;
+    int tileSize = TILE_SIZE * MAP_SCALE;
+    e->rect.x += (int)(e->speed * e->direction);
+
+    // Collision Mur
+    if (check_collision(e->rect, map, 0)) {
+        e->rect.x = oldX;
+        e->direction *= -1;
+    }
+
+    SDL_Rect testVide = e->rect;
+    testVide.y += 5;
+    if (e->direction > 0) testVide.x += e->rect.w;
+    else testVide.x -= 5;
+    testVide.w = 5;
+
+    if (!check_collision(testVide, map, 0) && e->onGround) {
+        e->rect.x = oldX;
+        e->direction *= -1;
+    }
+    e->velY += 0.6f;
+    e->rect.y += (int)e->velY;
+
+    if (check_collision(e->rect, map, 0)) {
+        e->rect.y = ((e->rect.y + e->rect.h) / tileSize) * tileSize - e->rect.h;
+        e->velY = 0; 
+        e->onGround = 1;
+    } else {
+        e->onGround = 0;
+    }
+}
+
+
+
+void render_jc(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_Texture* texJeanClaude) {
+    if (!e->vivant || !texJeanClaude) return;
+
+    int texW, texH;
+    SDL_QueryTexture(texJeanClaude, NULL, NULL, &texW, &texH);
+
+    int nbFrames = 3;
+    int frameW = texW / 3;
+    int frameH = texH / 4;
+    int currentFrame = (SDL_GetTicks() / 300) % nbFrames;
+    int ligne = (e->direction > 0) ? 1 : 3;
+
+    SDL_Rect src = { currentFrame * frameW, ligne * frameH, frameW, frameH };
+    int displayW = 32; 
+    int displayH = 48; 
+    int offsetX = (e->rect.w - displayW) / 2;
+    int offsetY = e->rect.h - displayH; 
+
+    SDL_Rect dest = { 
+        e->rect.x - scrollX + offsetX, 
+        e->rect.y - scrollY + offsetY, 
+        displayW, 
+        displayH 
+    };
+    SDL_RenderCopy(renderer, texJeanClaude, &src, &dest);
+
 }

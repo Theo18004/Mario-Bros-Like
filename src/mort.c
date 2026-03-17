@@ -3,6 +3,7 @@
  * @brief Gestion de la machine à état de mort du joueur.
  */
 #include "mort.h"
+#include "ennemi.h"
 
 int verifier_conditions_mort(Player* p, int mapPixelHeight){
     static Uint32 momentImpactSol = 0;
@@ -30,7 +31,7 @@ void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s){
 }
 
 
-void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Podoboo* mesPodoboo, Piece* pieces, Score* s, Camera* cam, int total_reset) {
+void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Podoboo* mesPodoboo, Coquilas* mesCoquilas, Ennemi* jc, Piece* pieces, Score* s, Camera* cam, int total_reset) {
     // Replacer le joueur au point de départ
     if (total_reset){
         p->lives = 3;
@@ -64,6 +65,14 @@ void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Podoboo* mesPodoboo, 
     init_podoboo(&mesPodoboo[8], 8192, 1088, 800); 
     init_podoboo(&mesPodoboo[9], 8256, 1088, 800);
     init_podoboo(&mesPodoboo[10], 8320, 1088, 800); 
+
+    init_coquilas(&mesCoquilas[0], 5896, 650);
+
+    init_jc(&jc[0], 10300, 900);
+    init_jc(&jc[1], 10700, 450);
+    init_jc(&jc[2], 11500, 750);
+    init_jc(&jc[3], 13000, 900);
+
 
     // Faire réapparaître les pièces
     for (int i = 0; i < NB_PIECES; i++) {

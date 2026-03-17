@@ -99,6 +99,8 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texLoup = IMG_LoadTexture(renderer, "assets/Ennemi/wolfsheet.png");
     SDL_Texture* texThwomp = IMG_LoadTexture(renderer, "assets/Ennemi/thwompEdit.png");
     SDL_Texture* texPodoboo = IMG_LoadTexture(renderer, "assets/Ennemi/podoboo.png");
+    SDL_Texture* texCoquilas = IMG_LoadTexture(renderer, "assets/Ennemi/coquilas_noir.png");
+    SDL_Texture* texJeanClaude = IMG_LoadTexture(renderer, "assets/Ennemi/jean-claude.png");
 
     //Textures Items
     SDL_Texture* texCoin = IMG_LoadTexture(renderer, "assets/Items/coin50.png");
@@ -106,7 +108,7 @@ int main(int argc, char* argv[]) {
 
     // --- 5. Initialisation Objets ---
     Player player;
-    init_player(&player, 20, 1000); //14176
+    init_player(&player, 14176, 900); //14176
     player.lives = 3;
 
     // Création du Loup
@@ -139,6 +141,17 @@ int main(int argc, char* argv[]) {
     init_podoboo(&mesPodoboo[9], 8256, 1088, 800);
     init_podoboo(&mesPodoboo[10], 8320, 1088, 800); 
    
+    //Création des Coquilas
+    Coquilas mesCoquilas[NB_COQUILAS];
+    init_coquilas(&mesCoquilas[0], 5896, 650);
+
+    //Création des Jean-Claude
+    Ennemi jc[NB_JEAN_CLAUDE];
+    init_jc(&jc[0], 10300, 928);
+    init_jc(&jc[1], 10700, 450);
+    init_jc(&jc[2], 11500, 750);
+    init_jc(&jc[3], 13000, 928);
+
     // Création des pièces
     Piece mesPieces[NB_PIECES];
     for (int i = 0; i < NB_PIECES; i++) {
@@ -196,12 +209,20 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < NB_THWOMPS; i++) {
             update_thwomp(&mesThwomps[i], &player, tileMap);
         }
+        for(int i=0; i<NB_COQUILAS; i++){
+            update_coquilas(&mesCoquilas[i], tileMap);
+        }
+
+        for(int i=0; i<NB_JEAN_CLAUDE; i++){
+            update_jc(&jc[i], tileMap);
+        }
+
         update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
         
         if (verifier_conditions_mort(&player, mapPixelHeight)) {
             gerer_mort_joueur(&player, 20, 1000, &score);
-            reset_level(&player, &mechant, mesThwomps, mesPodoboo, mesPieces, &score, &camera, 0);
+            reset_level(&player, &mechant, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 0);
         }
         
         // --- Sauvegarde des scores en temps réel ---
@@ -240,7 +261,27 @@ int main(int argc, char* argv[]) {
                 if (player.state != STATE_DEAD) {
                     player.state = STATE_DEAD;
                     player.velY = -8.0f; 
-                    printf("Brûlé par la lave !\n");
+                }
+            }
+        }
+
+        // -- Gestion Collision Joueur/Coquilas --
+        for (int i = 0; i < NB_COQUILAS; i++) {
+            if (player.state != STATE_DEAD && mesCoquilas[i].vivant && SDL_HasIntersection(&player.rect, &mesCoquilas[i].rect)) {
+                player.state = STATE_DEAD; 
+                player.velY = -10.0f;
+            }
+        }
+
+        // -- Gestion Collision Joueur/Jean-Claude --
+        for (int i = 0; i < NB_JEAN_CLAUDE; i++) {
+            if (player.state != STATE_DEAD && jc[i].vivant && SDL_HasIntersection(&player.rect, &jc[i].rect)) {
+                if (player.velY > 0 && (player.rect.y + player.rect.h) < (jc[i].rect.y + 30)) {
+                    jc[i].vivant = 0; 
+                    player.velY = -12.0f; 
+                } else {
+                    player.state = STATE_DEAD; 
+                    player.velY = -10.0f; 
                 }
             }
         }
@@ -370,6 +411,14 @@ int main(int argc, char* argv[]) {
             render_podoboo(renderer, &mesPodoboo[i], camera.x, camera.y, texPodoboo);
         }
 
+        for(int i=0; i<NB_COQUILAS; i++){
+            render_coquilas(renderer, &mesCoquilas[i], camera.x, camera.y, texCoquilas);
+        }
+
+        for (int i = 0; i < NB_JEAN_CLAUDE; i++) {
+            render_jc(renderer, &jc[i], camera.x, camera.y, texJeanClaude);
+        }
+
         render_loupas(renderer, &mechant, camera.x, camera.y, texLoup);
         render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump, texDead);
 
@@ -425,6 +474,28 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        // 5. Coquilas
+        for (int i =0; i < NB_COQUILAS; i++) {
+            if (mesCoquilas[i].vivant) {
+                SDL_SetRenderDrawColor(renderer, 0, 255, 255, 128); // Hitbox cyan
+                SDL_Rect debugCoquilasRect = { mesCoquilas[i].rect.x - camera.x, mesCoquilas[i].rect.y - camera.y, mesCoquilas[i].rect.w, mesCoquilas[i].rect.h };
+                SDL_RenderFillRect(renderer, &debugCoquilasRect);
+                SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+                SDL_RenderDrawRect(renderer, &debugCoquilasRect);
+            }
+        }
+
+        // 6. Jean-Claude
+        for (int i = 0; i < NB_JEAN_CLAUDE; i++) {
+            if (jc[i].vivant) {
+                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 128); // Hitbox Jaune transparente
+                SDL_Rect debugJeanClaudeRect = { jc[i].rect.x - camera.x, jc[i].rect.y - camera.y, jc[i].rect.w, jc[i].rect.h };
+                SDL_RenderFillRect(renderer, &debugJeanClaudeRect); 
+                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                SDL_RenderDrawRect(renderer, &debugJeanClaudeRect);
+            }   
+        }
+
         // Interface
         render_score(renderer, &score);
         render_lives(renderer, texFullHeart, player.lives);
@@ -443,7 +514,7 @@ int main(int argc, char* argv[]) {
             int action = gameover(renderer, font, &player, score_affichage_fin, meilleur_score);
             if (action == 1) {
                 // Paramètre '1' à la fin car on veut tout remettre à zéro (vies + score)
-                reset_level(&player, &mechant, mesThwomps, mesPodoboo, mesPieces, &score, &camera, 1);
+                reset_level(&player, &mechant, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 1);
             } else {
                 running = 0;
             }
@@ -460,7 +531,7 @@ int main(int argc, char* argv[]) {
     SDL_DestroyTexture(bg1); SDL_DestroyTexture(bg2); SDL_DestroyTexture(bg3); 
     SDL_DestroyTexture(bg4); SDL_DestroyTexture(bg5); SDL_DestroyTexture(bg6); SDL_DestroyTexture(terrainTex); 
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
-    SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo);
+    SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo); SDL_DestroyTexture(texCoquilas); SDL_DestroyTexture(texJeanClaude);
     SDL_DestroyTexture(texCoin); SDL_DestroyTexture(texCheckpoint);
     if (font) TTF_CloseFont(font); 
     SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window);

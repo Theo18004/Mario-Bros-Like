@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* bg4 = IMG_LoadTexture(renderer, "assets/Sprites/Background/cloud1.png");
     SDL_Texture* bg5 = IMG_LoadTexture(renderer, "assets/Sprites/Background/cloud2.png");
     SDL_Texture* bg6 = IMG_LoadTexture(renderer, "assets/Sprites/Background/Donjon.png");
-    SDL_Texture* bg7 = IMG_LoadTexture(renderer, "assets/Sprites/Background/Desert2.png");
+    SDL_Texture* bg7 = IMG_LoadTexture(renderer, "assets/Sprites/Background/desert2.png");
     SDL_Texture* texStatue = IMG_LoadTexture(renderer, "assets/Sprites/Background/statue.png");
     SDL_Texture* texPyramide = IMG_LoadTexture(renderer, "assets/Sprites/Background/pyramide.png");
     SDL_Texture* texChateau = IMG_LoadTexture(renderer, "assets/Sprites/Background/chateau.png");
@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
 
     // --- 5. Initialisation Objets ---
     Player player;
-    init_player(&player, 10176, 880); //14176
+    init_player(&player, 20, 1000); //14176
     player.lives = 3;
 
     // Création du Loup
@@ -147,8 +147,9 @@ int main(int argc, char* argv[]) {
         mesPieces[i].vivant = 1;
     }
     mesPieces[0].rect.x = 1088; mesPieces[0].rect.y = 1024;
-    mesPieces[1].rect.x = 2144; mesPieces[1].rect.y = 524;
+    mesPieces[1].rect.x = 2144; mesPieces[1].rect.y = 444;
     mesPieces[2].rect.x = 4352; mesPieces[2].rect.y = 576;
+    mesPieces[3].rect.x = 11585; mesPieces[3].rect.y = 640;
 
     // Création des checkpoints
     Checkpoint mesCheckpoints[NB_CHECKPOINTS];
@@ -314,11 +315,11 @@ int main(int argc, char* argv[]) {
         clipRect.w = logicalW - clipRect.x;
         clipRect.h = logicalH;
 
-        if (xStartEcran2 < logicalW) { 
-            SDL_RenderSetClipRect(renderer, &clipRect);
-            SDL_RenderCopy(renderer, bg7, NULL, &destDesert);
-            SDL_RenderSetClipRect(renderer, NULL);
-        }
+        
+        SDL_RenderSetClipRect(renderer, &clipRect);
+        SDL_RenderCopy(renderer, bg7, NULL, &destDesert);
+        SDL_RenderSetClipRect(renderer, NULL);
+        
 
 
         // La Pyramide 

@@ -31,7 +31,7 @@ int is_full(int tile_id) {
     return 0;
 }
 
-int is_slope_up_right(int tile_id) { return (tile_id == 268); }
+int is_slope_up_right(int tile_id) { return (tile_id == 268 || tile_id == 304); }
 int is_slope_up_left(int tile_id) { return (tile_id == 269); }
 
 /**
@@ -56,7 +56,10 @@ int get_slope(int worldX, int tileX, int tileY, int tile_id) {
     return (tileY * scaled_tile) + y_inside;
 }
 
-int check_collision(SDL_Rect rect, int* map) {
+
+int demi_plate_sol(int tile_id) { return ((tile_id >= 462 && tile_id <= 464) || (tile_id >= 440 && tile_id <= 442));}
+
+int demi_plate(SDL_Rect rect, int* map) {
     int scaled_tile = TILE_SIZE * MAP_SCALE;
     int left_tile   = rect.x / scaled_tile;
     int right_tile  = (rect.x + rect.w - 1) / scaled_tile;
@@ -67,14 +70,12 @@ int check_collision(SDL_Rect rect, int* map) {
         for (int x = left_tile; x <= right_tile; x++) {
             if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
                 int tile = map[y * MAP_WIDTH + x];
-                if (is_full(tile)) return 1;
-
-                if (is_slope_up_right(tile) || is_slope_up_left(tile)) {
-                    int playerCenterX = rect.x + rect.w / 2;
-                    int tileStartX = x * scaled_tile;
-                    if (playerCenterX >= tileStartX && playerCenterX < tileStartX + scaled_tile) {
-                        int floorY = get_slope(playerCenterX, x, y, tile);
-                        if (rect.y + rect.h > floorY) return 1;
+                
+                if (demi_plate_sol(tile)) {
+                    int tile_top = y * scaled_tile;
+                    int tile_limit = tile_top + (int)(scaled_tile );
+                    if (rect.y < tile_limit && (rect.y + rect.h) > tile_top) {
+                        return 1; 
                     }
                 }
             }
@@ -82,3 +83,59 @@ int check_collision(SDL_Rect rect, int* map) {
     }
     return 0; 
 }
+
+int check_collision(SDL_Rect rect, int* map, int check_demi) {
+    int scaled_tile = TILE_SIZE * MAP_SCALE;
+    int left_tile   = rect.x / scaled_tile;
+    int right_tile  = (rect.x + rect.w - 1) / scaled_tile;
+    int top_tile    = rect.y / scaled_tile;
+    int bottom_tile = (rect.y + rect.h - 1) / scaled_tile;
+    int on_slope = 0; 
+
+    for (int y = top_tile; y <= bottom_tile; y++) {
+        for (int x = left_tile; x <= right_tile; x++) {
+            if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
+                int tile = map[y * MAP_WIDTH + x];
+                
+                if (is_slope_up_right(tile) || is_slope_up_left(tile)) {
+                    int playerCenterX = rect.x + rect.w / 2;
+                    int tileStartX = x * scaled_tile;
+                    
+                    if (playerCenterX >= tileStartX && playerCenterX < tileStartX + scaled_tile) {
+                        int floorY = get_slope(playerCenterX, x, y, tile);
+                        if (rect.y + rect.h > floorY) {
+                            return 1; 
+                        }
+                        on_slope = 1; 
+                    }
+                }
+            }
+        }
+    }
+
+    for (int y = top_tile; y <= bottom_tile; y++) {
+        for (int x = left_tile; x <= right_tile; x++) {
+            if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
+                int tile = map[y * MAP_WIDTH + x];
+                
+                if (is_full(tile)) {
+                    if (on_slope) {
+                        continue; 
+                    }
+                    return 1; 
+                }
+                if (demi_plate_sol(tile)) {
+                    if (check_demi == 1) {
+                        int tile_top = y * scaled_tile;
+                        if (rect.y + rect.h > tile_top && rect.y + rect.h <= tile_top + 25) {
+                            return 1; 
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return 0; 
+}
+

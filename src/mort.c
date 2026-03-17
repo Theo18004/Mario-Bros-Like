@@ -30,7 +30,7 @@ void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s){
 }
 
 
-void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Piece* pieces, Score* s, Camera* cam, int total_reset) {
+void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Podoboo* mesPodoboo, Piece* pieces, Score* s, Camera* cam, int total_reset) {
     // Replacer le joueur au point de départ
     if (total_reset){
         p->lives = 3;
@@ -46,11 +46,24 @@ void reset_level(Player* p, Ennemi* loup, Thwomp* thwomps, Piece* pieces, Score*
     
     init_thwomp(&thwomps[0], 8960, 672);
     init_thwomp(&thwomps[1], 9120, 672);
-    init_thwomp(&thwomps[2], 9280, 672);
-    init_thwomp(&thwomps[3], 9408, 672);
-    init_thwomp(&thwomps[4], 9568, 672);
-    init_thwomp(&thwomps[5], 9728, 672);
-    init_thwomp(&thwomps[6], 9888, 672);
+    init_thwomp(&thwomps[2], 9250, 672);
+    init_thwomp(&thwomps[3], 9340, 672);
+    init_thwomp(&thwomps[4], 9400, 672);
+    init_thwomp(&thwomps[5], 9568, 672);
+    init_thwomp(&thwomps[6], 9728, 672);
+    init_thwomp(&thwomps[7], 9888, 672);
+
+    init_podoboo(&mesPodoboo[0], 7296, 1088, 800); 
+    init_podoboo(&mesPodoboo[1], 7488, 1088, 800);
+    init_podoboo(&mesPodoboo[2], 7648, 1088, 800); 
+    init_podoboo(&mesPodoboo[3], 7680, 1088, 800);
+    init_podoboo(&mesPodoboo[4], 7776, 1088, 800); 
+    init_podoboo(&mesPodoboo[5], 7840, 1088, 800);
+    init_podoboo(&mesPodoboo[6], 7968, 1088, 800); 
+    init_podoboo(&mesPodoboo[7], 8128, 1088, 800);
+    init_podoboo(&mesPodoboo[8], 8192, 1088, 800); 
+    init_podoboo(&mesPodoboo[9], 8256, 1088, 800);
+    init_podoboo(&mesPodoboo[10], 8320, 1088, 800); 
 
     // Faire réapparaître les pièces
     for (int i = 0; i < NB_PIECES; i++) {

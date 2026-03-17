@@ -13,8 +13,8 @@ int load_map_from_csv(const char* filename, int* map_array) {
         return 0;
     }
 
-    // 1. ALLOCATION DYNAMIQUE (Sur le Tas, empêche le crash)
-    int max_line_length = 500000; // Un demi-million de caractères !
+    // grosse allocation pour eviter de crash 
+    int max_line_length = 500000; 
     char* line = (char*)malloc(max_line_length * sizeof(char));
     
     if (line == NULL) {
@@ -35,7 +35,6 @@ int load_map_from_csv(const char* filename, int* map_array) {
         row++;
     }
     
-    // 2. NETTOYAGE OBLIGATOIRE (On rend la mémoire à l'ordinateur)
     free(line);
     fclose(file);
     

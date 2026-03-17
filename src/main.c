@@ -83,7 +83,10 @@ int main(int argc, char* argv[]) {
     SDL_Texture* bg4 = IMG_LoadTexture(renderer, "assets/Sprites/Background/cloud1.png");
     SDL_Texture* bg5 = IMG_LoadTexture(renderer, "assets/Sprites/Background/cloud2.png");
     SDL_Texture* bg6 = IMG_LoadTexture(renderer, "assets/Sprites/Background/Donjon.png");
-    SDL_Texture* bg7 = IMG_LoadTexture(renderer, "assets/Sprites/Background/Desert.png");
+    SDL_Texture* bg7 = IMG_LoadTexture(renderer, "assets/Sprites/Background/Desert2.png");
+    SDL_Texture* texStatue = IMG_LoadTexture(renderer, "assets/Sprites/Background/statue.png");
+    SDL_Texture* texPyramide = IMG_LoadTexture(renderer, "assets/Sprites/Background/pyramide.png");
+    SDL_Texture* texChateau = IMG_LoadTexture(renderer, "assets/Sprites/Background/chateau.png");
 
     // Textures Joueur
     SDL_Texture* texIdle = IMG_LoadTexture(renderer, "assets/Personnage/Idle.png");
@@ -95,6 +98,7 @@ int main(int argc, char* argv[]) {
     // Textures Ennemis
     SDL_Texture* texLoup = IMG_LoadTexture(renderer, "assets/Ennemi/wolfsheet.png");
     SDL_Texture* texThwomp = IMG_LoadTexture(renderer, "assets/Ennemi/thwompEdit.png");
+    SDL_Texture* texPodoboo = IMG_LoadTexture(renderer, "assets/Ennemi/podoboo.png");
 
     //Textures Items
     SDL_Texture* texCoin = IMG_LoadTexture(renderer, "assets/Items/coin50.png");
@@ -102,7 +106,7 @@ int main(int argc, char* argv[]) {
 
     // --- 5. Initialisation Objets ---
     Player player;
-    init_player(&player, 20, 900); 
+    init_player(&player, 10176, 880); //14176
     player.lives = 3;
 
     // Création du Loup
@@ -114,13 +118,27 @@ int main(int argc, char* argv[]) {
     Thwomp mesThwomps[NB_THWOMPS];
     init_thwomp(&mesThwomps[0], 8960, 672);
     init_thwomp(&mesThwomps[1], 9120, 672);
-    init_thwomp(&mesThwomps[2], 9280, 672);
-    //init_thwomp(&mesThwomps[3], 9344, 672);
-    init_thwomp(&mesThwomps[4], 9408, 672);
+    init_thwomp(&mesThwomps[2], 9250, 672);
+    init_thwomp(&mesThwomps[3], 9340, 672);
+    init_thwomp(&mesThwomps[4], 9400, 672);
     init_thwomp(&mesThwomps[5], 9568, 672);
     init_thwomp(&mesThwomps[6], 9728, 672);
     init_thwomp(&mesThwomps[7], 9888, 672);
-    
+
+    //Création des Podoboo
+    Podoboo mesPodoboo[NB_PODOBOO];
+    init_podoboo(&mesPodoboo[0], 7296, 1088, 800); 
+    init_podoboo(&mesPodoboo[1], 7488, 1088, 800);
+    init_podoboo(&mesPodoboo[2], 7648, 1088, 800); 
+    init_podoboo(&mesPodoboo[3], 7680, 1088, 800);
+    init_podoboo(&mesPodoboo[4], 7776, 1088, 800); 
+    init_podoboo(&mesPodoboo[5], 7840, 1088, 800);
+    init_podoboo(&mesPodoboo[6], 7968, 1088, 800); 
+    init_podoboo(&mesPodoboo[7], 8128, 1088, 800);
+    init_podoboo(&mesPodoboo[8], 8192, 1088, 800); 
+    init_podoboo(&mesPodoboo[9], 8256, 1088, 800);
+    init_podoboo(&mesPodoboo[10], 8320, 1088, 800); 
+   
     // Création des pièces
     Piece mesPieces[NB_PIECES];
     for (int i = 0; i < NB_PIECES; i++) {
@@ -129,11 +147,9 @@ int main(int argc, char* argv[]) {
         mesPieces[i].vivant = 1;
     }
     mesPieces[0].rect.x = 1088; mesPieces[0].rect.y = 1024;
-    mesPieces[1].rect.x = 2144; mesPieces[1].rect.y = 544;
+    mesPieces[1].rect.x = 2144; mesPieces[1].rect.y = 524;
     mesPieces[2].rect.x = 4352; mesPieces[2].rect.y = 576;
-    //mesPieces[3].rect.x = 1000; mesPieces[3].rect.y = 700;
-    //mesPieces[4].rect.x = 1100; mesPieces[4].rect.y = 700;
-    
+
     // Création des checkpoints
     Checkpoint mesCheckpoints[NB_CHECKPOINTS];
     mesCheckpoints[0].rect.x = 4096; 
@@ -160,7 +176,7 @@ int main(int argc, char* argv[]) {
     int mapPixelWidth = MAP_WIDTH * TILE_SIZE * MAP_SCALE;
     int mapPixelHeight = MAP_HEIGHT * TILE_SIZE * MAP_SCALE;
 
-    // --- 6. Boucle Principale ---
+    // --- Boucle Principale ---
     int running = 1;
     SDL_Event event;
 
@@ -184,7 +200,7 @@ int main(int argc, char* argv[]) {
         
         if (verifier_conditions_mort(&player, mapPixelHeight)) {
             gerer_mort_joueur(&player, 20, 1000, &score);
-            reset_level(&player, &mechant, mesThwomps, mesPieces, &score, &camera, 0);
+            reset_level(&player, &mechant, mesThwomps, mesPodoboo, mesPieces, &score, &camera, 0);
         }
         
         // --- Sauvegarde des scores en temps réel ---
@@ -212,6 +228,19 @@ int main(int argc, char* argv[]) {
                 player.state = STATE_DEAD; 
                 player.velY = -10.0f;
                 break; 
+            }
+        }
+
+        // -- Gestion Collision Joueur/Podoboo --
+        for (int i = 0; i < NB_PODOBOO; i++) {
+            update_podoboo(&mesPodoboo[i]);
+
+            if (SDL_HasIntersection(&player.rect, &mesPodoboo[i].rect)) {
+                if (player.state != STATE_DEAD) {
+                    player.state = STATE_DEAD;
+                    player.velY = -8.0f; 
+                    printf("Brûlé par la lave !\n");
+                }
             }
         }
 
@@ -251,8 +280,9 @@ int main(int argc, char* argv[]) {
         draw_parallax_bg(renderer, bg2, camera.x, camera.y, 0.15f, 0.05f, logicalW, logicalH, 0, 200); 
         draw_parallax_bg(renderer, bg3, camera.x, camera.y, 0.40f, 0.1f, logicalW, logicalH, 0, 350);
 
+        // Background Donjon
         int startDonjonX = 128 * 32; // Début (Tuile 128)
-        int endDonjonX = 318 * 32;   // Fin (Tuile 317)
+        int endDonjonX = 318 * 32;   // Fin (Tuile 318)
 
         int xStartEcran = startDonjonX - camera.x;
         int xEndEcran = endDonjonX - camera.x;
@@ -265,34 +295,59 @@ int main(int argc, char* argv[]) {
         clip.h = logicalH;
 
         SDL_RenderSetClipRect(renderer, &clip);
-        draw_parallax_bg(renderer, bg6, camera.x, camera.y, 0.15f, 0.0f, logicalW, logicalH, startDonjonX, -300);
+        draw_parallax_bg(renderer, bg6, camera.x, camera.y, 0.15f, 0.0f, logicalW, logicalH, startDonjonX, 0);
         SDL_RenderSetClipRect(renderer, NULL);
+ 
+        // Background désert
+        int startDesertX = 318 * 32; // Début (Tuile 318)
+        int mapTotalWidth = MAP_WIDTH * 32; // Fin de la map en pixels
+        int xStartEcran2 = startDesertX - camera.x;
 
-        // Dessin de la Map
-        for (int y = 0; y < MAP_HEIGHT; y++) { 
-            for (int x = 0; x < MAP_WIDTH; x++) {
-                int tilePixelX = x * TILE_SIZE * MAP_SCALE;
-                if (tilePixelX > camera.x - 64 && tilePixelX < camera.x + logicalW + 64) {
-                    draw_tile(renderer, &ts, tileMap[y * MAP_WIDTH + x], tilePixelX, y * TILE_SIZE * MAP_SCALE, camera.x, camera.y);
-                }
-            }
+        int imgW, imgH;
+        SDL_QueryTexture(bg7, NULL, NULL, &imgW, &imgH);
+        int biomeWidthInPixels = mapTotalWidth - startDesertX;
+
+        SDL_Rect destDesert = { xStartEcran2, 0, biomeWidthInPixels, logicalH };
+        SDL_Rect clipRect;
+        clipRect.x = (xStartEcran2 > 0) ? xStartEcran2 : 0;
+        clipRect.y = 0;
+        clipRect.w = logicalW - clipRect.x;
+        clipRect.h = logicalH;
+
+        if (xStartEcran2 < logicalW) { 
+            SDL_RenderSetClipRect(renderer, &clipRect);
+            SDL_RenderCopy(renderer, bg7, NULL, &destDesert);
+            SDL_RenderSetClipRect(renderer, NULL);
         }
 
-        int startDesertX = 318 * 32; 
-        int endDesertX = MAP_WIDTH * 32;  
 
-        int xStartEcran2 = startDesertX - camera.x;
-        int xEndEcran2 = endDesertX - camera.x;
+        // La Pyramide 
+        SDL_QueryTexture(texPyramide, NULL, NULL, &imgW, &imgH);
+        SDL_SetTextureBlendMode(texPyramide, SDL_BLENDMODE_BLEND); // Effet d'opacité 
+        SDL_SetTextureAlphaMod(texPyramide, 76); // 30% d'opacité 
 
-        SDL_Rect clip2;
-        clip2.x = xStartEcran2;
-        clip2.y = 0;
-        clip2.w = xEndEcran2 - xStartEcran2; 
-        clip2.h = logicalH;
+        int finalH = 300; 
+        float ratio = (float)finalH / (float)imgH;
+        int finalW = (int)(imgW * ratio);
+        SDL_Rect posPyramide = { (330 * 32) - camera.x, logicalH - finalH - 250, finalW, finalH };
+        SDL_RenderCopy(renderer, texPyramide, NULL, &posPyramide);
 
-        SDL_RenderSetClipRect(renderer, &clip2);
-        draw_parallax_bg(renderer, bg7, camera.x, camera.y, 0.7f, 0.0f, logicalW, logicalH, startDesertX, -300);
-        SDL_RenderSetClipRect(renderer, NULL);
+        // La Statue 
+        int sW, sH;
+        SDL_QueryTexture(texStatue, NULL, NULL, &sW, &sH);
+        SDL_SetTextureBlendMode(texStatue, SDL_BLENDMODE_BLEND);
+        SDL_SetTextureAlphaMod(texStatue, 65);
+
+        int finalStatueH = 250;
+        float ratioStatue = (float)finalStatueH / (float)sH;
+        int finalStatueW = (int)(sW * ratioStatue);
+        SDL_Rect posStatue = { (405 * 32) - camera.x, logicalH-finalStatueH-250, finalStatueW, finalStatueH }; // x, y, w, h 
+        SDL_RenderCopy(renderer, texStatue, NULL, &posStatue);
+
+        // Le Château 
+        int finNiveauX = (MAP_WIDTH - 15) * 32; 
+        SDL_Rect posChateau = { finNiveauX - camera.x, 115, 450, 450 };
+        SDL_RenderCopy(renderer, texChateau, NULL, &posChateau);
 
         // Dessin de la Map
         for (int y = 0; y < MAP_HEIGHT; y++) { 
@@ -309,6 +364,11 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < NB_THWOMPS; i++) {
             render_thwomp(renderer, &mesThwomps[i], camera.x, camera.y, texThwomp);
         }
+
+        for (int i = 0; i < NB_PODOBOO; i++) {
+            render_podoboo(renderer, &mesPodoboo[i], camera.x, camera.y, texPodoboo);
+        }
+
         render_loupas(renderer, &mechant, camera.x, camera.y, texLoup);
         render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump, texDead);
 
@@ -353,6 +413,17 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        // 4. Podoboo
+        for (int i = 0; i < NB_PODOBOO; i++) {
+            if (mesPodoboo[i].vivant) {
+                SDL_SetRenderDrawColor(renderer, 255, 165, 0, 128); // Hitbox orange
+                SDL_Rect debugPodobooRect = { mesPodoboo[i].rect.x - camera.x, mesPodoboo[i].rect.y - camera.y, mesPodoboo[i].rect.w, mesPodoboo[i].rect.h };
+                SDL_RenderFillRect(renderer, &debugPodobooRect); 
+                SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
+                SDL_RenderDrawRect(renderer, &debugPodobooRect);
+            }
+        }
+
         // Interface
         render_score(renderer, &score);
         render_lives(renderer, texFullHeart, player.lives);
@@ -370,8 +441,8 @@ int main(int argc, char* argv[]) {
        if (player.lives <= 0) {
             int action = gameover(renderer, font, &player, score_affichage_fin, meilleur_score);
             if (action == 1) {
-                // Paramètre '1' à la fin car on veut TOUT remettre à zéro (vies + score)
-                reset_level(&player, &mechant, mesThwomps, mesPieces, &score, &camera, 1);
+                // Paramètre '1' à la fin car on veut tout remettre à zéro (vies + score)
+                reset_level(&player, &mechant, mesThwomps, mesPodoboo, mesPieces, &score, &camera, 1);
             } else {
                 running = 0;
             }
@@ -388,7 +459,7 @@ int main(int argc, char* argv[]) {
     SDL_DestroyTexture(bg1); SDL_DestroyTexture(bg2); SDL_DestroyTexture(bg3); 
     SDL_DestroyTexture(bg4); SDL_DestroyTexture(bg5); SDL_DestroyTexture(bg6); SDL_DestroyTexture(terrainTex); 
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
-    SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp);
+    SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo);
     SDL_DestroyTexture(texCoin); SDL_DestroyTexture(texCheckpoint);
     if (font) TTF_CloseFont(font); 
     SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window);

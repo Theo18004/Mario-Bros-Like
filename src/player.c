@@ -56,7 +56,7 @@ void update_player(Player* p, const Uint8* keys, int* map) {
         p->state = STATE_RUN;
 
         // Si on rentre dans un mur ou une pente
-        if (check_collision(p->rect, map)) {
+        if (check_collision(p->rect, map, 0)) {
             int success = 0;
             int max_step = 10;
             
@@ -64,7 +64,7 @@ void update_player(Player* p, const Uint8* keys, int* map) {
             if (wasOnGround) {
                 for (int i = 1; i <= max_step; i++) {
                     p->rect.y = oldY - i;
-                    if (!check_collision(p->rect, map)) {
+                    if (!check_collision(p->rect, map, 0)) {
                         success = 1;
                         break;
                     }
@@ -75,11 +75,11 @@ void update_player(Player* p, const Uint8* keys, int* map) {
                 p->rect.y = oldY; 
                 // Si on allait vers la droite (oldX était plus petit)
                 if (p->rect.x > oldX) {
-                    while (check_collision(p->rect, map)) p->rect.x -= 1;
+                    while (check_collision(p->rect, map, 0)) p->rect.x -= 1;
                 } 
                 // Si on allait vers la gauche (oldX était plus grand)
                 else if (p->rect.x < oldX) {
-                    while (check_collision(p->rect, map)) p->rect.x += 1;
+                    while (check_collision(p->rect, map, 0)) p->rect.x += 1;
                 }
             }
         }
@@ -99,23 +99,25 @@ void update_player(Player* p, const Uint8* keys, int* map) {
     p->onGround = 0; 
 
     // Résolution des collisions Y par "Pushback"
-    if (check_collision(p->rect, map)) {
+    int check_demi = (p->velY > 0) ? 1 : 0;
+
+    if (check_collision(p->rect, map, check_demi)) {
         if (p->velY > 0) { 
-            while (check_collision(p->rect, map)) {
+            while (check_collision(p->rect, map, check_demi)) {
                 p->rect.y -= 1; 
             }
             p->velY = 0;
             p->onGround = 1; 
         } 
         else if (p->velY < 0) { 
-            while (check_collision(p->rect, map)) {
+            while (check_collision(p->rect, map, 0)) {
                 p->rect.y += 1; 
             }
             p->velY = 0;
         }
     } else {
         p->rect.y += 1;
-        if (check_collision(p->rect, map)) {
+        if (check_collision(p->rect, map, 1)) {
             p->onGround = 1; 
         }
         p->rect.y -= 1; 
@@ -173,12 +175,11 @@ void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY,
         
         // Taille d'affichage à l'écran
         int displaySize = 64;
-
         
         // Centrage horizontal (Taille de l'image - Taille de la Hitbox) / 2
         int offsetX = (displaySize - p->rect.w) / 2; 
         
-        // Alignement vertical, On aligne les pieds de l'image avec le bas de la hitbox
+        // Alignement vertical On aligne les pieds de l'image avec le bas de la hitbox
         int offsetY = displaySize - p->rect.h;       
 
         

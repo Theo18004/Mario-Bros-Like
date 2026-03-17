@@ -57,9 +57,21 @@ typedef struct {
 } Podoboo;
 #define NB_PODOBOO 11
 
+typedef struct {
+    SDL_Rect rect;      /**< Hitbox de l'ennemi */
+    float velY;         /**< Vélocité verticale */
+    float speed;        /**< Vitesse de marche */
+    int direction;      /**< 1 pour droite, -1 pour gauche */
+    int onGround;       /**< État au sol */
+    PlayerState state;  /**< État d'animation */
+    int vivant;         /**< 1 si actif, 0 si supprimé */
+} Coquilas;
+
+#define NB_COQUILAS 1
+#define NB_JEAN_CLAUDE 4
+
 void init_loupas(Ennemi* e, int x, int y);
 void update_loupas(Ennemi* e, int* map);
-
 /**
  * @brief Affiche l'ennemi Loup en animant sa Sprite Sheet.
  * @param renderer Le renderer SDL.
@@ -78,5 +90,17 @@ void render_thwomp(SDL_Renderer* renderer, Thwomp* t, int scrollX, int scrollY, 
 void init_podoboo(Podoboo* p, int posX, int limYBas, int limYHaut);
 void update_podoboo(Podoboo* p);
 void render_podoboo(SDL_Renderer* renderer, Podoboo* p, int camX, int camY, SDL_Texture* texPodoboo);
+
+
+void init_coquilas(Coquilas* c, int x, int y); 
+void update_coquilas(Coquilas* c, int* map);
+void render_coquilas(SDL_Renderer* renderer, Coquilas* c, int scrollX, int scrollY, 
+                   SDL_Texture* texCoquilas);
+
+
+void init_jc(Ennemi* e, int x, int y);
+void update_jc(Ennemi* e, int* map);
+void render_jc(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_Texture* texMomie);
+
 
 #endif

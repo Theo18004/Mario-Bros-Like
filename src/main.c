@@ -7,6 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_audio.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,6 +28,9 @@
 /**
  * @brief Fonction main.
  */
+
+Mix_chunck * sonSaut = NULL;
+
 int main(int argc, char* argv[]) {
     (void)argc;
     (void)argv;
@@ -38,6 +43,12 @@ int main(int argc, char* argv[]) {
     TTF_Font* font = TTF_OpenFont("assets/police.ttf", 32);
     if (font == NULL) {
         printf("Erreur : impossible de charger la police ! %s\n", TTF_GetError());
+    }
+
+    // --- 2. Initialisation sonSaut
+
+    if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048) < 0){
+        print("Erreur Mixer : %s\n", Mix_GetError());
     }
 
     SDL_Window* window = SDL_CreateWindow("Mario-Like (Loup & Thwomp)",
@@ -105,6 +116,16 @@ int main(int argc, char* argv[]) {
     //Textures Items
     SDL_Texture* texCoin = IMG_LoadTexture(renderer, "assets/Items/coin50.png");
     SDL_Texture* texCheckpoint = IMG_LoadTexture(renderer, "assets/Items/Checkpoint.png");
+
+
+    // 3. Charger le sonSaut
+
+    sonSaut = Mix_LoadWAV("assets/son/Jump.wav");
+    if(!sonSaut) printf("Erreur son saut : %s\n",Mix_GetError());
+
+    // 4. Applique le volume sauvegarder
+
+    Mix_Volume(-1,(volume * 128 )/100);
 
     // --- 5. Initialisation Objets ---
     Player player;
@@ -530,6 +551,8 @@ int main(int argc, char* argv[]) {
 
     // --- 7. Nettoyage ---
     free(tileMap);
+    Mix_FreeChunk(sonSaut);
+    Mix_CloseAudio();
     SDL_DestroyTexture(bg1); SDL_DestroyTexture(bg2); SDL_DestroyTexture(bg3);
     SDL_DestroyTexture(bg4); SDL_DestroyTexture(bg5); SDL_DestroyTexture(bg6); SDL_DestroyTexture(terrainTex);
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);

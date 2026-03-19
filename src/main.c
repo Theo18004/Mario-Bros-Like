@@ -29,7 +29,7 @@
  * @brief Fonction main.
  */
 
-Mix_chunck * sonSaut = NULL;
+Mix_Chunk * sonSaut = NULL;
 
 int main(int argc, char* argv[]) {
     (void)argc;
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
     // --- 2. Initialisation sonSaut
 
     if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048) < 0){
-        print("Erreur Mixer : %s\n", Mix_GetError());
+        printf("Erreur Mixer : %s\n", Mix_GetError());
     }
 
     SDL_Window* window = SDL_CreateWindow("Mario-Like (Loup & Thwomp)",

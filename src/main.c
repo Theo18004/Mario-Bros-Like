@@ -289,7 +289,7 @@ int main(int argc, char* argv[]) {
 
         // -- Gestion Collision Joueur/Podoboo --
         for (int i = 0; i < NB_PODOBOO; i++) {
-            update_podoboo(&mesPodoboo[i]);
+            update_podoboo(&mesPodoboo[i], &camera);
 
             if (SDL_HasIntersection(&player.rect, &mesPodoboo[i].rect)) {
                 if (player.state != STATE_DEAD) {

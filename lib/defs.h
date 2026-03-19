@@ -6,6 +6,10 @@
 #ifndef DEFS_H
 #define DEFS_H
 
+#include <SDL2/SDL_mixer.h>
+
+extern Mix_Chunk *bouleFeu;
+
 #define TILE_SIZE 16        /**< Taille de base d'une tuile (pixels) */
 #define MAP_SCALE 2         /**< Facteur d'agrandissement de l'affichage */
 #define MAP_WIDTH 484       /**< Nombre de tuiles en largeur */

@@ -30,6 +30,7 @@
  */
 
 Mix_Chunk * sonSaut = NULL;
+Mix_Chunk * bouleFeu = NULL;
 
 int main(int argc, char* argv[]) {
     (void)argc;
@@ -131,6 +132,9 @@ int main(int argc, char* argv[]) {
 
     sonSaut = Mix_LoadWAV("assets/son/Jump.wav");
     if(!sonSaut) printf("Erreur son saut : %s\n",Mix_GetError());
+
+    bouleFeu = Mix_LoadWAV("assets/son/BouleFeu.wav");
+    if(!bouleFeu) printf("Erreur son boule de feu : %s\n",Mix_GetError());
 
     // 4. Applique le volume sauvegarder
 
@@ -564,6 +568,7 @@ int main(int argc, char* argv[]) {
     }
     free(tileMap);
     Mix_FreeChunk(sonSaut);
+    Mix_FreeChunk(bouleFeu);
     Mix_CloseAudio();
     SDL_DestroyTexture(bg1); SDL_DestroyTexture(bg2); SDL_DestroyTexture(bg3);
     SDL_DestroyTexture(bg4); SDL_DestroyTexture(bg5); SDL_DestroyTexture(bg6); SDL_DestroyTexture(terrainTex);

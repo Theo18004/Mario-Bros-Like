@@ -6,10 +6,10 @@ CC = gcc
 
 # --- CONFIGURATION DES FLAGS ---
 # CFLAGS : Ajout de SDL2_ttf pour la compilation (trouve SDL_ttf.h)
-CFLAGS = -Wall -Wextra -Ilib -g $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
+CFLAGS = -Wall -Wextra -Ilib -g $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf SDL2_mixer)
 
 # LDFLAGS : Ajout de SDL2_ttf pour l'édition de liens (trouve la lib)
-LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf) -lm
+LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer) -lm
 
 # Dossiers
 SRC_DIR = src

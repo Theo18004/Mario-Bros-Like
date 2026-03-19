@@ -5,18 +5,26 @@
 #include <SDL2/SDL.h>
 #include "interface.h"
 
-void render_lives(SDL_Renderer* renderer, SDL_Texture* texHeart, int lives) {
-    int maxLives = 3; 
-    int w, h;
-    SDL_RenderGetLogicalSize(renderer, &w, &h);
-    if (w == 0) SDL_GetRendererOutputSize(renderer, &w, &h);
-    int CoX = w - (maxLives * 30) + 20; 
+void render_lives(SDL_Renderer* renderer, SDL_Texture** texVies, int lives) {
+    if (lives <= 0) return;
 
-    for (int i = 0; i < lives; i++) {
-        int PosX = CoX + ((maxLives - 1 - i) * 20); 
-        SDL_Rect dest = { PosX, 10, 32, 32 };  
-        SDL_RenderCopy(renderer, texHeart, NULL, &dest);
+    int index = lives - 1;
+    if (index > 4) index = 4;
+
+    if (texVies[index] == NULL) {
+        return;
     }
+
+    int imgW, imgH, posX, posY;
+    SDL_QueryTexture(texVies[index], NULL, NULL, &imgW, &imgH);
+
+    imgW = 55;
+    imgH = 25;
+    posX=5;
+    posY=40;
+
+    SDL_Rect dest = { posX, posY, imgW, imgH };
+    SDL_RenderCopy(renderer, texVies[index], NULL, &dest);
 }
 
 void render_progress_bar(SDL_Renderer* renderer, int playerX, int mapPixelWidth) {
@@ -24,7 +32,7 @@ void render_progress_bar(SDL_Renderer* renderer, int playerX, int mapPixelWidth)
     SDL_RenderGetLogicalSize(renderer, &w, &h);
     if (w == 0) SDL_GetRendererOutputSize(renderer, &w, &h);
     int barW = 500; int barH = 10;
-    int barX = (w - barW) / 2; int barY = 15; 
+    int barX = (w - barW) / 2; int barY = 15;
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Fond
     SDL_Rect bgBar = { barX, barY, barW, barH };
@@ -34,7 +42,7 @@ void render_progress_bar(SDL_Renderer* renderer, int playerX, int mapPixelWidth)
     int cursorX = barX + (int)(progress * barW);
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Curseur
-    SDL_Rect cursor = { cursorX - 5, barY - 5, 10, 20 }; 
+    SDL_Rect cursor = { cursorX - 5, barY - 5, 10, 20 };
     SDL_RenderFillRect(renderer, &cursor);
 }
 
@@ -43,19 +51,19 @@ int gameover(SDL_Renderer* renderer, TTF_Font* font, Player* player, int score_a
         int w, h;
         SDL_RenderGetLogicalSize(renderer, &w, &h);
         if (w == 0) SDL_GetRendererOutputSize(renderer, &w, &h);
-        
+
         int gameOverScreen = 1;
         int action = 0; // 0 = Quitter, 1 = Rejouer
-        
+
         while (gameOverScreen) {
             SDL_Event e;
             while (SDL_PollEvent(&e)) {
-                if (e.type == SDL_QUIT) { 
-                    gameOverScreen = 0; 
-                    action = 0; 
+                if (e.type == SDL_QUIT) {
+                    gameOverScreen = 0;
+                    action = 0;
                 }
                 if (e.type == SDL_KEYDOWN && (e.key.keysym.scancode == SDL_SCANCODE_SPACE || e.key.keysym.scancode == SDL_SCANCODE_RETURN)) {
-                    gameOverScreen = 0; 
+                    gameOverScreen = 0;
                     action = 1;
                 }
             }
@@ -63,7 +71,7 @@ int gameover(SDL_Renderer* renderer, TTF_Font* font, Player* player, int score_a
             SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
             SDL_RenderClear(renderer);
 
-            if (font != NULL) { 
+            if (font != NULL) {
                 SDL_Color rouge = {255, 50, 50, 255};
                 SDL_Color blanc = {255, 255, 255, 255};
                 char buffer[100];
@@ -89,9 +97,9 @@ int gameover(SDL_Renderer* renderer, TTF_Font* font, Player* player, int score_a
             }
 
             SDL_RenderPresent(renderer);
-            SDL_Delay(16); 
+            SDL_Delay(16);
         }
         return action;
     }
-    return 1; 
+    return 1;
 }

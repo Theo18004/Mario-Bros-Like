@@ -16,7 +16,7 @@
  * @brief Affiche les cœurs représentant les vies restantes.
  * @param lives Nombre de vies à afficher.
  */
-void render_lives(SDL_Renderer* renderer, SDL_Texture* texHeart, int lives);
+ void render_lives(SDL_Renderer* renderer, SDL_Texture** texVies, int lives);
 
 /**
  * @brief Affiche la barre de progression du niveau.

@@ -8,6 +8,7 @@
 
 #include <SDL.h>
 #include "player.h"
+#include "camera.h"
 
 /**
  * @enum ThwompState
@@ -88,7 +89,7 @@ void update_thwomp(Thwomp* t, Player* p, int* map);
 void render_thwomp(SDL_Renderer* renderer, Thwomp* t, int scrollX, int scrollY, SDL_Texture* texThwomp);
 
 void init_podoboo(Podoboo* p, int posX, int limYBas, int limYHaut);
-void update_podoboo(Podoboo* p);
+void update_podoboo(Podoboo* p, Camera * cam);
 void render_podoboo(SDL_Renderer* renderer, Podoboo* p, int camX, int camY, SDL_Texture* texPodoboo);
 
 

@@ -8,6 +8,8 @@
 #include "mort.h"
 #include "score.h"
 
+extern Mix_Chunk *sonSaut;
+
 void init_player(Player* p, int x, int y) {
     p->rect.x = x;
     p->rect.y = y;
@@ -40,6 +42,11 @@ void update_player(Player* p, const Uint8* keys, int* map) {
     if ((keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_W]) && p->onGround) {
         p->velY = -12.0f; // Force du saut
         p->onGround = 0;
+        p->state = STATE_JUMP;
+
+        if (sonSaut != NULL) {
+            Mix_PlayChannel(-1, sonSaut, 0); 
+        }
     }
 
     // --- 4. Mouvements sur l'axe X ---

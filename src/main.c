@@ -104,7 +104,6 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texRun  = IMG_LoadTexture(renderer, "assets/Personnage/Run.png");
     SDL_Texture* texJump = IMG_LoadTexture(renderer, "assets/Personnage/Jump.png");
     SDL_Texture* texDead = IMG_LoadTexture(renderer, "assets/Personnage/Dead.png");
-    SDL_Texture* texFullHeart = IMG_LoadTexture(renderer, "assets/Interface/FullHeart.png");
 
     // Textures Ennemis
     SDL_Texture* texLoup = IMG_LoadTexture(renderer, "assets/Ennemi/wolfsheet.png");
@@ -114,9 +113,19 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texJeanClaude = IMG_LoadTexture(renderer, "assets/Ennemi/jean-claude.png");
 
     //Textures Items
+    SDL_Texture* texVies[5];
+    texVies[0] = IMG_LoadTexture(renderer, "assets/Interface/vie_x1.png"); // Pour 1 vie
+    texVies[1] = IMG_LoadTexture(renderer, "assets/Interface/vie_x2.png"); // Pour 2 vies
+    texVies[2] = IMG_LoadTexture(renderer, "assets/Interface/vie_x3.png"); // Pour 3 vies
+    texVies[3] = IMG_LoadTexture(renderer, "assets/Interface/vie_x4.png"); // Pour 4 vies
+    texVies[4] = IMG_LoadTexture(renderer, "assets/Interface/vie_x5.png"); // Pour 5 vies
     SDL_Texture* texCoin = IMG_LoadTexture(renderer, "assets/Items/coin50.png");
     SDL_Texture* texCheckpoint = IMG_LoadTexture(renderer, "assets/Items/Checkpoint.png");
-
+    for (int i = 0; i < 5; i++) {
+        if (texVies[i] == NULL) {
+            printf("ERREUR CHARGEMENT texVies[%d] : %s\n", i, IMG_GetError());
+        }
+    }
 
     // 3. Charger le sonSaut
 
@@ -129,7 +138,7 @@ int main(int argc, char* argv[]) {
 
     // --- 5. Initialisation Objets ---
     Player player;
-    init_player(&player, 4080, 900); //14176
+    init_player(&player, 20, 1000); //14176
     player.lives = 3;
 
     // Création du Loup
@@ -519,7 +528,7 @@ int main(int argc, char* argv[]) {
 
         // Interface
         render_score(renderer, &score);
-        render_lives(renderer, texFullHeart, player.lives);
+        render_lives(renderer, texVies, player.lives);
         render_progress_bar(renderer, player.rect.x, mapPixelWidth);
 
         // Effet luminosité
@@ -550,6 +559,9 @@ int main(int argc, char* argv[]) {
     }
 
     // --- 7. Nettoyage ---
+    for (int i = 0; i < 5; i++) {
+        SDL_DestroyTexture(texVies[i]);
+    }
     free(tileMap);
     Mix_FreeChunk(sonSaut);
     Mix_CloseAudio();

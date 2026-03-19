@@ -4,11 +4,14 @@
  */
 #include "ennemi.h"
 #include "collision.h"
+#include "camera.h"
 #include "defs.h"
 
 //==============================================================
 //========================Loupas================================
 //==============================================================
+
+
 
 void init_loupas(Ennemi* e, int x, int y) {
     e->rect.x = x; 
@@ -214,7 +217,7 @@ void init_podoboo(Podoboo* p, int posX, int limYBas, int limYHaut) {
     p->vivant = 1;
 }
 
-void update_podoboo(Podoboo* p) {
+void update_podoboo(Podoboo* p, Camera * cam) {
     if (!p->vivant) return;
     
     p->rect.y += (int)p->speedY;
@@ -225,6 +228,12 @@ void update_podoboo(Podoboo* p) {
     if (p->rect.y >= p->maxY) {
         p->rect.y = p->maxY;
         p->speedY = -5.0f; 
+
+        if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
+            if (bouleFeu != NULL) {
+                Mix_PlayChannel(-1, bouleFeu, 0);
+            }
+        }
     }
 }
 

@@ -44,6 +44,7 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
     // Sauvegarder l'état des ennemis avant de les réinitialiser
     int etatLoup[5], etatThwomp[8], etatPodoboo[11], etatCoquilas[3], etatJC[4];
     if (!total_reset) {
+        for (int i=0; i<5; i++)  etatLoup[i] = mesLoupas[i].vivant;
         for(int i=0; i<5; i++)  etatLoup[i] = mesLoupas[i].vivant;
         for(int i=0; i<8; i++)  etatThwomp[i] = thwomps[i].vivant;
         for(int i=0; i<11; i++) etatPodoboo[i] = mesPodoboo[i].vivant;

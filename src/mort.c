@@ -42,14 +42,10 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
     init_player(p, p->checkpointX, p->checkpointY);
 
     // Sauvegarder l'état des ennemis avant de les réinitialiser
-    int etatLoup[5], etatThwomp[8], etatPodoboo[11], etatCoquilas[3], etatJC[4];
+    int etatLoup[NB_LOUPAS], etatJC[NB_JEAN_CLAUDE];
     if (!total_reset) {
-        for (int i=0; i<5; i++)  etatLoup[i] = mesLoupas[i].vivant;
-        for(int i=0; i<5; i++)  etatLoup[i] = mesLoupas[i].vivant;
-        for(int i=0; i<8; i++)  etatThwomp[i] = thwomps[i].vivant;
-        for(int i=0; i<11; i++) etatPodoboo[i] = mesPodoboo[i].vivant;
-        for(int i=0; i<3; i++)  etatCoquilas[i] = mesCoquilas[i].vivant;
-        for(int i=0; i<4; i++)  etatJC[i] = jc[i].vivant;
+        for(int i=0; i<NB_LOUPAS; i++)  etatLoup[i] = mesLoupas[i].vivant;
+        for(int i=0; i<NB_JEAN_CLAUDE; i++)  etatJC[i] = jc[i].vivant;
     }
 
     // Réinitialiser les ennemis
@@ -90,12 +86,8 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
     init_jc(&jc[3], 13000, 900);
 
     //On laisse mort ceux qui étaient morts avant le reset si ce n'est pas un gameover
-        for(int i=0; i<5; i++)  mesLoupas[i].vivant = etatLoup[i];
-        for(int i=0; i<8; i++)  thwomps[i].vivant = etatThwomp[i];
-        for(int i=0; i<11; i++) mesPodoboo[i].vivant = etatPodoboo[i];
-        for(int i=0; i<3; i++)  mesCoquilas[i].vivant = etatCoquilas[i];
-        for(int i=0; i<4; i++)  jc[i].vivant = etatJC[i];
-
+        for(int i=0; i<NB_LOUPAS; i++)  mesLoupas[i].vivant = etatLoup[i];
+        for(int i=0; i<NB_JEAN_CLAUDE; i++)  jc[i].vivant = etatJC[i];
 
     // Faire réapparaître les pièces si gameover
     if (total_reset) {

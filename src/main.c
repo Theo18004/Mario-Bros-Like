@@ -177,7 +177,7 @@ int main(int argc, char* argv[]) {
     player.lives = 3;
 
     // Création du Loup
-    #define NB_LOUPAS 5
+    
     Ennemi mesLoupas[NB_LOUPAS];
     init_loupas(&mesLoupas[0], 600, 1000);
     init_loupas(&mesLoupas[1], 1184, 768);
@@ -187,7 +187,7 @@ int main(int argc, char* argv[]) {
 
 
     // Création du Thwomp
-    #define NB_THWOMPS 8
+    
     Thwomp mesThwomps[NB_THWOMPS];
     init_thwomp(&mesThwomps[0], 8960, 672);
     init_thwomp(&mesThwomps[1], 9120, 672);

@@ -2,14 +2,14 @@
  * @file mort.h
  * @brief Gestion de la mort du joueur et du respawn.
  */
-   
+
 #ifndef MORT_H
 #define MORT_H
 
 #include "player.h"
-#include "ennemi.h"  
-#include "Items.h"   
-#include "score.h"
+#include "ennemi.h"
+#include "Items.h"
+#include "interface.h"
 #include "camera.h"
 
 

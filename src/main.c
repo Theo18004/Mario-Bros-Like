@@ -53,6 +53,12 @@ int main(int argc, char* argv[]) {
         printf("Erreur Mixer : %s\n", Mix_GetError());
     }
 
+    // canaux pour le son
+    Mix_AllocateChannel(32);
+
+    // reserve canal 0
+    Mix_ReserveChannel(1);
+
     SDL_Window* window = SDL_CreateWindow("Mario-Like (Loup & Thwomp)",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
@@ -693,6 +699,7 @@ int main(int argc, char* argv[]) {
     free(tileMap);
     Mix_FreeChunk(sonSaut);
     Mix_FreeChunk(bouleFeu);
+    Mix_FreeChunk(coin);
     Mix_CloseAudio();
     SDL_DestroyTexture(bg1); SDL_DestroyTexture(bg2); SDL_DestroyTexture(bg3);
     SDL_DestroyTexture(bg4); SDL_DestroyTexture(bg5); SDL_DestroyTexture(bg6); SDL_DestroyTexture(terrainTex);

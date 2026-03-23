@@ -28,6 +28,9 @@ void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s){
     p->rect.y = p->checkpointY;
     p->velY = 0; p->state = STATE_IDLE;
     p->lives--;
+
+    // reinitialise les sons
+    Mix_HaltChannel(-1);
 }
 
 

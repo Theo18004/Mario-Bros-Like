@@ -68,7 +68,7 @@ typedef struct {
     int vivant;         /**< 1 si actif, 0 si supprimé */
 } Coquilas;
 
-#define NB_COQUILAS 1
+#define NB_COQUILAS 3
 #define NB_JEAN_CLAUDE 4
 
 void init_loupas(Ennemi* e, int x, int y);

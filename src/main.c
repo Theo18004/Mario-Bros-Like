@@ -31,6 +31,7 @@
 
 Mix_Chunk * sonSaut = NULL;
 Mix_Chunk * bouleFeu = NULL;
+Mix_Chunk * coin = NULL;
 
 int main(int argc, char* argv[]) {
     (void)argc;
@@ -162,6 +163,9 @@ int main(int argc, char* argv[]) {
 
     bouleFeu = Mix_LoadWAV("assets/son/BouleFeu.wav");
     if(!bouleFeu) printf("Erreur son boule de feu : %s\n",Mix_GetError());
+
+    coin = Mix_LoadWAV("assets/son/coin.wav");
+    if(!coin) printf("Erreur son piece %s\n", Mix_GetError());
 
     // 4. Applique le volume sauvegarder
 
@@ -387,6 +391,10 @@ int main(int argc, char* argv[]) {
                 if (SDL_HasIntersection(&player.rect, &rPiece)) {
                     score.bonus += 50;
                     mesPieces[i].vivant = 0;
+
+                    if(coin != NULL) {
+                        Mix_PlayChannel(-1, coin, 0);
+                    }
                 }
             }
         }

@@ -50,7 +50,7 @@ void update_player(Player* p, const Uint8* keys, int* map) {
         p->state = STATE_JUMP;
 
         if (sonSaut != NULL) {
-            Mix_PlayChannel(-1, sonSaut, 0);
+            Mix_PlayChannel(0, sonSaut, 0);
         }
     }
 

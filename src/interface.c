@@ -4,6 +4,7 @@
  */
 #include <SDL2/SDL.h>
 #include "interface.h"
+#include "player.h"
 
 void render_lives(SDL_Renderer* renderer, SDL_Texture** texVies, int lives) {
     if (lives <= 0) return;
@@ -21,29 +22,91 @@ void render_lives(SDL_Renderer* renderer, SDL_Texture** texVies, int lives) {
     imgW = 55;
     imgH = 25;
     posX=5;
-    posY=40;
+    posY=10;
 
     SDL_Rect dest = { posX, posY, imgW, imgH };
     SDL_RenderCopy(renderer, texVies[index], NULL, &dest);
 }
 
-void render_progress_bar(SDL_Renderer* renderer, int playerX, int mapPixelWidth) {
-    int w, h;
-    SDL_RenderGetLogicalSize(renderer, &w, &h);
-    if (w == 0) SDL_GetRendererOutputSize(renderer, &w, &h);
-    int barW = 500; int barH = 10;
-    int barX = (w - barW) / 2; int barY = 15;
+void render_pieces_hud(SDL_Renderer* renderer, SDL_Texture** texPiecesHUD, Piece* mesPieces) {
+    if (!renderer || !texPiecesHUD || !mesPieces) return;
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Fond
-    SDL_Rect bgBar = { barX, barY, barW, barH };
-    SDL_RenderFillRect(renderer, &bgBar);
+    int index = 0;
+    
+    if (mesPieces[0].vivant == 0) index += 1;
+    if (mesPieces[1].vivant == 0) index += 2;
+    if (mesPieces[2].vivant == 0) index += 4;
+    if (mesPieces[3].vivant == 0) index += 8;
 
-    float progress = (float)playerX / (float)mapPixelWidth;
-    int cursorX = barX + (int)(progress * barW);
+    if (texPiecesHUD[index] != NULL) {
+        SDL_QueryTexture(texPiecesHUD[index], NULL, NULL, NULL, NULL);
+        
+        int posX = 5;
+        int posY = 40; 
+        int imgW = 120;
+        int imgH = 40;
+        SDL_Rect dest = { posX, posY, imgW, imgH }; 
+        SDL_RenderCopy(renderer, texPiecesHUD[index], NULL, &dest);
+    }
+}
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Curseur
-    SDL_Rect cursor = { cursorX - 5, barY - 5, 10, 20 };
-    SDL_RenderFillRect(renderer, &cursor);
+void render_timer(SDL_Renderer* renderer, TTF_Font* font, int tempsRestant) {
+    if (!font) return;
+
+    char timeText[32];
+    sprintf(timeText, "TIME %03d", tempsRestant);
+    SDL_Color color = {255, 255, 255, 255}; 
+
+    SDL_Surface* surface = TTF_RenderText_Solid(font, timeText, color);
+    if (!surface) return;
+    int posX = 1175;
+    int posY = 10;
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Rect dest = { posX, posY, surface->w, surface->h };
+    SDL_RenderCopy(renderer, texture, NULL, &dest);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+}
+
+void init_score(Score* s) {
+    s->bonus = 0;
+    s->value = 0;
+    s->max_x = 0;
+    s->rect.x = 950;
+    s->rect.y = 10;
+}
+
+void update_score(Score* s, int player_x) {
+    if (player_x > s->max_x) {
+        s->max_x = player_x;
+    }
+    s->value = (s->max_x / 20) + s->bonus;
+}
+
+void render_score(SDL_Renderer* renderer, TTF_Font* font, Score* s) {
+    if (!font || !s) return;
+
+    char scoreText[32];
+    sprintf(scoreText, "SCORE %06d", s->value + s->bonus);
+
+    SDL_Color color = {255, 255, 255, 255}; 
+    SDL_Surface* surface = TTF_RenderText_Solid(font, scoreText, color);
+    if (!surface) return;
+    
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Rect dest = { s->rect.x, s->rect.y, surface->w, surface->h };
+
+    SDL_RenderCopy(renderer, texture, NULL, &dest);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+}
+
+void reset_score(Score* s) {
+    if (s != NULL) {
+        s->bonus = 0;
+        s->value = 0;
+        s->max_x = 0;
+    }
 }
 
 int gameover(SDL_Renderer* renderer, TTF_Font* font, Player* player, int score_affichage_fin, int meilleur_score) {
@@ -102,4 +165,102 @@ int gameover(SDL_Renderer* renderer, TTF_Font* font, Player* player, int score_a
         return action;
     }
     return 1;
+}
+
+int victory_screen(SDL_Renderer* renderer, TTF_Font* font, Player* player, Score* score, int temps_restant, int etoiles) {
+    int w, h;
+    SDL_RenderGetLogicalSize(renderer, &w, &h);
+    if (w == 0) SDL_GetRendererOutputSize(renderer, &w, &h);
+
+    int victoryScreenActive = 1;
+    int action = 0; 
+    int animationFinie = 0; // Passe à 1 quand le temps atteint 0
+
+    while (victoryScreenActive) {
+        SDL_Event e;
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) {
+                victoryScreenActive = 0;
+                action = 0;
+            }
+            if (e.type == SDL_KEYDOWN && (e.key.keysym.scancode == SDL_SCANCODE_SPACE || e.key.keysym.scancode == SDL_SCANCODE_RETURN)) {
+                if (animationFinie) {
+                    victoryScreenActive = 0;
+                    action = 1;
+                } else {
+                    score->bonus += temps_restant * 50;
+                    temps_restant = 0;
+                    animationFinie = 1;
+                }
+            }
+        }
+
+        // --- ANIMATION DU TEMPS ---
+        if (!animationFinie) {
+            if (temps_restant > 0) {
+                int vitesse = 5; // Enlève 5s par frame 
+                if (temps_restant < vitesse) vitesse = temps_restant;
+                
+                temps_restant -= vitesse;
+                score->bonus += (vitesse * 3);
+            } else {
+                animationFinie = 1;
+            }
+        }
+
+        // --- RENDU ---
+        SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255); // Fond Bleu foncé
+        SDL_RenderClear(renderer);
+
+        if (font != NULL) {
+            SDL_Color or = {255, 215, 0, 255};
+            SDL_Color blanc = {255, 255, 255, 255};
+            
+            char buffer[100];
+
+            // 1. Titre
+            SDL_Surface* sTitre = TTF_RenderText_Solid(font, "NIVEAU TERMINE !", or);
+            SDL_Texture* tTitre = SDL_CreateTextureFromSurface(renderer, sTitre);
+            SDL_Rect rTitre = { w/2 - sTitre->w/2, h/2 - 200, sTitre->w, sTitre->h };
+            SDL_RenderCopy(renderer, tTitre, NULL, &rTitre);
+            SDL_FreeSurface(sTitre); SDL_DestroyTexture(tTitre);
+
+            // 2. Score Final 
+            sprintf(buffer, "Score Total : %d", score->value + score->bonus);
+            SDL_Surface* sScore = TTF_RenderText_Solid(font, buffer, blanc);
+            SDL_Texture* tScore = SDL_CreateTextureFromSurface(renderer, sScore);
+            SDL_Rect rScore = { w/2 - sScore->w/2, h/2 - 100, sScore->w, sScore->h };
+            SDL_RenderCopy(renderer, tScore, NULL, &rScore);
+            SDL_FreeSurface(sScore); SDL_DestroyTexture(tScore);
+
+            // 3. Temps restant bonus
+            sprintf(buffer, "Bonus Temps : %d", temps_restant);
+            SDL_Surface* sTemps = TTF_RenderText_Solid(font, buffer, blanc);
+            SDL_Texture* tTemps = SDL_CreateTextureFromSurface(renderer, sTemps);
+            SDL_Rect rTemps = { w/2 - sTemps->w/2, h/2 - 40, sTemps->w, sTemps->h };
+            SDL_RenderCopy(renderer, tTemps, NULL, &rTemps);
+            SDL_FreeSurface(sTemps); SDL_DestroyTexture(tTemps);
+
+            // 4. Stats
+            sprintf(buffer, "Vies : %d   |   Etoiles : %d/3", player->lives, etoiles);
+            SDL_Surface* sStats = TTF_RenderText_Solid(font, buffer, blanc);
+            SDL_Texture* tStats = SDL_CreateTextureFromSurface(renderer, sStats);
+            SDL_Rect rStats = { w/2 - sStats->w/2, h/2 + 20, sStats->w, sStats->h };
+            SDL_RenderCopy(renderer, tStats, NULL, &rStats);
+            SDL_FreeSurface(sStats); SDL_DestroyTexture(tStats);
+
+            // 5. Appuyer sur ESPACE 
+            if (animationFinie) {
+                SDL_Surface* sInst = TTF_RenderText_Solid(font, "Appuyez sur ESPACE pour continuer", or);
+                SDL_Texture* tInst = SDL_CreateTextureFromSurface(renderer, sInst);
+                SDL_Rect rInst = { w/2 - sInst->w/2, h/2 + 150, sInst->w, sInst->h };
+                SDL_RenderCopy(renderer, tInst, NULL, &rInst);
+                SDL_FreeSurface(sInst); SDL_DestroyTexture(tInst);
+            }
+        }
+
+        SDL_RenderPresent(renderer);
+        SDL_Delay(16); 
+    }
+    return action;
 }

@@ -6,7 +6,7 @@
 #include "collision.h"
 #include "defs.h"
 #include "mort.h"
-#include "score.h"
+#include "interface.h"
 
 extern Mix_Chunk *sonSaut;
 
@@ -19,22 +19,27 @@ void init_player(Player* p, int x, int y) {
     p->facingRight = 1;
     p->onGround = 0;
     p->state = STATE_IDLE;
-    p->checkpointX = x; 
+    p->checkpointX = x;
     p->checkpointY = y;
 }
 
 void update_player(Player* p, const Uint8* keys, int* map) {
     int mapPixelWidth = TILE_SIZE * MAP_SCALE * MAP_WIDTH;
 
+    // On vérifie si le joueur est entrain de mourir ou de gagner avant de le faire bouger
     if (p->state == STATE_DEAD){
         p->velY += 0.6f;
         p->rect.y += (int)p->velY;
         return;
     }
 
+    if( p->state == STATE_WIN){
+        return;
+    }
+
     // --- 2. Initialisation de la frame ---
     int wasOnGround = p->onGround;
-    p->state = STATE_IDLE; 
+    p->state = STATE_IDLE;
     int oldX = p->rect.x;
     int oldY = p->rect.y;
 
@@ -45,7 +50,7 @@ void update_player(Player* p, const Uint8* keys, int* map) {
         p->state = STATE_JUMP;
 
         if (sonSaut != NULL) {
-            Mix_PlayChannel(-1, sonSaut, 0); 
+            Mix_PlayChannel(-1, sonSaut, 0);
         }
     }
 
@@ -59,15 +64,15 @@ void update_player(Player* p, const Uint8* keys, int* map) {
             p->rect.x += (int)speed;
             p->facingRight = 1;
         }
-        
+
         p->state = STATE_RUN;
 
         // Si on rentre dans un mur ou une pente
         if (check_collision(p->rect, map, 0)) {
             int success = 0;
             int max_step = 10;
-            
-            // On tente de monter la pente/escalier  
+
+            // On tente de monter la pente/escalier
             if (wasOnGround) {
                 for (int i = 1; i <= max_step; i++) {
                     p->rect.y = oldY - i;
@@ -79,11 +84,11 @@ void update_player(Player* p, const Uint8* keys, int* map) {
             }
 
             if (!success) {
-                p->rect.y = oldY; 
+                p->rect.y = oldY;
                 // Si on allait vers la droite (oldX était plus petit)
                 if (p->rect.x > oldX) {
                     while (check_collision(p->rect, map, 0)) p->rect.x -= 1;
-                } 
+                }
                 // Si on allait vers la gauche (oldX était plus grand)
                 else if (p->rect.x < oldX) {
                     while (check_collision(p->rect, map, 0)) p->rect.x += 1;
@@ -99,49 +104,49 @@ void update_player(Player* p, const Uint8* keys, int* map) {
     }
 
     // --- 5. Gravité et axe Y ---
-    p->velY += 0.6f; 
+    p->velY += 0.6f;
     if (p->velY > 15.0f) p->velY = 15.0f; // Vitesse de chute max
 
     p->rect.y += (int)p->velY;
-    p->onGround = 0; 
+    p->onGround = 0;
 
     // Résolution des collisions Y par "Pushback"
     int check_demi = (p->velY > 0) ? 1 : 0;
 
     if (check_collision(p->rect, map, check_demi)) {
-        if (p->velY > 0) { 
+        if (p->velY > 0) {
             while (check_collision(p->rect, map, check_demi)) {
-                p->rect.y -= 1; 
+                p->rect.y -= 1;
             }
             p->velY = 0;
-            p->onGround = 1; 
-        } 
-        else if (p->velY < 0) { 
+            p->onGround = 1;
+        }
+        else if (p->velY < 0) {
             while (check_collision(p->rect, map, 0)) {
-                p->rect.y += 1; 
+                p->rect.y += 1;
             }
             p->velY = 0;
         }
     } else {
         p->rect.y += 1;
         if (check_collision(p->rect, map, 1)) {
-            p->onGround = 1; 
+            p->onGround = 1;
         }
-        p->rect.y -= 1; 
+        p->rect.y -= 1;
     }
 
     // --- 6. Choix final de l'animation ---
     if (!p->onGround) {
         p->state = STATE_JUMP;
-    } else if (p->rect.x == oldX && (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT])) { 
+    } else if (p->rect.x == oldX && (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT])) {
         p->state = STATE_IDLE;
     }
     return;
 }
 
-void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY, 
+void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY,
                    SDL_Texture* texIdle, SDL_Texture* texRun, SDL_Texture* texJump, SDL_Texture* texDead) {
-    
+
     SDL_Texture* currentTexture = texIdle;
     int nbFrames = 6;
 
@@ -155,7 +160,7 @@ void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY,
         currentTexture = texDead;
         nbFrames = 3;
     }
-    
+
     // On met les animations à jour en fonction du temps
     if (currentTexture) {
         int texW, texH;
@@ -170,33 +175,33 @@ void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY,
         } else if (p->state == STATE_JUMP) {
             currentFrame = (SDL_GetTicks() / 100) % nbFrames;
         } else if (p->state == STATE_DEAD) {
-            if (deathStartTime == 0) deathStartTime = SDL_GetTicks(); 
+            if (deathStartTime == 0) deathStartTime = SDL_GetTicks();
             currentFrame = (SDL_GetTicks() - deathStartTime) / 150;
-            if (currentFrame >= nbFrames) currentFrame = nbFrames - 1; 
+            if (currentFrame >= nbFrames) currentFrame = nbFrames - 1;
         } else {
             deathStartTime = 0;
             currentFrame = (SDL_GetTicks() / 150) % nbFrames;
         }
 
         SDL_Rect srcP = { currentFrame * singleFrameW, 0, singleFrameW, texH };
-        
+
         // Taille d'affichage à l'écran
         int displaySize = 64;
-        
-        // Centrage horizontal (Taille de l'image - Taille de la Hitbox) / 2
-        int offsetX = (displaySize - p->rect.w) / 2; 
-        
-        // Alignement vertical On aligne les pieds de l'image avec le bas de la hitbox
-        int offsetY = displaySize - p->rect.h;       
 
-        
-        SDL_Rect destP = { 
-            p->rect.x - scrollX - offsetX, 
-            p->rect.y - scrollY - offsetY, 
-            displaySize, 
-            displaySize 
+        // Centrage horizontal (Taille de l'image - Taille de la Hitbox) / 2
+        int offsetX = (displaySize - p->rect.w) / 2;
+
+        // Alignement vertical On aligne les pieds de l'image avec le bas de la hitbox
+        int offsetY = displaySize - p->rect.h;
+
+
+        SDL_Rect destP = {
+            p->rect.x - scrollX - offsetX,
+            p->rect.y - scrollY - offsetY,
+            displaySize,
+            displaySize
         };
-        
+
         SDL_RendererFlip flip = (p->facingRight) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         SDL_RenderCopyEx(renderer, currentTexture, &srcP, &destP, 0, NULL, flip);
     }

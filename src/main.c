@@ -4,26 +4,26 @@
  * @details Initialise SDL2, charge les ressources, gère la boucle de jeu.
  */
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_audio.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+ #include <SDL2/SDL.h>
+ #include <SDL2/SDL_image.h>
+ #include <SDL2/SDL_ttf.h>
+ #include <SDL2/SDL_mixer.h>
+ #include <SDL2/SDL_audio.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
 
-// Inclusion de nos headers persos
-#include "map.h"
-#include "player.h"
-#include "camera.h"
-#include "defs.h"
-#include "menu.h"
-#include "score.h"
-#include "mort.h"
-#include "interface.h"
-#include "ennemi.h"
-#include "Items.h"
+ // Inclusion de nos headers persos
+ #include "map.h"
+ #include "player.h"
+ #include "camera.h"
+ #include "defs.h"
+ #include "menu.h"
+ #include "mort.h"
+ #include "interface.h"
+ #include "ennemi.h"
+ #include "Items.h"
+ #include "flag.h"
 
 /**
  * @brief Fonction main.
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     IMG_Init(IMG_INIT_PNG);
     if (TTF_Init() == -1) return 1;
 
-    TTF_Font* font = TTF_OpenFont("assets/police.ttf", 32);
+    TTF_Font* font = TTF_OpenFont("assets/NSuperMario.ttf", 32);
     if (font == NULL) {
         printf("Erreur : impossible de charger la police ! %s\n", TTF_GetError());
     }
@@ -128,6 +128,33 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    SDL_Texture* texMat = IMG_LoadTexture(renderer, "assets/Items/Mat.png");
+    SDL_Texture* texFlag = IMG_LoadTexture(renderer, "assets/Items/Drapeau.png");
+    if (!texMat || !texFlag) {
+        printf("Attention: image du drapeau manquante ! %s\n", IMG_GetError());
+    }
+
+    //Textures pour le HUD des pièces
+    SDL_Texture* texPiecesHUD[16];
+
+    for (int i = 0; i < 16; i++) {
+        char comb[10] = "";
+
+        // On construit le nom du fichier selon les combinaisons
+        if (i & 1) strcat(comb, "1");
+        if (i & 2) strcat(comb, "2");
+        if (i & 4) strcat(comb, "3");
+        if (i & 8) strcat(comb, "4");
+        if (i == 0) strcpy(comb, "0");
+
+        char chemin[128];
+        sprintf(chemin, "assets/Items/piece_hud/piece_%s.png", comb);
+        texPiecesHUD[i] = IMG_LoadTexture(renderer, chemin);
+        if (texPiecesHUD[i] == NULL) {
+            printf("Attention, image manquante : %s\n", chemin);
+        }
+    }
+
     // 3. Charger le sonSaut
 
     sonSaut = Mix_LoadWAV("assets/son/Jump.wav");
@@ -146,8 +173,14 @@ int main(int argc, char* argv[]) {
     player.lives = 3;
 
     // Création du Loup
-    Ennemi mechant;
-    init_loupas(&mechant, 600, 1000);
+    #define NB_LOUPAS 5
+    Ennemi mesLoupas[NB_LOUPAS];
+    init_loupas(&mesLoupas[0], 600, 1000);
+    init_loupas(&mesLoupas[1], 1184, 768);
+    init_loupas(&mesLoupas[2], 1920, 576);
+    init_loupas(&mesLoupas[3], 2368, 576);
+    init_loupas(&mesLoupas[4], 3072, 1056);
+
 
     // Création du Thwomp
     #define NB_THWOMPS 8
@@ -178,10 +211,12 @@ int main(int argc, char* argv[]) {
     //Création des Coquilas
     Coquilas mesCoquilas[NB_COQUILAS];
     init_coquilas(&mesCoquilas[0], 5896, 650);
+    init_coquilas(&mesCoquilas[1], 4416, 608);
+    init_coquilas(&mesCoquilas[2], 6272, 960);
 
     //Création des Jean-Claude
     Ennemi jc[NB_JEAN_CLAUDE];
-    init_jc(&jc[0], 10600, 928);
+    init_jc(&jc[0], 10800, 928);
     init_jc(&jc[1], 10700, 450);
     init_jc(&jc[2], 11500, 750);
     init_jc(&jc[3], 13000, 928);
@@ -212,8 +247,11 @@ int main(int argc, char* argv[]) {
     mesCheckpoints[1].rect.h = 64;
     mesCheckpoints[1].actif = 0;
 
+    Flag monDrapeau;
+    init_flag(&monDrapeau, 15008, 747);
+
     Score score;
-    init_score(&score, 10, 10);
+    init_score(&score);
 
     Camera camera;
     camera.w = logicalW;
@@ -227,6 +265,9 @@ int main(int argc, char* argv[]) {
     // --- Boucle Principale ---
     int running = 1;
     SDL_Event event;
+    int tempsMax = 400;
+    Uint32 startTime = SDL_GetTicks();
+    int tempsRestant = tempsMax;
 
     while (running) {
         Uint32 frameStart = SDL_GetTicks();
@@ -239,7 +280,9 @@ int main(int argc, char* argv[]) {
 
         // -- Mises à jour --
         update_player(&player, keys, tileMap);
-        update_loupas(&mechant, tileMap);
+        for (int i = 0; i < NB_LOUPAS; i++) {
+            update_loupas(&mesLoupas[i], tileMap);
+        }
         for (int i = 0; i < NB_THWOMPS; i++) {
             update_thwomp(&mesThwomps[i], &player, tileMap);
         }
@@ -256,7 +299,21 @@ int main(int argc, char* argv[]) {
 
         if (verifier_conditions_mort(&player, mapPixelHeight)) {
             gerer_mort_joueur(&player, 20, 1000, &score);
-            reset_level(&player, &mechant, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 0);
+            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 0);
+        }
+
+        if (player.state != STATE_WIN) {
+            int tempsEcoule = (SDL_GetTicks() - startTime) / 1000;
+            tempsRestant = tempsMax - tempsEcoule;
+        }
+
+        // Game Over si le temps est écoulé !
+        if (tempsRestant <= 0) {
+            tempsRestant = 0;
+            if (player.state != STATE_DEAD) {
+                player.state = STATE_DEAD;
+                player.velY = -10.0f;
+            }
         }
 
         // --- Sauvegarde des scores en temps réel ---
@@ -267,14 +324,17 @@ int main(int argc, char* argv[]) {
         if (player.lives > 0) { score_affichage_fin = score.value; }
 
         // -- Gestion Collision Joueur/Loup --
-        if (player.state != STATE_DEAD && mechant.vivant && SDL_HasIntersection(&player.rect, &mechant.rect)) {
-            int pieds_avant = (player.rect.y + player.rect.h) - (int)player.velY;
-            if (player.velY > 0 && pieds_avant <= mechant.rect.y + 15) {
-                mechant.vivant = 0;
-                player.velY = -12.0f;
-            } else {
-                player.state = STATE_DEAD;
-                player.velY = -10.0f;
+         for (int i = 0; i < NB_LOUPAS; i++) {
+            if (player.state != STATE_DEAD && mesLoupas[i].vivant && SDL_HasIntersection(&player.rect, &mesLoupas[i].rect)) {
+                int pieds_avant = (player.rect.y + player.rect.h) - (int)player.velY;
+                if (player.velY > 0 && pieds_avant <= mesLoupas[i].rect.y + 15) {
+                    mesLoupas[i].vivant = 0;
+                    score.bonus += 100;
+                    player.velY = -12.0f;
+                } else {
+                    player.state = STATE_DEAD;
+                    player.velY = -10.0f;
+                }
             }
         }
 
@@ -342,6 +402,37 @@ int main(int argc, char* argv[]) {
 
                     printf("Checkpoint %d atteint !\n", i);
                 }
+            }
+        }
+
+        // Gestion de victoire
+        // 1. Activation du drapeau (si le joueur touche le mât )
+        if (monDrapeau.actif == 0 && SDL_HasIntersection(&player.rect, &monDrapeau.matRect)) {
+            monDrapeau.actif = 1;
+            player.state = STATE_WIN;
+            player.rect.x = monDrapeau.matRect.x - player.rect.w / 2;
+
+        }
+        // 2. Fait descendre le drapeau
+        update_flag(&monDrapeau);
+
+        // 3. Conversion du temps en score (Quand le drapeau est au sol)
+       if (monDrapeau.actif == 2 && player.state == STATE_WIN) {
+            SDL_Delay(500);
+
+            // Calcul des étoiles ramassées
+            int etoiles = 0;
+            for (int i = 0; i < NB_PIECES; i++) {
+                if (mesPieces[i].vivant == 0) etoiles++;
+            }
+
+            // On affiche le menu de victoire
+            int action = victory_screen(renderer, font, &player, &score, tempsRestant, etoiles);
+
+            if (action == 1) {
+                running = 0;
+            } else {
+                running = 0;
             }
         }
 
@@ -437,6 +528,9 @@ int main(int argc, char* argv[]) {
 
         // Entités
         // On affiche les objets de l'arrière plan vers le premier plan
+        for(int i=0; i<NB_LOUPAS; i++){
+            render_loupas(renderer, &mesLoupas[i], camera.x, camera.y, texLoup);
+        }
         for (int i = 0; i < NB_THWOMPS; i++) {
             render_thwomp(renderer, &mesThwomps[i], camera.x, camera.y, texThwomp);
         }
@@ -452,10 +546,6 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < NB_JEAN_CLAUDE; i++) {
             render_jc(renderer, &jc[i], camera.x, camera.y, texJeanClaude);
         }
-
-        render_loupas(renderer, &mechant, camera.x, camera.y, texLoup);
-        render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump, texDead);
-
         for (int i = 0; i < NB_CHECKPOINTS; i++) {
             render_checkpoint(renderer, texCheckpoint, &mesCheckpoints[i], camera.x, camera.y);
         }
@@ -478,12 +568,14 @@ int main(int argc, char* argv[]) {
         SDL_RenderDrawRect(renderer, &debugPlayerRect);
 
         // 2. Loup
-        if (mechant.vivant) {
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 128);
-            SDL_Rect debugEnnemiRect = { mechant.rect.x - camera.x, mechant.rect.y - camera.y, mechant.rect.w, mechant.rect.h };
-            SDL_RenderFillRect(renderer, &debugEnnemiRect);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            SDL_RenderDrawRect(renderer, &debugEnnemiRect);
+        for (int i = 0; i < NB_LOUPAS; i++) {
+            if (mesLoupas[i].vivant) {
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 128);
+                SDL_Rect debugEnnemiRect = { mesLoupas[i].rect.x - camera.x, mesLoupas[i].rect.y - camera.y, mesLoupas[i].rect.w, mesLoupas[i].rect.h };
+                SDL_RenderFillRect(renderer, &debugEnnemiRect);
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                SDL_RenderDrawRect(renderer, &debugEnnemiRect);
+            }
         }
 
         // 3. Thwomp
@@ -530,10 +622,29 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        //Flag
+        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 128); // Hitbox Magenta transparente
+        SDL_Rect debugFlagRect = { monDrapeau.matRect.x - camera.x, monDrapeau.matRect.y - camera.y,
+                                    monDrapeau.matRect.w, monDrapeau.matRect.h };
+        SDL_RenderFillRect(renderer, &debugFlagRect);
+        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+        SDL_RenderDrawRect(renderer, &debugFlagRect);
+
+        //Mat
+        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 128); // Hitbox Magenta transparente
+        SDL_Rect debugMatRect = { monDrapeau.matRect.x - camera.x, monDrapeau.matRect.y - camera.y,
+                                  monDrapeau.matRect.w, monDrapeau.matRect.h };
+        SDL_RenderFillRect(renderer, &debugMatRect);
+        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+        SDL_RenderDrawRect(renderer, &debugMatRect);
+
         // Interface
-        render_score(renderer, &score);
+        render_score(renderer, font, &score);
         render_lives(renderer, texVies, player.lives);
-        render_progress_bar(renderer, player.rect.x, mapPixelWidth);
+        render_pieces_hud(renderer, texPiecesHUD, mesPieces);
+        render_timer(renderer, font, tempsRestant);
+        render_flag(renderer, &monDrapeau, texMat, texFlag, camera.x, camera.y);
+        render_player(renderer, &player, camera.x, camera.y, texIdle, texRun, texJump, texDead);
 
         // Effet luminosité
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -547,7 +658,7 @@ int main(int argc, char* argv[]) {
           int action = gameover(renderer, font, &player, score_affichage_fin, meilleur_score);
           if (action == 1) {
             // Paramètre '1' à la fin car on veut tout remettre à zéro (vies + score)
-            reset_level(&player, &mechant, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 1);
+            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 1);
                 for (int i = 0; i < NB_CHECKPOINTS; i++) {
                     mesCheckpoints[i].actif = 0;
                 }
@@ -566,6 +677,11 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < 5; i++) {
         SDL_DestroyTexture(texVies[i]);
     }
+    for (int i = 0; i < 16; i++) {
+        if (texPiecesHUD[i] != NULL) {
+            SDL_DestroyTexture(texPiecesHUD[i]);
+        }
+    }
     free(tileMap);
     Mix_FreeChunk(sonSaut);
     Mix_FreeChunk(bouleFeu);
@@ -574,7 +690,7 @@ int main(int argc, char* argv[]) {
     SDL_DestroyTexture(bg4); SDL_DestroyTexture(bg5); SDL_DestroyTexture(bg6); SDL_DestroyTexture(terrainTex);
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
     SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo); SDL_DestroyTexture(texCoquilas); SDL_DestroyTexture(texJeanClaude);
-    SDL_DestroyTexture(texCoin); SDL_DestroyTexture(texCheckpoint);
+    SDL_DestroyTexture(texCoin); SDL_DestroyTexture(texCheckpoint); SDL_DestroyTexture(texMat); SDL_DestroyTexture(texFlag);
     if (font) TTF_CloseFont(font);
     SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window);
     TTF_Quit(); IMG_Quit(); SDL_Quit();

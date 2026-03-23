@@ -224,6 +224,12 @@ void update_podoboo(Podoboo* p, Camera * cam) {
     if (p->rect.y <= p->minY) {
         p->rect.y = p->minY;
         p->speedY = 5.0f; 
+
+        if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
+            if (bouleFeu != NULL) {
+                Mix_PlayChannel(-1, bouleFeu, 0);
+            }
+        }
     }
     if (p->rect.y >= p->maxY) {
         p->rect.y = p->maxY;

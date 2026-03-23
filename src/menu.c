@@ -4,6 +4,10 @@
 
 #include <stdio.h>
 
+#define BTN_SOURCE_SIZE 250
+#define COLONNES 12
+#define LIGNES 4
+
 int luminosite = 255; // valeur max : 255
 int volume = 50; // valeur max 100
 
@@ -275,4 +279,76 @@ void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font
     SDL_DestroyTexture(txtSon);
     SDL_DestroyTexture(txtLum);
     SDL_DestroyTexture(txtRetour);
+}
+
+MenuResult afficher_pause(SDL_Renderer* renderer, int width, int height, Mix_Chunk* sfx) {
+    SDL_Texture* texBouton = IMG_LoadTexture(renderer, "assets/bouton.png");
+    SDL_Texture* texBG = IMG_LoadTexture(renderer, "assets/background.png");
+    
+    if (!texBouton) return MENU_PLAY;
+
+    int imgW, imgH;
+    SDL_QueryTexture(texBouton, NULL, NULL, &imgW, &imgH);
+    int bw = imgW / COLONNES;
+    int bh = imgH / LIGNES;
+
+    // Sélection des icônes (Ligne 3)
+    SDL_Rect srcPlay    = { bw * 4,  bh * 2, bw, bh }; 
+    SDL_Rect srcRestart = { bw * 3,  bh * 2, bw, bh }; 
+    SDL_Rect srcHome    = { bw * 6,  bh * 3 - 50, bw, bh }; 
+
+    int displaySize = 100;
+    int spacing = 40;
+    int startX = (width - (displaySize * 3 + spacing * 2)) / 2;
+    // On remonte les boutons (Centre - 150 pixels)
+    int startY = (height / 2) - (displaySize / 2) - 150; 
+
+    SDL_Rect dPlay    = { startX, startY, displaySize, displaySize };
+    SDL_Rect dRestart = { startX + displaySize + spacing, startY, displaySize, displaySize };
+    SDL_Rect dHome    = { startX + (displaySize + spacing) * 2, startY, displaySize, displaySize };
+
+    int pauseRunning = 1;
+    MenuResult result = MENU_PLAY;
+    SDL_Event e;
+
+    while (pauseRunning) {
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) { result = MENU_QUIT; pauseRunning = 0; }
+            if (e.type == SDL_MOUSEBUTTONDOWN) {
+                SDL_Point p = { e.button.x, e.button.y };
+                if (SDL_PointInRect(&p, &dPlay)) { 
+                    if(sfx) Mix_PlayChannel(-1, sfx, 0); 
+                    pauseRunning = 0; 
+                }
+                if (SDL_PointInRect(&p, &dRestart)) { 
+                    if(sfx) Mix_PlayChannel(-1, sfx, 0); 
+                    result = MENU_OPTIONS; // Signal pour Restart
+                    pauseRunning = 0; 
+                }
+                if (SDL_PointInRect(&p, &dHome)) { 
+                    if(sfx) Mix_PlayChannel(-1, sfx, 0); 
+                    result = MENU_QUIT; // Retour Menu Principal
+                    pauseRunning = 0; 
+                }
+            }
+            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_p) pauseRunning = 0;
+        }
+
+        SDL_RenderClear(renderer);
+        if (texBG) SDL_RenderCopy(renderer, texBG, NULL, NULL);
+
+        // Voile sombre léger pour voir le fond
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
+        SDL_RenderFillRect(renderer, NULL);
+
+        SDL_RenderCopy(renderer, texBouton, &srcPlay, &dPlay);
+        SDL_RenderCopy(renderer, texBouton, &srcRestart, &dRestart);
+        SDL_RenderCopy(renderer, texBouton, &srcHome, &dHome);
+        SDL_RenderPresent(renderer);
+    }
+
+    if(texBG) SDL_DestroyTexture(texBG);
+    SDL_DestroyTexture(texBouton);
+    return result;
 }

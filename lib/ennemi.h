@@ -56,7 +56,7 @@ typedef struct {
     float speedY;   /**< Vitesse de déplacement vertical */
     int vivant;     /**< 1 si actif, 0 si supprimé */
 } Podoboo;
-#define NB_PODOBOO 11
+
 
 typedef struct {
     SDL_Rect rect;      /**< Hitbox de l'ennemi */
@@ -68,8 +68,11 @@ typedef struct {
     int vivant;         /**< 1 si actif, 0 si supprimé */
 } Coquilas;
 
+#define NB_PODOBOO 11
 #define NB_COQUILAS 3
 #define NB_JEAN_CLAUDE 4
+#define NB_LOUPAS 5
+#define NB_THWOMPS 8
 
 void init_loupas(Ennemi* e, int x, int y);
 void update_loupas(Ennemi* e, int* map);

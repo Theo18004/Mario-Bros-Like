@@ -53,11 +53,13 @@ int main(int argc, char* argv[]) {
         printf("Erreur Mixer : %s\n", Mix_GetError());
     }
 
+
     // canaux pour le son
-    Mix_AllocateChannel(32);
+    Mix_AllocateChannels(32);
 
     // reserve canal 0
-    Mix_ReserveChannel(1);
+    Mix_ReserveChannels(1);
+
 
     SDL_Window* window = SDL_CreateWindow("Mario-Like (Loup & Thwomp)",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -275,7 +277,7 @@ int main(int argc, char* argv[]) {
     // --- Boucle Principale ---
     int running = 1;
     SDL_Event event;
-    int tempsMax = 400;
+    int tempsMax = 250;
     Uint32 startTime = SDL_GetTicks();
     int tempsRestant = tempsMax;
 
@@ -307,9 +309,17 @@ int main(int argc, char* argv[]) {
         update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
 
+        // --- MORT ET RESPAWN NORMAL ---
         if (verifier_conditions_mort(&player, mapPixelHeight)) {
+            int temps_sauvegarde = tempsRestant;
+            if (temps_sauvegarde <= 0) {
+                temps_sauvegarde = tempsMax; 
+            }
+
             gerer_mort_joueur(&player, 20, 1000, &score);
             reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 0);
+            startTime = SDL_GetTicks() - ((tempsMax - temps_sauvegarde) * 1000);
+            tempsRestant = temps_sauvegarde;
         }
 
         if (player.state != STATE_WIN) {
@@ -325,7 +335,6 @@ int main(int argc, char* argv[]) {
                 player.velY = -10.0f;
             }
         }
-
         // --- Sauvegarde des scores en temps réel ---
         static int meilleur_score = 0;
         static int score_affichage_fin = 0;
@@ -394,7 +403,7 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < NB_PIECES; i++) {
             if (mesPieces[i].vivant) {
                 SDL_Rect rPiece = { mesPieces[i].rect.x, mesPieces[i].rect.y, 32, 32 };
-                if (SDL_HasIntersection(&player.rect, &rPiece)) {
+                if (player.state != STATE_DEAD && SDL_HasIntersection(&player.rect, &rPiece)) {
                     score.bonus += 50;
                     mesPieces[i].vivant = 0;
 
@@ -436,6 +445,7 @@ int main(int argc, char* argv[]) {
 
             // Calcul des étoiles ramassées
             int etoiles = 0;
+
             for (int i = 0; i < NB_PIECES; i++) {
                 if (mesPieces[i].vivant == 0) etoiles++;
             }
@@ -667,19 +677,27 @@ int main(int argc, char* argv[]) {
         SDL_RenderFillRect(renderer, &fullScreen);
 
         SDL_RenderPresent(renderer);
+        
         // --- GESTION DU GAME OVER ---
         if (player.lives <= 0) {
-          int action = gameover(renderer, font, &player, score_affichage_fin, meilleur_score);
-          if (action == 1) {
-            // Paramètre '1' à la fin car on veut tout remettre à zéro (vies + score)
-            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 1);
+            tempsRestant = tempsMax; 
+            int action = gameover(renderer, font, &player, score_affichage_fin, meilleur_score);
+            if (action == 1) {
+                // Paramètre '1' à la fin car on veut tout remettre à zéro (vies + score)
+                reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 1);
+                
                 for (int i = 0; i < NB_CHECKPOINTS; i++) {
                     mesCheckpoints[i].actif = 0;
                 }
-                } else {
-                        running = 0;
-                    }
-                }
+                
+                // On réinitialise l'horloge interne pour le nouveau run !
+                startTime = SDL_GetTicks();
+                tempsRestant = tempsMax;
+                
+            } else {
+                running = 0;
+            }
+        }
 
         Uint32 frameTime = SDL_GetTicks() - frameStart;
         if (frameTime < 16) {

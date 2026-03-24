@@ -89,8 +89,10 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
     init_jc(&jc[3], 13000, 900);
 
     //On laisse mort ceux qui étaient morts avant le reset si ce n'est pas un gameover
+    if( !total_reset){
         for(int i=0; i<NB_LOUPAS; i++)  mesLoupas[i].vivant = etatLoup[i];
         for(int i=0; i<NB_JEAN_CLAUDE; i++)  jc[i].vivant = etatJC[i];
+    }
 
     // Faire réapparaître les pièces si gameover
     if (total_reset) {

@@ -173,6 +173,7 @@ int victory_screen(SDL_Renderer* renderer, TTF_Font* font, Player* player, Score
     if (w == 0) SDL_GetRendererOutputSize(renderer, &w, &h);
 
     int victoryScreenActive = 1;
+    SDL_Delay(1000);
     int action = 0; 
     int animationFinie = 0; // Passe à 1 quand le temps atteint 0
 
@@ -198,6 +199,7 @@ int victory_screen(SDL_Renderer* renderer, TTF_Font* font, Player* player, Score
         // --- ANIMATION DU TEMPS ---
         if (!animationFinie) {
             if (temps_restant > 0) {
+                
                 int vitesse = 5; // Enlève 5s par frame 
                 if (temps_restant < vitesse) vitesse = temps_restant;
                 

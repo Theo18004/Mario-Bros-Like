@@ -14,7 +14,7 @@ void init_player(Player* p, int x, int y) {
     p->rect.x = x;
     p->rect.y = y;
     p->rect.w = 20; // Largeur Hitbox
-    p->rect.h = 48; // Hauteur Hitbox
+    p->rect.h = 42; // Hauteur Hitbox
     p->velY = 0.0f;
     p->facingRight = 1;
     p->onGround = 0;

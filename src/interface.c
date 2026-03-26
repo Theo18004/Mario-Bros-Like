@@ -5,6 +5,9 @@
 #include <SDL2/SDL.h>
 #include "interface.h"
 #include "player.h"
+#include "ennemi.h" 
+#include "flag.h"   
+#include "defs.h"
 
 void render_lives(SDL_Renderer* renderer, SDL_Texture** texVies, int lives) {
     if (lives <= 0) return;
@@ -265,4 +268,82 @@ int victory_screen(SDL_Renderer* renderer, TTF_Font* font, Player* player, Score
         SDL_Delay(16); 
     }
     return action;
+}
+
+
+void render_debug_hitboxes(SDL_Renderer* renderer, Player* player, 
+                           Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, 
+                           Coquilas* coquilas, Ennemi* jc, Flag* drapeau, 
+                           int camX, int camY) {
+                           
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+    // 1. Joueur
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 128);
+    SDL_Rect rPlayer = { player->rect.x - camX, player->rect.y - camY, player->rect.w, player->rect.h };
+    SDL_RenderFillRect(renderer, &rPlayer);
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    SDL_RenderDrawRect(renderer, &rPlayer);
+
+    // 2. Loupas
+    for (int i = 0; i < NB_LOUPAS; i++) {
+        if (loupas[i].vivant) {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 128);
+            SDL_Rect r = { loupas[i].rect.x - camX, loupas[i].rect.y - camY, loupas[i].rect.w, loupas[i].rect.h };
+            SDL_RenderFillRect(renderer, &r);
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            SDL_RenderDrawRect(renderer, &r);
+        }
+    }
+
+    // 3. Thwomps
+    for (int i = 0; i < NB_THWOMPS; i++) {
+        if (thwomps[i].vivant) {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 128);
+            SDL_Rect r = { thwomps[i].rect.x - camX, thwomps[i].rect.y - camY, thwomps[i].rect.w, thwomps[i].rect.h };
+            SDL_RenderFillRect(renderer, &r);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+            SDL_RenderDrawRect(renderer, &r);
+        }
+    }
+
+    // 4. Podoboos
+    for (int i = 0; i < NB_PODOBOO; i++) {
+        if (podoboo[i].vivant) {
+            SDL_SetRenderDrawColor(renderer, 255, 165, 0, 128);
+            SDL_Rect r = { podoboo[i].rect.x - camX, podoboo[i].rect.y - camY, podoboo[i].rect.w, podoboo[i].rect.h };
+            SDL_RenderFillRect(renderer, &r);
+            SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
+            SDL_RenderDrawRect(renderer, &r);
+        }
+    }
+
+    // 5. Coquilas
+    for (int i = 0; i < NB_COQUILAS; i++) {
+        if (coquilas[i].vivant) {
+            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 128);
+            SDL_Rect r = { coquilas[i].rect.x - camX, coquilas[i].rect.y - camY, coquilas[i].rect.w, coquilas[i].rect.h };
+            SDL_RenderFillRect(renderer, &r);
+            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+            SDL_RenderDrawRect(renderer, &r);
+        }
+    }
+
+    // 6. Jean-Claude
+    for (int i = 0; i < NB_JEAN_CLAUDE; i++) {
+        if (jc[i].vivant) {
+            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 128);
+            SDL_Rect r = { jc[i].rect.x - camX, jc[i].rect.y - camY, jc[i].rect.w, jc[i].rect.h };
+            SDL_RenderFillRect(renderer, &r);
+            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+            SDL_RenderDrawRect(renderer, &r);
+        }
+    }
+
+    // 7. Drapeau (Mât)
+    SDL_SetRenderDrawColor(renderer, 255, 0, 255, 128);
+    SDL_Rect rMat = { drapeau->matRect.x - camX, drapeau->matRect.y - camY, drapeau->matRect.w, drapeau->matRect.h };
+    SDL_RenderFillRect(renderer, &rMat);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+    SDL_RenderDrawRect(renderer, &rMat);
 }

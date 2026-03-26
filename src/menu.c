@@ -92,7 +92,6 @@ MenuResult afficher_menu(SDL_Renderer* renderer, int width, int height) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) menuRunning = 0;
             if (e.type == SDL_MOUSEBUTTONDOWN) {
-                // --- Bouton JOUER ---
                 if (SDL_PointInRect(&mousePoint, &rectJouer)) {
                     MenuResult choix = afficher_selection_map(renderer, width, height, font_boutons, texBG2);
                     if (choix == MENU_CHOIX_MAP1 || choix == MENU_CHOIX_MAP2) {
@@ -112,6 +111,8 @@ MenuResult afficher_menu(SDL_Renderer* renderer, int width, int height) {
                 }
             }
         }
+        // au cas où on choisi de jouer pour eviter le court retour sur le menu
+        if (!menuRunning) break; 
 
         SDL_RenderClear(renderer);
         if (texBG) SDL_RenderCopy(renderer, texBG, NULL, NULL);

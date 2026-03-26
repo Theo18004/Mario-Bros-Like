@@ -25,7 +25,7 @@ typedef enum {
  * @struct Ennemi
  * @brief Données d'un ennemi Loup patrouilleur.
  */
-typedef struct {
+typedef struct Ennemi {
     SDL_Rect rect;      /**< Hitbox de l'ennemi */
     float velY;         /**< Vélocité verticale */
     float speed;        /**< Vitesse de marche */
@@ -39,7 +39,7 @@ typedef struct {
  * @struct Thwomp
  * @brief Données de l'ennemi Thwomp.
  */
-typedef struct {
+typedef struct Thwomp {
     SDL_Rect rect;       /**< Hitbox du Thwomp */
     int startY;          /**< Hauteur d'origine (plafond) */
     float velY;          /**< Vélocité de chute */
@@ -49,7 +49,7 @@ typedef struct {
 } Thwomp;
 
 
-typedef struct {
+typedef struct Podoboo {
     SDL_Rect rect;  /**< Position et taille du Podoboo */
     int minY;       /**< Limite haute */
     int maxY;       /**< Limite basse */
@@ -58,7 +58,7 @@ typedef struct {
 } Podoboo;
 
 
-typedef struct {
+typedef struct Coquilas {
     SDL_Rect rect;      /**< Hitbox de l'ennemi */
     float velY;         /**< Vélocité verticale */
     float speed;        /**< Vitesse de marche */

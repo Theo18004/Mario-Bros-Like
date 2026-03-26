@@ -13,6 +13,21 @@
 struct Player;
 typedef struct Player Player;
 
+struct Ennemi;
+typedef struct Ennemi Ennemi;
+
+struct Thwomp;
+typedef struct Thwomp Thwomp;
+
+struct Podoboo;
+typedef struct Podoboo Podoboo;
+
+struct Coquilas;
+typedef struct Coquilas Coquilas;
+
+struct Flag;
+typedef struct Flag Flag;
+
 typedef struct {
     int value;    /**< Valeur du score actuel */
     int bonus;   /**< Bonus accumulé (Pièces / Monstres) */
@@ -39,6 +54,11 @@ void render_pieces_hud(SDL_Renderer* renderer, SDL_Texture** texPiecesHUD, Piece
  * @param tempsRestant Temps restant en secondes à afficher.
  */
 void render_timer(SDL_Renderer* renderer, TTF_Font* font, int tempsRestant);
+
+void render_debug_hitboxes(SDL_Renderer* renderer, Player* player, 
+                           Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, 
+                           Coquilas* coquilas, Ennemi* jc, Flag* drapeau, 
+                           int camX, int camY);
 
 /**
  * @brief Affiche le score du joueur à l'écran.

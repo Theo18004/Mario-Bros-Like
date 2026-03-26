@@ -6,14 +6,16 @@
 
 int luminosite = 255; // valeur max : 255
 int volume = 50; // valeur max 100
+int hitboxes = 0; // 0 = OFF, 1 = ON
+
 
 // permet de sauvegarder les parametres
 void sauvegarder_parametres() {
     FILE* fichier = fopen("config.txt", "w"); // "w" pour write (écraser/créer)
     if (fichier != NULL) {
-        fprintf(fichier, "%d %d", volume, luminosite);
+        fprintf(fichier, "%d %d %d", volume, luminosite, hitboxes);
         fclose(fichier);
-        printf("Paramètres sauvegardés : Vol=%d, Lum=%d\n", volume, luminosite);
+        printf("Paramètres sauvegardés : Vol=%d, Lum=%d, Hitboxes=%d\n", volume, luminosite, hitboxes);
     }
 }
 
@@ -22,10 +24,11 @@ void charger_parametres() {
     FILE* fichier = fopen("config.txt", "r"); // "r" pour read (lire)
     if (fichier != NULL) {
         // On lit les deux entiers dans le fichier
-        if (fscanf(fichier, "%d %d", &volume, &luminosite) != 2) {
+        if (fscanf(fichier, "%d %d %d", &volume, &luminosite, &hitboxes) != 3) {
             // Si le fichier est corrompu, on met des valeurs par défaut
             volume = 50;
             luminosite = 255;
+            hitboxes = 0;
         }
         fclose(fichier);
         printf("Parametres charges depuis le fichier.\n");
@@ -33,144 +36,119 @@ void charger_parametres() {
         // Si le fichier n'existe pas encore (premier lancement)
         volume = 50;
         luminosite = 255;
+        hitboxes = 0;
     }
 }
 
-// Fonction utilitaire interne
+
+// --- Fonction Utilitaire pour charger du texte rapidement ---
 SDL_Texture* loadText(SDL_Renderer* renderer, TTF_Font* font, const char* text, SDL_Color color, SDL_Rect* rect) {
-    SDL_Surface* surface = TTF_RenderText_Blended(font, text, color);
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
     if (!surface) return NULL;
-    
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     rect->w = surface->w;
     rect->h = surface->h;
-    
     SDL_FreeSurface(surface);
     return texture;
 }
 
+
+// ==============================================================
+// ==================== AFFICHER MENU ===========================
+// ==============================================================
+
 MenuResult afficher_menu(SDL_Renderer* renderer, int width, int height) {
-    // Note: On suppose que SDL, IMG et TTF sont déjà initialisés dans le main.c
-    
-    // Réinitialiser la taille logique pour que le menu soit net (pas pixelisé comme le jeu)
-    SDL_RenderSetLogicalSize(renderer, width, height);
-
-    // 1. Chargement des ressources
-    // Attention aux chemins : j'ai harmonisé avec main.c (assets/ au lieu de ../assets/)
-    SDL_Texture* texBG = IMG_LoadTexture(renderer, "assets/background.png"); 
-    // Si pas de background, on met une couleur unie pour éviter le crash
-    if (!texBG) SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
-
-    SDL_Texture* texBouton = IMG_LoadTexture(renderer, "assets/bouton_bois.png");
-    
-    TTF_Font* font_boutons = TTF_OpenFont("assets/police.ttf", 24); 
-    TTF_Font* font_titre = TTF_OpenFont("assets/police.ttf", 40); 
-
-    if (!font_titre || !font_boutons) {
-        printf("Erreur chargement police menu: %s\n", TTF_GetError());
-        // En cas d'erreur critique, on quitte
-        return MENU_QUIT; 
-    }
-
-    SDL_Color blanc = {255, 255, 255, 255};
-    SDL_Color couleurTitre = {255, 215, 0, 255};
-
-    // 2. Définition des zones (centrées par rapport à la taille width/height reçue)
-    int btnW = 200;
-    int btnH = 60;
-    int centerX = width / 2;
-    
-    SDL_Rect rectJouer =   { centerX - btnW/2, 250, btnW, btnH };
-    SDL_Rect rectParam =   { centerX - btnW/2, 350, btnW, btnH };
-    SDL_Rect rectQuitter = { centerX - btnW/2, 450, btnW, btnH };
-
-    // Titre
-    SDL_Rect tRectTitre;
-    SDL_Texture * txtTitre = loadText(renderer, font_titre, "MARIO-BROS-LIKE", couleurTitre, &tRectTitre);
-    SDL_Rect posTitre = { centerX - tRectTitre.w/2, 100, tRectTitre.w, tRectTitre.h };
-
-    // Textes boutons
-    SDL_Rect tRectJ, tRectP, tRectQ;
-    SDL_Texture* txtJouer = loadText(renderer, font_boutons, "JOUER", blanc, &tRectJ);
-    SDL_Texture* txtParam = loadText(renderer, font_boutons, "PARAMETRES", blanc, &tRectP);
-    SDL_Texture* txtQuitter = loadText(renderer, font_boutons, "QUITTER", blanc, &tRectQ);
-
-    MenuResult result = MENU_QUIT; // Par défaut
     int menuRunning = 1;
+    MenuResult result = MENU_QUIT;
     SDL_Event e;
 
-    while (menuRunning) {
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) {
-                result = MENU_QUIT;
-                menuRunning = 0;
-            }
-            else if (e.type == SDL_MOUSEBUTTONDOWN) {
-                SDL_Point mousePos = { e.button.x, e.button.y };
+    TTF_Font* font_titre = TTF_OpenFont("assets/NSuperMario.ttf", 64);
+    TTF_Font* font_boutons = TTF_OpenFont("assets/NSuperMario.ttf", 32);
 
-                if (SDL_PointInRect(&mousePos, &rectJouer)) {
-                    result = MENU_PLAY;
-                    menuRunning = 0;
+    SDL_Texture* texBG = IMG_LoadTexture(renderer, "assets/background.png");
+    SDL_Texture* texBoutonBois = IMG_LoadTexture(renderer, "assets/bouton_bois.png");
+
+    SDL_Color blanc = {255, 255, 255, 255};
+    SDL_Color or_couleur = {255, 215, 0, 255};
+
+    SDL_Rect tRectTitre, tRectJouer, tRectP, tRectQ;
+    SDL_Texture* txtTitre = loadText(renderer, font_titre, "MARIO-BROS-LIKE", or_couleur, &tRectTitre);
+    SDL_Texture* txtJouer = loadText(renderer, font_boutons, "JOUER", blanc, &tRectJouer);
+    SDL_Texture* txtParam = loadText(renderer, font_boutons, "PARAMETRES", blanc, &tRectP);
+    SDL_Texture* txtQuit = loadText(renderer, font_boutons, "QUITTER", blanc, &tRectQ);
+
+    int btnW = 300; int btnH = 70; int centerX = width / 2;
+    SDL_Rect rectJouer = { centerX - btnW/2, height / 2 - 200, btnW, btnH }; 
+    SDL_Rect rectParam = { centerX - btnW/2, height / 2 - 100,  btnW, btnH }; 
+    SDL_Rect rectQuit  = { centerX - btnW/2, height / 2 ,  btnW, btnH }; 
+    SDL_Rect posTitre = { centerX - tRectTitre.w/2, height/10, tRectTitre.w, tRectTitre.h };
+
+    while (menuRunning) {
+        int mouseX, mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+        SDL_Point mousePoint = {mouseX, mouseY};
+
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) menuRunning = 0;
+            if (e.type == SDL_MOUSEBUTTONDOWN) {
+                // --- Bouton JOUER ---
+                if (SDL_PointInRect(&mousePoint, &rectJouer)) {
+                    MenuResult choix = afficher_selection_map(renderer, width, height, font_boutons, texBG);
+                    if (choix == MENU_CHOIX_MAP1 || choix == MENU_CHOIX_MAP2) {
+                        result = choix;
+                        menuRunning = 0;
+                    } else if (choix == MENU_QUIT) {
+                        result = MENU_QUIT;
+                        menuRunning = 0;
+                    }
                 }
-                else if (SDL_PointInRect(&mousePos, &rectParam)) {
+                if (SDL_PointInRect(&mousePoint, &rectParam)) {
                     afficher_parametres(renderer, width, height, font_boutons, texBG);
                 }
-                else if (SDL_PointInRect(&mousePos, &rectQuitter)) {
+                if (SDL_PointInRect(&mousePoint, &rectQuit)) {
                     result = MENU_QUIT;
                     menuRunning = 0;
                 }
             }
         }
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
-
-        // --- DESSIN ---
         if (texBG) SDL_RenderCopy(renderer, texBG, NULL, NULL);
-
         SDL_RenderCopy(renderer, txtTitre, NULL, &posTitre);
 
-        // Boutons
-        if (texBouton) {
-            SDL_RenderCopy(renderer, texBouton, NULL, &rectJouer);
-            SDL_RenderCopy(renderer, texBouton, NULL, &rectParam);
-            SDL_RenderCopy(renderer, texBouton, NULL, &rectQuitter);
-        } else {
-            // Fallback si pas de texture bouton : rectangles gris
-            SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-            SDL_RenderFillRect(renderer, &rectJouer);
-            SDL_RenderFillRect(renderer, &rectParam);
-            SDL_RenderFillRect(renderer, &rectQuitter);
-        }
+        // --- DESSIN DU BOUTON JOUER ---
+        if (texBoutonBois) SDL_RenderCopy(renderer, texBoutonBois, NULL, &rectJouer);
+        SDL_Rect posTxtJ = { rectJouer.x + (btnW - tRectJouer.w)/2, rectJouer.y + (btnH - tRectJouer.h)/2, tRectJouer.w, tRectJouer.h };
+        SDL_RenderCopy(renderer, txtJouer, NULL, &posTxtJ);
 
-        // Textes boutons centrés
-        SDL_Rect posJ = { rectJouer.x + (rectJouer.w - tRectJ.w)/2, rectJouer.y + (rectJouer.h - tRectJ.h)/2, tRectJ.w, tRectJ.h };
-        SDL_RenderCopy(renderer, txtJouer, NULL, &posJ);
+        // Dessin du bouton PARAMETRES
+        if (texBoutonBois) SDL_RenderCopy(renderer, texBoutonBois, NULL, &rectParam);
+        SDL_Rect posTxtP = { rectParam.x + (btnW - tRectP.w)/2, rectParam.y + (btnH - tRectP.h)/2, tRectP.w, tRectP.h };
+        SDL_RenderCopy(renderer, txtParam, NULL, &posTxtP);
 
-        SDL_Rect posP = { rectParam.x + (rectParam.w - tRectP.w)/2, rectParam.y + (rectParam.h - tRectP.h)/2, tRectP.w, tRectP.h };
-        SDL_RenderCopy(renderer, txtParam, NULL, &posP);
+        // Dessin du bouton QUITTER
+        if (texBoutonBois) SDL_RenderCopy(renderer, texBoutonBois, NULL, &rectQuit);
+        SDL_Rect posTxtQ = { rectQuit.x + (btnW - tRectQ.w)/2, rectQuit.y + (btnH - tRectQ.h)/2, tRectQ.w, tRectQ.h };
+        SDL_RenderCopy(renderer, txtQuit, NULL, &posTxtQ);
 
-        SDL_Rect posQ = { rectQuitter.x + (rectQuitter.w - tRectQ.w)/2, rectQuitter.y + (rectQuitter.h - tRectQ.h)/2, tRectQ.w, tRectQ.h };
-        SDL_RenderCopy(renderer, txtQuitter, NULL, &posQ);
-
-        // --- APPLIQUER LA LUMINOSITÉ PARTOUT ---
+        // Effet survol
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 50);
+        if (SDL_PointInRect(&mousePoint, &rectJouer)) SDL_RenderFillRect(renderer, &rectJouer);
+        if (SDL_PointInRect(&mousePoint, &rectParam)) SDL_RenderFillRect(renderer, &rectParam);
+        if (SDL_PointInRect(&mousePoint, &rectQuit)) SDL_RenderFillRect(renderer, &rectQuit);
+
+        // Luminosité
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 - luminosite); 
         SDL_Rect fullScreen = {0, 0, width, height};
         SDL_RenderFillRect(renderer, &fullScreen);
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(16);
     }
 
-    // Nettoyage local (on ne détruit PAS le renderer ni la fenêtre !)
-    SDL_DestroyTexture(txtJouer); SDL_DestroyTexture(txtParam); SDL_DestroyTexture(txtQuitter);
-    SDL_DestroyTexture(txtTitre);
-    if(texBG) SDL_DestroyTexture(texBG);
-    if(texBouton) SDL_DestroyTexture(texBouton);
-    TTF_CloseFont(font_titre);
-    TTF_CloseFont(font_boutons);
-
+    SDL_DestroyTexture(txtTitre); SDL_DestroyTexture(txtJouer); SDL_DestroyTexture(txtParam); SDL_DestroyTexture(txtQuit);
+    SDL_DestroyTexture(texBG); SDL_DestroyTexture(texBoutonBois);
+    TTF_CloseFont(font_titre); TTF_CloseFont(font_boutons);
     return result;
 }
 
@@ -200,7 +178,14 @@ void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font
     SDL_Rect posSon    = { centerX - tRectSon.w/2, 160, tRectSon.w, tRectSon.h };
     SDL_Rect posLum    = { centerX - tRectLum.w/2, 280, tRectLum.w, tRectLum.h };
 
-    // Bouton Retour (on peut réutiliser l'image du bouton bois ici si on veut)
+    // --- LE SYSTÈME HITBOX ---
+    // Rectangle de position du texte "Afficher Hitboxes"
+    SDL_Rect rectTxtHitbox = { centerX - 100, 360, 200, 25 }; 
+    
+    // Rectangle du switch ON/OFF
+    SDL_Rect rectSwitchHitbox = { centerX - 60, 390, 120, 30 }; 
+
+    // Bouton Retour 
     SDL_Rect rectBtnRetour = { centerX - 100, 450, 200, 60 };
     SDL_Rect posRetourTxt  = { rectBtnRetour.x + (rectBtnRetour.w - tRectRetour.w)/2, 
                                rectBtnRetour.y + (rectBtnRetour.h - tRectRetour.h)/2, 
@@ -209,25 +194,25 @@ void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font
     while (paramRunning) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) paramRunning = 0;
-
             // Gestion des clics et du "drag" (glisser la souris)
             if (e.type == SDL_MOUSEBUTTONDOWN || (e.type == SDL_MOUSEMOTION && (e.motion.state & SDL_BUTTON(SDL_BUTTON_LEFT)))) {
                 SDL_Point p = { e.motion.x, e.motion.y };
-
+                // Glisser les barres
                 if (SDL_PointInRect(&p, &barSon)) {
-                    // Calcul du pourcentage (0 à 100)
                     volume = ((p.x - barSon.x) * 100) / barSon.w;
                 }
                 if (SDL_PointInRect(&p, &barLum)) {
-                    // Calcul de la valeur (0 à 255)
                     luminosite = ((p.x - barLum.x) * 255) / barLum.w;
                 }
-                if (e.type == SDL_MOUSEBUTTONDOWN && SDL_PointInRect(&p, &rectBtnRetour)) {
-                    paramRunning = 0;
-                }
-                if (SDL_PointInRect(&p, &rectBtnRetour)) {
-                    sauvegarder_parametres();
-                    paramRunning = 0; // On quitte la page de réglages
+                // Clics uniques sur les boutons
+                if (e.type == SDL_MOUSEBUTTONDOWN) {
+                    if (SDL_PointInRect(&p, &rectSwitchHitbox)) {
+                        hitboxes = !hitboxes; // Inverse ON / OFF
+                    }
+                    if (SDL_PointInRect(&p, &rectBtnRetour)) {
+                        sauvegarder_parametres();
+                        paramRunning = 0; // On quitte
+                    }
                 }
             }
         }
@@ -255,13 +240,63 @@ void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font
         SDL_Rect fillLum = { barLum.x, barLum.y, (luminosite * barLum.w) / 255, barLum.h };
         SDL_RenderFillRect(renderer, &fillLum);
 
-        // Bouton Retour (Rectangle simple ou texture bouton_bois)
+        // --- AFFICHAGE HITBOXES ---
+        // Dessiner le texte "Afficher Hitboxes"
+        SDL_Rect tRectHitTxt;
+        SDL_Texture* txtHitTxt = loadText(renderer, font, "AFFICHER HITBOXES", blanc, &tRectHitTxt);
+        if (txtHitTxt != NULL) {
+            // Centrer le texte au-dessus de son rectangle de position
+            SDL_Rect posHitTxtFixed = { rectTxtHitbox.x + (rectTxtHitbox.w - tRectHitTxt.w)/2,
+                                         rectTxtHitbox.y + (rectTxtHitbox.h - tRectHitTxt.h)/2,
+                                         tRectHitTxt.w, tRectHitTxt.h };
+            SDL_RenderCopy(renderer, txtHitTxt, NULL, &posHitTxtFixed);
+            SDL_DestroyTexture(txtHitTxt); 
+        }
+
+        // Dessiner le fond du Switch 
+        SDL_SetRenderDrawColor(renderer, 40, 40, 40, 255);
+        SDL_RenderFillRect(renderer, &rectSwitchHitbox);
+
+        if (hitboxes) {
+            SDL_SetRenderDrawColor(renderer, 46, 204, 113, 255); // Vert pour ON
+        } else {
+            SDL_SetRenderDrawColor(renderer, 231, 76, 60, 255); // Rouge pour OFF
+        }
+        SDL_Rect switchInner = { rectSwitchHitbox.x + 2, rectSwitchHitbox.y + 2,
+                                rectSwitchHitbox.w - 4, rectSwitchHitbox.h - 4 };
+        SDL_RenderFillRect(renderer, &switchInner);
+
+        // Dessiner le curseur du switch
+        int curseurW = rectSwitchHitbox.w / 3; // Le curseur fait 1/3 de la barre
+        SDL_Rect rectCurseur;
+        rectCurseur.w = curseurW;
+        rectCurseur.h = rectSwitchHitbox.h + 6; // Dépasse légèrement
+        rectCurseur.y = rectSwitchHitbox.y - 3; // Centré en hauteur
+
+        if (hitboxes) {
+            // Curseur à droite pour ON
+            rectCurseur.x = rectSwitchHitbox.x + rectSwitchHitbox.w - curseurW - 2;
+        } else {
+            // Curseur à gauche pour OFF
+            rectCurseur.x = rectSwitchHitbox.x + 2;
+        }
+
+        // Dessin du curseur 
+        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255); // Ombre du curseur
+        SDL_RenderFillRect(renderer, &rectCurseur);
+        
+        SDL_Rect curseurInner = { rectCurseur.x + 2, rectCurseur.y + 2,
+                                  rectCurseur.w - 4, rectCurseur.h - 4 };
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Blanc
+        SDL_RenderFillRect(renderer, &curseurInner);
+
+        // Bouton Retour 
         SDL_SetRenderDrawColor(renderer, 150, 75, 0, 255); // Marron
         SDL_RenderFillRect(renderer, &rectBtnRetour);
         SDL_RenderCopy(renderer, txtRetour, NULL, &posRetourTxt);
 
         // --- EFFET LUMINOSITÉ ---
-        // On dessine un rectangle noir sur TOUT l'écran avec une transparence inverse
+        // On dessine un rectangle noir sur l'écran avec une transparence inverse
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 - luminosite); 
         SDL_Rect fullScreen = {0, 0, width, height};
@@ -275,4 +310,115 @@ void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font
     SDL_DestroyTexture(txtSon);
     SDL_DestroyTexture(txtLum);
     SDL_DestroyTexture(txtRetour);
+}
+
+
+MenuResult afficher_selection_map(SDL_Renderer* renderer, int width, int height, TTF_Font* font, SDL_Texture* texBG) {
+    int selectionRunning = 1;
+    MenuResult result = MENU_NONE;
+    SDL_Event e;
+    SDL_Color blanc = {255, 255, 255, 255};
+    SDL_Color or_couleur = {255, 215, 0, 255}; // couleur or
+
+    TTF_Font* font_titre = TTF_OpenFont("assets/NSuperMario.ttf", 64);
+
+    // On charge la texture du bouton pour ce menu aussi
+    SDL_Texture* texBoutonBois = IMG_LoadTexture(renderer, "assets/bouton_bois.png");
+
+    int centerX = width / 2;
+    int size = 120; // Taille des boutons de map
+    int btnW = 300; // Taille du bouton Retour
+    int btnH = 70;
+
+    // Positions des boutons de Map
+    SDL_Rect rectMap1 = { centerX - 180, height / 2 - 200, size, size };
+    SDL_Rect rectMap2 = { centerX + 60,  height / 2 - 200, size, size };
+    
+    // Position du bouton RETOUR (centré en bas)
+    SDL_Rect rectRetour = { centerX - btnW / 2 + 10, height/2 - 30, btnW, btnH };
+
+    // Textes
+    SDL_Rect tRect1, tRect2, tRectRetour, tRectTitre; // tRectTitre ajouté ici
+    SDL_Texture* txt1 = loadText(renderer, font, "MAP 1", blanc, &tRect1);
+    SDL_Texture* txt2 = loadText(renderer, font, "MAP 2", blanc, &tRect2);
+    SDL_Texture* txtRetour = loadText(renderer, font, "RETOUR", blanc, &tRectRetour);
+    SDL_Texture* txtTitre = loadText(renderer, font_titre, "MARIO-BROS-LIKE", or_couleur, &tRectTitre);
+
+    // Position du titre (centré horizontalement, à 1/10ème de la hauteur)
+    SDL_Rect posTitre = { centerX - tRectTitre.w/2, height/10, tRectTitre.w, tRectTitre.h };
+
+    while (selectionRunning) {
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) {
+                SDL_DestroyTexture(texBoutonBois);
+                SDL_DestroyTexture(txtTitre);
+                TTF_CloseFont(font_titre);
+                return MENU_QUIT;
+            }
+            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+                selectionRunning = 0; 
+            }
+            
+            if (e.type == SDL_MOUSEBUTTONDOWN) {
+                SDL_Point p = {e.button.x, e.button.y};
+                if (SDL_PointInRect(&p, &rectMap1)) {
+                    result = MENU_CHOIX_MAP1;
+                    selectionRunning = 0;
+                }
+                if (SDL_PointInRect(&p, &rectMap2)) {
+                    result = MENU_CHOIX_MAP2;
+                    selectionRunning = 0;
+                }
+                if (SDL_PointInRect(&p, &rectRetour)) {
+                    result = MENU_NONE; 
+                    selectionRunning = 0;
+                }
+            }
+        }
+
+        SDL_RenderClear(renderer);
+        if (texBG) SDL_RenderCopy(renderer, texBG, NULL, NULL);
+
+        // --- AFFICHAGE DU TITRE ---
+        SDL_RenderCopy(renderer, txtTitre, NULL, &posTitre); // Ajout du rendu du titre
+
+        // Dessin Bouton Map 1
+        SDL_SetRenderDrawColor(renderer, 52, 152, 219, 255);
+        SDL_RenderFillRect(renderer, &rectMap1);
+        SDL_Rect posT1 = { rectMap1.x + (size - tRect1.w)/2, rectMap1.y - 40, tRect1.w, tRect1.h };
+        SDL_RenderCopy(renderer, txt1, NULL, &posT1);
+
+        // Dessin Bouton Map 2
+        SDL_SetRenderDrawColor(renderer, 231, 76, 60, 255);
+        SDL_RenderFillRect(renderer, &rectMap2);
+        SDL_Rect posT2 = { rectMap2.x + (size - tRect2.w)/2, rectMap2.y - 40, tRect2.w, tRect2.h };
+        SDL_RenderCopy(renderer, txt2, NULL, &posT2);
+
+        // Dessin du bouton RETOUR
+        if (texBoutonBois) SDL_RenderCopy(renderer, texBoutonBois, NULL, &rectRetour);
+        SDL_Rect posTxtRetour = { rectRetour.x + (btnW - tRectRetour.w)/2, rectRetour.y + (btnH - tRectRetour.h)/2, tRectRetour.w, tRectRetour.h };
+        SDL_RenderCopy(renderer, txtRetour, NULL, &posTxtRetour);
+
+        // Effet survol sur Retour
+        int mx, my;
+        SDL_GetMouseState(&mx, &my);
+        SDL_Point mP = {mx, my};
+        if (SDL_PointInRect(&mP, &rectRetour)) {
+            SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 50);
+            SDL_RenderFillRect(renderer, &rectRetour);
+        }
+
+        SDL_RenderPresent(renderer);
+    }
+
+    // Nettoyage local
+    SDL_DestroyTexture(txt1);
+    SDL_DestroyTexture(txt2);
+    SDL_DestroyTexture(txtRetour);
+    SDL_DestroyTexture(txtTitre); 
+    SDL_DestroyTexture(texBoutonBois);
+    TTF_CloseFont(font_titre); 
+
+    return result;
 }

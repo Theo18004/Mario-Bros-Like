@@ -66,6 +66,7 @@ MenuResult afficher_menu(SDL_Renderer* renderer, int width, int height) {
     TTF_Font* font_boutons = TTF_OpenFont("assets/NSuperMario.ttf", 32);
 
     SDL_Texture* texBG = IMG_LoadTexture(renderer, "assets/background.png");
+    SDL_Texture* texBG2 = IMG_LoadTexture(renderer, "assets/background2.png");
     SDL_Texture* texBoutonBois = IMG_LoadTexture(renderer, "assets/bouton_bois.png");
 
     SDL_Color blanc = {255, 255, 255, 255};
@@ -93,7 +94,7 @@ MenuResult afficher_menu(SDL_Renderer* renderer, int width, int height) {
             if (e.type == SDL_MOUSEBUTTONDOWN) {
                 // --- Bouton JOUER ---
                 if (SDL_PointInRect(&mousePoint, &rectJouer)) {
-                    MenuResult choix = afficher_selection_map(renderer, width, height, font_boutons, texBG);
+                    MenuResult choix = afficher_selection_map(renderer, width, height, font_boutons, texBG2);
                     if (choix == MENU_CHOIX_MAP1 || choix == MENU_CHOIX_MAP2) {
                         result = choix;
                         menuRunning = 0;
@@ -159,14 +160,14 @@ void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font
     SDL_Color blanc = {255, 255, 255, 255};
     SDL_Color or_couleur = {255, 215, 0, 255};
 
-    // 1. Préparation des Textures de texte
+    // Préparation des Textures de texte
     SDL_Rect tRectTitre, tRectSon, tRectLum, tRectRetour;
     SDL_Texture* txtTitre  = loadText(renderer, font, "REGLAGES", or_couleur, &tRectTitre);
     SDL_Texture* txtSon    = loadText(renderer, font, "SON", blanc, &tRectSon);
     SDL_Texture* txtLum    = loadText(renderer, font, "LUMINOSITE", blanc, &tRectLum);
     SDL_Texture* txtRetour = loadText(renderer, font, "RETOUR", blanc, &tRectRetour);
 
-    // 2. Positions des éléments
+    // Positions des éléments
     int centerX = width / 2;
     SDL_Rect posTitre  = { centerX - tRectTitre.w/2, 50, tRectTitre.w, tRectTitre.h };
     
@@ -313,45 +314,45 @@ void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font
 }
 
 
-MenuResult afficher_selection_map(SDL_Renderer* renderer, int width, int height, TTF_Font* font, SDL_Texture* texBG) {
+MenuResult afficher_selection_map(SDL_Renderer* renderer, int width, int height, TTF_Font* font, SDL_Texture* texBG2) {
     int selectionRunning = 1;
     MenuResult result = MENU_NONE;
     SDL_Event e;
     SDL_Color blanc = {255, 255, 255, 255};
-    SDL_Color or_couleur = {255, 215, 0, 255}; // couleur or
+    SDL_Color or_couleur = {255, 215, 0, 255};
 
     TTF_Font* font_titre = TTF_OpenFont("assets/NSuperMario.ttf", 64);
-
-    // On charge la texture du bouton pour ce menu aussi
     SDL_Texture* texBoutonBois = IMG_LoadTexture(renderer, "assets/bouton_bois.png");
 
+    // --- DÉCLARATIONS ---
     int centerX = width / 2;
-    int size = 120; // Taille des boutons de map
-    int btnW = 300; // Taille du bouton Retour
+    int size = 250; 
+    int btnW = 300; 
     int btnH = 70;
 
-    // Positions des boutons de Map
-    SDL_Rect rectMap1 = { centerX - 180, height / 2 - 200, size, size };
-    SDL_Rect rectMap2 = { centerX + 60,  height / 2 - 200, size, size };
-    
-    // Position du bouton RETOUR (centré en bas)
-    SDL_Rect rectRetour = { centerX - btnW / 2 + 10, height/2 - 30, btnW, btnH };
+    // Positions des zones cliquables
+    SDL_Rect rectMap1 = { centerX - 440, height - 470, size, size };
+    SDL_Rect rectMap2 = { centerX - 90, height - 470, size, size };
+    SDL_Rect rectRetour = { centerX - btnW / 2 + 10, height - 100, btnW, btnH };
 
-    // Textes
-    SDL_Rect tRect1, tRect2, tRectRetour, tRectTitre; // tRectTitre ajouté ici
-    SDL_Texture* txt1 = loadText(renderer, font, "MAP 1", blanc, &tRect1);
-    SDL_Texture* txt2 = loadText(renderer, font, "MAP 2", blanc, &tRect2);
+    // Textes (Titre et Retour)
+    SDL_Rect tRectRetour, tRectTitre;
     SDL_Texture* txtRetour = loadText(renderer, font, "RETOUR", blanc, &tRectRetour);
     SDL_Texture* txtTitre = loadText(renderer, font_titre, "MARIO-BROS-LIKE", or_couleur, &tRectTitre);
 
-    // Position du titre (centré horizontalement, à 1/10ème de la hauteur)
+    // Position du titre en haut
     SDL_Rect posTitre = { centerX - tRectTitre.w/2, height/10, tRectTitre.w, tRectTitre.h };
 
     while (selectionRunning) {
+        int mx, my;
+        SDL_GetMouseState(&mx, &my);
+        SDL_Point mP = {mx, my};
+
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {
                 SDL_DestroyTexture(texBoutonBois);
                 SDL_DestroyTexture(txtTitre);
+                SDL_DestroyTexture(txtRetour);
                 TTF_CloseFont(font_titre);
                 return MENU_QUIT;
             }
@@ -360,16 +361,15 @@ MenuResult afficher_selection_map(SDL_Renderer* renderer, int width, int height,
             }
             
             if (e.type == SDL_MOUSEBUTTONDOWN) {
-                SDL_Point p = {e.button.x, e.button.y};
-                if (SDL_PointInRect(&p, &rectMap1)) {
+                if (SDL_PointInRect(&mP, &rectMap1)) {
                     result = MENU_CHOIX_MAP1;
                     selectionRunning = 0;
                 }
-                if (SDL_PointInRect(&p, &rectMap2)) {
+                if (SDL_PointInRect(&mP, &rectMap2)) {
                     result = MENU_CHOIX_MAP2;
                     selectionRunning = 0;
                 }
-                if (SDL_PointInRect(&p, &rectRetour)) {
+                if (SDL_PointInRect(&mP, &rectRetour)) {
                     result = MENU_NONE; 
                     selectionRunning = 0;
                 }
@@ -377,32 +377,20 @@ MenuResult afficher_selection_map(SDL_Renderer* renderer, int width, int height,
         }
 
         SDL_RenderClear(renderer);
-        if (texBG) SDL_RenderCopy(renderer, texBG, NULL, NULL);
+        
+        // Image de fond
+        if (texBG2) SDL_RenderCopy(renderer, texBG2, NULL, NULL);
 
-        // --- AFFICHAGE DU TITRE ---
-        SDL_RenderCopy(renderer, txtTitre, NULL, &posTitre); // Ajout du rendu du titre
+        // Titre du jeu
+        SDL_RenderCopy(renderer, txtTitre, NULL, &posTitre);
 
-        // Dessin Bouton Map 1
-        SDL_SetRenderDrawColor(renderer, 52, 152, 219, 255);
-        SDL_RenderFillRect(renderer, &rectMap1);
-        SDL_Rect posT1 = { rectMap1.x + (size - tRect1.w)/2, rectMap1.y - 40, tRect1.w, tRect1.h };
-        SDL_RenderCopy(renderer, txt1, NULL, &posT1);
-
-        // Dessin Bouton Map 2
-        SDL_SetRenderDrawColor(renderer, 231, 76, 60, 255);
-        SDL_RenderFillRect(renderer, &rectMap2);
-        SDL_Rect posT2 = { rectMap2.x + (size - tRect2.w)/2, rectMap2.y - 40, tRect2.w, tRect2.h };
-        SDL_RenderCopy(renderer, txt2, NULL, &posT2);
-
-        // Dessin du bouton RETOUR
+        // Bouton Retour
         if (texBoutonBois) SDL_RenderCopy(renderer, texBoutonBois, NULL, &rectRetour);
-        SDL_Rect posTxtRetour = { rectRetour.x + (btnW - tRectRetour.w)/2, rectRetour.y + (btnH - tRectRetour.h)/2, tRectRetour.w, tRectRetour.h };
+        SDL_Rect posTxtRetour = { rectRetour.x + (btnW - tRectRetour.w)/2, 
+                                   rectRetour.y + (btnH - tRectRetour.h)/2, 
+                                   tRectRetour.w, tRectRetour.h };
         SDL_RenderCopy(renderer, txtRetour, NULL, &posTxtRetour);
 
-        // Effet survol sur Retour
-        int mx, my;
-        SDL_GetMouseState(&mx, &my);
-        SDL_Point mP = {mx, my};
         if (SDL_PointInRect(&mP, &rectRetour)) {
             SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 50);
@@ -413,12 +401,10 @@ MenuResult afficher_selection_map(SDL_Renderer* renderer, int width, int height,
     }
 
     // Nettoyage local
-    SDL_DestroyTexture(txt1);
-    SDL_DestroyTexture(txt2);
     SDL_DestroyTexture(txtRetour);
-    SDL_DestroyTexture(txtTitre); 
+    SDL_DestroyTexture(txtTitre);
     SDL_DestroyTexture(texBoutonBois);
-    TTF_CloseFont(font_titre); 
+    TTF_CloseFont(font_titre);
 
     return result;
 }

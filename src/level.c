@@ -73,7 +73,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
     for (int i = 0; i < NB_PODOBOO; i++) podoboo[i].vivant = 0;
     for (int i = 0; i < NB_COQUILAS; i++) coquilas[i].vivant = 0;
     for (int i = 0; i < NB_JEAN_CLAUDE; i++) jc[i].vivant = 0;
-    for (int i = 0; i < NB_PIECES; i++) pieces[i].vivant = 0;
+    for (int i = 0; i < NB_PIECES; i++) pieces[i].vivant = 1;
     for (int i = 0; i < NB_CHECKPOINTS; i++) checkpoints[i].actif = 0;
 
     // --- MAP 1 ---

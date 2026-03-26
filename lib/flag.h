@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 
 // --- Structure Flag ---
-typedef struct {
+typedef struct Flag{
     SDL_Rect matRect;   // Le mât
     SDL_Rect flagRect;  // Le tissu du drapeau
     int actif;          // 0 = en haut, 1 = descend, 2 = en bas

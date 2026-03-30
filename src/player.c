@@ -23,7 +23,7 @@ void init_player(Player* p, int x, int y) {
     p->checkpointY = y;
 }
 
-void update_player(Player* p, const Uint8* keys, int* map) {
+void update_player(Player* p, const Uint8* keys, int* map, int levelID) {
     int mapPixelWidth = TILE_SIZE * MAP_SCALE * MAP_WIDTH;
 
     // On vérifie si le joueur est entrain de mourir ou de gagner avant de le faire bouger
@@ -68,7 +68,7 @@ void update_player(Player* p, const Uint8* keys, int* map) {
         p->state = STATE_RUN;
 
         // Si on rentre dans un mur ou une pente
-        if (check_collision(p->rect, map, 0)) {
+        if (check_collision(p->rect, map, 0, levelID)) {
             int success = 0;
             int max_step = 10;
 
@@ -76,7 +76,7 @@ void update_player(Player* p, const Uint8* keys, int* map) {
             if (wasOnGround) {
                 for (int i = 1; i <= max_step; i++) {
                     p->rect.y = oldY - i;
-                    if (!check_collision(p->rect, map, 0)) {
+                    if (!check_collision(p->rect, map, 0, levelID)) {
                         success = 1;
                         break;
                     }
@@ -87,11 +87,11 @@ void update_player(Player* p, const Uint8* keys, int* map) {
                 p->rect.y = oldY;
                 // Si on allait vers la droite (oldX était plus petit)
                 if (p->rect.x > oldX) {
-                    while (check_collision(p->rect, map, 0)) p->rect.x -= 1;
+                    while (check_collision(p->rect, map, 0, levelID)) p->rect.x -= 1;
                 }
                 // Si on allait vers la gauche (oldX était plus grand)
                 else if (p->rect.x < oldX) {
-                    while (check_collision(p->rect, map, 0)) p->rect.x += 1;
+                    while (check_collision(p->rect, map, 0, levelID)) p->rect.x += 1;
                 }
             }
         }
@@ -113,23 +113,23 @@ void update_player(Player* p, const Uint8* keys, int* map) {
     // Résolution des collisions Y par "Pushback"
     int check_demi = (p->velY > 0) ? 1 : 0;
 
-    if (check_collision(p->rect, map, check_demi)) {
+    if (check_collision(p->rect, map, check_demi, levelID)) {
         if (p->velY > 0) {
-            while (check_collision(p->rect, map, check_demi)) {
+            while (check_collision(p->rect, map, check_demi, levelID)) {
                 p->rect.y -= 1;
             }
             p->velY = 0;
             p->onGround = 1;
         }
         else if (p->velY < 0) {
-            while (check_collision(p->rect, map, 0)) {
+            while (check_collision(p->rect, map, 0, levelID)) {
                 p->rect.y += 1;
             }
             p->velY = 0;
         }
     } else {
         p->rect.y += 1;
-        if (check_collision(p->rect, map, 1)) {
+        if (check_collision(p->rect, map, 1, levelID)) {
             p->onGround = 1;
         }
         p->rect.y -= 1;

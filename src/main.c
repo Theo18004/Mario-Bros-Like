@@ -182,11 +182,11 @@ int main(int argc, char* argv[]) {
         const Uint8* keys = SDL_GetKeyboardState(NULL);
 
         // -- Mises à jour --
-        update_player(&player, keys, lvl->tileMap);
-        for (int i = 0; i < NB_LOUPAS; i++) update_loupas(&mesLoupas[i], lvl->tileMap);
-        for (int i = 0; i < NB_THWOMPS; i++) update_thwomp(&mesThwomps[i], &player, lvl->tileMap);
-        for (int i = 0; i < NB_COQUILAS; i++) update_coquilas(&mesCoquilas[i], lvl->tileMap);
-        for (int i = 0; i < NB_JEAN_CLAUDE; i++) update_jc(&jc[i], lvl->tileMap);
+        update_player(&player, keys, lvl->tileMap, lvl->id);
+        for (int i = 0; i < NB_LOUPAS; i++) update_loupas(&mesLoupas[i], lvl->tileMap, lvl->id);
+        for (int i = 0; i < NB_THWOMPS; i++) update_thwomp(&mesThwomps[i], &player, lvl->tileMap, lvl->id);
+        for (int i = 0; i < NB_COQUILAS; i++) update_coquilas(&mesCoquilas[i], lvl->tileMap, lvl->id);
+        for (int i = 0; i < NB_JEAN_CLAUDE; i++) update_jc(&jc[i], lvl->tileMap, lvl->id);
 
         update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
@@ -197,7 +197,7 @@ int main(int argc, char* argv[]) {
             if (temps_sauvegarde <= 0) temps_sauvegarde = tempsMax; 
 
             gerer_mort_joueur(&player, lvl->playerStart.x, lvl->playerStart.y, &score);
-            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 0);
+            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 0, lvl->id);
             startTime = SDL_GetTicks() - ((tempsMax - temps_sauvegarde) * 1000);
             tempsRestant = temps_sauvegarde;
         }
@@ -384,7 +384,7 @@ int main(int argc, char* argv[]) {
         if (player.lives <= 0) {
             int action = gameover(renderer, font, &player, score_affichage_fin, meilleur_score);
             if (action == 1) {
-                reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 1);
+                reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 1, lvl->id);
                 for (int i = 0; i < NB_CHECKPOINTS; i++) mesCheckpoints[i].actif = 0;
                 startTime = SDL_GetTicks(); tempsRestant = tempsMax;
             } else running = 0;

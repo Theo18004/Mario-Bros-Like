@@ -42,24 +42,14 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         // --- CHARGEMENT MAP 2 ---
         lvl->tileMap = (int*)malloc(MAP_WIDTH * MAP_HEIGHT * sizeof(int));
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
-        
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
         lvl->playerStart = (SDL_Point){ 20, 900 };
 
         // Backgrounds 
-        lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/winterbg.png");
-        lvl->bgs[1] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/winter2.png");
-        lvl->bgs[2] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/winter1.png");
-        lvl->bgs[3] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/portbg.png");
-        lvl->bgs[4] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/port4.png");
-        lvl->bgs[5] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/port3.png");
-        lvl->bgs[6] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/port2.png");
-        lvl->bgs[7] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/port1.png");
-        lvl->bgs[8] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/villebg.png");
-        lvl->bgs[9] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/ville3.png");
-        lvl->bgs[10] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/ville2.png");
-        lvl->bgs[11] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/ville1.png");
+        lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");
+        lvl->bgs[1] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/portfull.png");
+        lvl->bgs[2] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/villefull.png");
     }
 
     lvl->mapPixelWidth = MAP_WIDTH * TILE_SIZE * MAP_SCALE;
@@ -132,10 +122,12 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
     // --- MAP 2 --- 
     else if(lvl->id == 2) {
         init_loupas(&loupas[0], 600, 1000); 
-        init_flag(flag, 2000, 1000); 
+        init_flag(flag, 20000, 1000); 
         
-        checkpoints[0].rect = (SDL_Rect){ 1000, 950, 64, 64 };
+        checkpoints[0].rect = (SDL_Rect){ 4800, 950, 64, 64 };
         checkpoints[0].actif = 0;
+        checkpoints[1].rect = (SDL_Rect){ 9600, 950, 64, 64 };
+        checkpoints[1].actif = 0;
     }
 }
 
@@ -192,34 +184,34 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
     // --- MAP 2 --- 
     else if(lvl->id == 2) {
         // --- HIVER ---
-        int startWinterX = 0 * 32, endWinterX = 150 * 32;
+        int startWinterX = 0 * 32; 
+        int endWinterX = 150 * 32;
         SDL_Rect clipWinter = { startWinterX - cameraX, 0, endWinterX - startWinterX, screenH };
+        if (clipWinter.x < 0) { clipWinter.w += clipWinter.x; clipWinter.x = 0; } // Sécurité clipping
+
         SDL_RenderSetClipRect(renderer, &clipWinter);
-        draw_parallax_bg(renderer, lvl->bgs[0], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startWinterX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[1], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startWinterX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[2], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startWinterX, 0);
+        draw_parallax_bg(renderer, lvl->bgs[0]
+            , cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startWinterX, 00);
         SDL_RenderSetClipRect(renderer, NULL);
 
         // --- PORT ---
-        int startPortX = 150 * 32, endPortX = 300 * 32;
+        int startPortX = 150 * 32;
+        int endPortX = 300 * 32;
         SDL_Rect clipPort = { startPortX - cameraX, 0, endPortX - startPortX, screenH };
+        if (clipPort.x < 0) { clipPort.w += clipPort.x; clipPort.x = 0; }
+
         SDL_RenderSetClipRect(renderer, &clipPort);
-        draw_parallax_bg(renderer, lvl->bgs[3], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startPortX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[4], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startPortX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[5], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startPortX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[6], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startPortX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[7], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startPortX, 0);
+        draw_parallax_bg(renderer, lvl->bgs[1], cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startPortX, -350);
         SDL_RenderSetClipRect(renderer, NULL);
 
         // --- VILLE ---
-        int startVilleX = 300 * 32, endVilleX = 500 * 32;
+        int startVilleX = 300 * 32;
+        int endVilleX = MAP_WIDTH * 32;
         SDL_Rect clipVille = { startVilleX - cameraX, 0, endVilleX - startVilleX, screenH };
+        if (clipVille.x < 0) { clipVille.w += clipVille.x; clipVille.x = 0; }
+
         SDL_RenderSetClipRect(renderer, &clipVille);
-        draw_parallax_bg(renderer, lvl->bgs[8], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startVilleX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[9], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startVilleX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[9], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startVilleX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[10], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startVilleX, 0);
-        draw_parallax_bg(renderer, lvl->bgs[11], cameraX, cameraY, 0.15f, 0.0f, screenW, screenH, startVilleX, 0);  
+        draw_parallax_bg(renderer, lvl->bgs[2], cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startVilleX, 0);
         SDL_RenderSetClipRect(renderer, NULL);
     }
 }

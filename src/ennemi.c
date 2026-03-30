@@ -29,13 +29,13 @@ void init_loupas(Ennemi* e, int x, int y) {
     e->vivant = 1;
 }
 
-void update_loupas(Ennemi* e, int* map) {
+void update_loupas(Ennemi* e, int* map, int levelID) {
     if (!e->vivant) return;
     int oldX = e->rect.x;
     int tileSize = TILE_SIZE * MAP_SCALE;
     
     e->rect.x += (int)(e->speed * e->direction);
-    if (check_collision(e->rect, map, 0)) {
+    if (check_collision(e->rect, map, 0, levelID)) {
         e->rect.x = oldX;
         e->direction *= -1;
     }
@@ -47,14 +47,14 @@ void update_loupas(Ennemi* e, int* map) {
     else testVide.x -= 5;
     testVide.w = 5;
 
-    if (!check_collision(testVide, map, 0) && e->onGround) {
+    if (!check_collision(testVide, map, 0, levelID) && e->onGround) {
         e->rect.x = oldX;
         e->direction *= -1;
     }
 
     e->velY += 0.6f;
     e->rect.y += (int)e->velY;
-    if (check_collision(e->rect, map, 0)) {
+    if (check_collision(e->rect, map, 0, levelID)) {
         e->rect.y = ((e->rect.y + e->rect.h) / tileSize) * tileSize - e->rect.h;
         e->velY = 0; e->onGround = 1;
     } else e->onGround = 0;
@@ -112,7 +112,7 @@ void init_thwomp(Thwomp* t, int x, int y) {
     t->vivant = 1;
 }
 
-void update_thwomp(Thwomp* t, Player* p, int* map) {
+void update_thwomp(Thwomp* t, Player* p, int* map, int levelID) {
     if (!t->vivant) return;
     int tileSize = TILE_SIZE * MAP_SCALE;
 
@@ -130,7 +130,7 @@ void update_thwomp(Thwomp* t, Player* p, int* map) {
             t->velY += 1.5f; 
             t->rect.y += (int)t->velY;
 
-            if (check_collision(t->rect, map,0)) {
+            if (check_collision(t->rect, map, 0, levelID)) {
                 t->rect.y = ((t->rect.y + t->rect.h) / tileSize) * tileSize - t->rect.h;
                 t->velY = 0;
                 t->state = THWOMP_GROUNDED;
@@ -280,13 +280,13 @@ void init_coquilas(Coquilas* c, int x, int y) {
     c->vivant = 1;
 }
 
-void update_coquilas(Coquilas* c, int* map) {
+void update_coquilas(Coquilas* c, int* map, int levelID) {
     if (!c->vivant) return;
     int oldX = c->rect.x;
     int tileSize = TILE_SIZE * MAP_SCALE;
 
     c->rect.x += (int)(c->speed * c->direction);
-    if (check_collision(c->rect, map, 0)) {
+    if (check_collision(c->rect, map, 0, levelID)) {
         c->rect.x = oldX;
         c->direction *= -1;
     }
@@ -297,14 +297,14 @@ void update_coquilas(Coquilas* c, int* map) {
     else testVide.x -= 5;
     testVide.w = 5;
 
-    if (!check_collision(testVide, map, 0) && c->onGround) {
+    if (!check_collision(testVide, map, 0, levelID) && c->onGround) {
         c->rect.x = oldX;
         c->direction *= -1;
     }
 
     c->velY += 0.6f;
     c->rect.y += (int)c->velY;
-    if (check_collision(c->rect, map, 0)) {
+    if (check_collision(c->rect, map, 0, levelID)) {
         c->rect.y = ((c->rect.y + c->rect.h) / tileSize) * tileSize - c->rect.h;
         c->velY = 0; c->onGround = 1;
     } else c->onGround = 0;
@@ -363,7 +363,7 @@ void init_jc(Ennemi* e, int x, int y) {
 
 
 
-void update_jc(Ennemi* e, int* map) {
+void update_jc(Ennemi* e, int* map, int levelID) {
 
     if (!e->vivant) return;
 
@@ -372,7 +372,7 @@ void update_jc(Ennemi* e, int* map) {
     e->rect.x += (int)(e->speed * e->direction);
 
     // Collision Mur
-    if (check_collision(e->rect, map, 0)) {
+    if (check_collision(e->rect, map, 0, levelID)) {
         e->rect.x = oldX;
         e->direction *= -1;
     }
@@ -383,14 +383,14 @@ void update_jc(Ennemi* e, int* map) {
     else testVide.x -= 5;
     testVide.w = 5;
 
-    if (!check_collision(testVide, map, 0) && e->onGround) {
+    if (!check_collision(testVide, map, 0, levelID) && e->onGround) {
         e->rect.x = oldX;
         e->direction *= -1;
     }
     e->velY += 0.6f;
     e->rect.y += (int)e->velY;
 
-    if (check_collision(e->rect, map, 0)) {
+    if (check_collision(e->rect, map, 0, levelID)) {
         e->rect.y = ((e->rect.y + e->rect.h) / tileSize) * tileSize - e->rect.h;
         e->velY = 0; 
         e->onGround = 1;

@@ -12,6 +12,7 @@ extern Mix_Chunk *sonSaut;
 extern Mix_Chunk *bouleFeu;
 extern Mix_Chunk *coin;
 extern Mix_Chunk *sonThwomp;
+extern Mix_Chunk *sonJC;
 
 #define TILE_SIZE 16        /**< Taille de base d'une tuile (pixels) */
 #define MAP_SCALE 2         /**< Facteur d'agrandissement de l'affichage */

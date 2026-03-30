@@ -121,6 +121,11 @@ void update_thwomp(Thwomp* t, Player* p, int* map, int levelID) {
             if (p->rect.x + p->rect.w > t->rect.x - 30 && p->rect.x < t->rect.x + t->rect.w + 30) {
                 if (p->rect.y > t->rect.y) {
                     t->state = THWOMP_FALLING;
+                    
+                    if (sonThwomp != NULL) {
+                        Mix_PlayChannel(-1, sonThwomp, 0);
+                    }
+
                     t->velY = 0;
                 }
             }
@@ -220,22 +225,23 @@ void init_podoboo(Podoboo* p, int posX, int limYBas, int limYHaut) {
 void update_podoboo(Podoboo* p, Camera * cam) {
     if (!p->vivant) return;
     
+    float oldSpeedy = p->speedY;
+
     p->rect.y += (int)p->speedY;
     if (p->rect.y <= p->minY) {
         p->rect.y = p->minY;
         p->speedY = 5.0f; 
-
-        if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
-            if (bouleFeu != NULL) {
-                Mix_PlayChannel(-1, bouleFeu, 0);
-            }
-        }
     }
+
     if (p->rect.y >= p->maxY) {
         p->rect.y = p->maxY;
         p->speedY = -5.0f; 
+    }
 
-        if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
+    if (oldSpeedy != p->speedY) {
+        if (p->rect.x >= cam->x && p->rect.x <= cam->x + cam->w &&
+            p->rect.y >= cam->y && p->rect.y <= cam->y + cam->h) {
+
             if (bouleFeu != NULL) {
                 Mix_PlayChannel(-1, bouleFeu, 0);
             }

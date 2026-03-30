@@ -101,7 +101,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_coquilas(&coquilas[1], 4416, 608);
         init_coquilas(&coquilas[2], 6272, 960);
 
-        init_jc(&jc[0], 10800, 928);
+        init_jc(&jc[0], 10600, 928);
         init_jc(&jc[1], 10700, 450);
         init_jc(&jc[2], 11500, 750);
         init_jc(&jc[3], 13000, 928);

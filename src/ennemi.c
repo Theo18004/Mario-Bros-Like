@@ -121,11 +121,6 @@ void update_thwomp(Thwomp* t, Player* p, int* map, int levelID) {
             if (p->rect.x + p->rect.w > t->rect.x - 30 && p->rect.x < t->rect.x + t->rect.w + 30) {
                 if (p->rect.y > t->rect.y) {
                     t->state = THWOMP_FALLING;
-                    
-                    if (sonThwomp != NULL) {
-                        Mix_PlayChannel(-1, sonThwomp, 0);
-                    }
-
                     t->velY = 0;
                 }
             }
@@ -225,23 +220,22 @@ void init_podoboo(Podoboo* p, int posX, int limYBas, int limYHaut) {
 void update_podoboo(Podoboo* p, Camera * cam) {
     if (!p->vivant) return;
     
-    float oldSpeedy = p->speedY;
-
     p->rect.y += (int)p->speedY;
     if (p->rect.y <= p->minY) {
         p->rect.y = p->minY;
         p->speedY = 5.0f; 
-    }
 
+        if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
+            if (bouleFeu != NULL) {
+                Mix_PlayChannel(-1, bouleFeu, 0);
+            }
+        }
+    }
     if (p->rect.y >= p->maxY) {
         p->rect.y = p->maxY;
         p->speedY = -5.0f; 
-    }
 
-    if (oldSpeedy != p->speedY) {
-        if (p->rect.x >= cam->x && p->rect.x <= cam->x + cam->w &&
-            p->rect.y >= cam->y && p->rect.y <= cam->y + cam->h) {
-
+        if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
             if (bouleFeu != NULL) {
                 Mix_PlayChannel(-1, bouleFeu, 0);
             }
@@ -434,3 +428,51 @@ void render_jc(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_
     SDL_RenderCopy(renderer, texJeanClaude, &src, &dest);
 
 }
+
+
+//==============================================================
+//============================Olaf==============================
+//==============================================================
+
+// Dans ennemi.c
+
+void init_snowman(Ennemi* e, int x, int y) {
+    e->rect.x = x; 
+    e->rect.y = y;
+    e->rect.w = 32; // Ajuste selon la taille de ton sprite
+    e->rect.h = 48; 
+    e->velY = 0.0f; 
+    e->speed = 1.5f; 
+    e->direction = -1; 
+    e->onGround = 0;
+    e->vivant = 1;
+}
+
+void update_snowman(Ennemi* e, int* map, int levelID) {
+    update_loupas(e, map, levelID); 
+}
+
+void render_snowman(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_Texture* texOlaf) {
+    if (!e->vivant || !texOlaf) return;
+
+    int texW, texH;
+    SDL_QueryTexture(texOlaf, NULL, NULL, &texW, &texH);
+
+    int nbFrames = 4; // Ta sprite sheet a 4 images
+    int frameW = texW / nbFrames;
+
+    int frame = (SDL_GetTicks() / 150) % nbFrames;
+    SDL_Rect src = { frame * frameW, 0, frameW, texH };
+    
+    // On dessine le sprite un peu plus grand que la hitbox pour le visuel
+    SDL_Rect dest = { e->rect.x - scrollX - 8, e->rect.y - scrollY, 48, 48 };
+
+    // Gestion du flip selon la direction
+    if (e->direction > 0) {
+        SDL_RenderCopyEx(renderer, texOlaf, &src, &dest, 0, NULL, SDL_FLIP_HORIZONTAL);
+    } else {
+        SDL_RenderCopy(renderer, texOlaf, &src, &dest);
+    }
+}
+
+

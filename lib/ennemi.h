@@ -75,6 +75,7 @@ typedef struct Coquilas {
 #define NB_JEAN_CLAUDE 4
 #define NB_LOUPAS 5
 #define NB_THWOMPS 8
+#define NB_OLAF 2
 
 void init_loupas(Ennemi* e, int x, int y);
 void update_loupas(Ennemi* e, int* map, int levelID);
@@ -108,5 +109,8 @@ void init_jc(Ennemi* e, int x, int y);
 void update_jc(Ennemi* e, int* map, int levelID);
 void render_jc(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_Texture* texMomie);
 
+void init_snowman(Ennemi* e, int x, int y);
+void update_snowman(Ennemi* e, int* map, int levelID);
+void render_snowman(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_Texture* texOlaf);
 
 #endif

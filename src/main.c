@@ -33,8 +33,6 @@
 Mix_Chunk * sonSaut = NULL;
 Mix_Chunk * bouleFeu = NULL;
 Mix_Chunk * coin = NULL;
-Mix_Chunk * sonThwomp = NULL;
-Mix_Chunk * sonJC = NULL;
 
 int main(int argc, char* argv[]) {
     (void)argc;
@@ -106,6 +104,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texPodoboo = IMG_LoadTexture(renderer, "assets/Ennemi/podoboo.png");
     SDL_Texture* texCoquilas = IMG_LoadTexture(renderer, "assets/Ennemi/coquilas_noir.png");
     SDL_Texture* texJeanClaude = IMG_LoadTexture(renderer, "assets/Ennemi/jean-claude.png");
+    SDL_Texture* texOlaf = IMG_LoadTexture(renderer, "assets/Ennemi/olaf.png");
 
     // Textures Items & HUD
     SDL_Texture* texVies[5];
@@ -134,8 +133,6 @@ int main(int argc, char* argv[]) {
     sonSaut = Mix_LoadWAV("assets/son/Jump.wav");
     bouleFeu = Mix_LoadWAV("assets/son/BouleFeu.wav");
     coin = Mix_LoadWAV("assets/son/coin.wav");
-    sonThwomp = Mix_LoadWAV("assets/son/sonThowp.wav");
-    sonJC = Mix_LoadWAV("assets/son/sonJP.wav");
     Mix_Volume(-1, (volume * 128) / 100);
 
     // --- 5. Initialisation Objets ---
@@ -148,12 +145,13 @@ int main(int argc, char* argv[]) {
     Podoboo mesPodoboo[NB_PODOBOO];
     Coquilas mesCoquilas[NB_COQUILAS];
     Ennemi jc[NB_JEAN_CLAUDE];
+    Ennemi mesOlaf[NB_OLAF];
     Piece mesPieces[NB_PIECES];
     Checkpoint mesCheckpoints[NB_CHECKPOINTS];
     Flag monDrapeau;
 
     // Spawn des entités selon le niveau
-    spawn_level_entities(lvl, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, mesCheckpoints, &monDrapeau);
+    spawn_level_entities(lvl, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPieces, mesCheckpoints, &monDrapeau);
 
     Score score;
     init_score(&score);
@@ -191,6 +189,7 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < NB_THWOMPS; i++) update_thwomp(&mesThwomps[i], &player, lvl->tileMap, lvl->id);
         for (int i = 0; i < NB_COQUILAS; i++) update_coquilas(&mesCoquilas[i], lvl->tileMap, lvl->id);
         for (int i = 0; i < NB_JEAN_CLAUDE; i++) update_jc(&jc[i], lvl->tileMap, lvl->id);
+        for (int i = 0; i < NB_OLAF; i++) update_snowman(&mesOlaf[i], lvl->tileMap, lvl->id);
 
         update_score(&score, (int)player.rect.x);
         update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
@@ -201,7 +200,7 @@ int main(int argc, char* argv[]) {
             if (temps_sauvegarde <= 0) temps_sauvegarde = tempsMax; 
 
             gerer_mort_joueur(&player, lvl->playerStart.x, lvl->playerStart.y, &score);
-            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 0, lvl->id);
+            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPieces, &score, &camera, 0, lvl->id);
             startTime = SDL_GetTicks() - ((tempsMax - temps_sauvegarde) * 1000);
             tempsRestant = temps_sauvegarde;
         }
@@ -272,9 +271,20 @@ int main(int argc, char* argv[]) {
                 if (player.velY > 0 && (player.rect.y + player.rect.h) < (jc[i].rect.y + 30)) {
                     jc[i].vivant = 0;
                     player.velY = -12.0f;
-                    if (sonJC != NULL) {
-                        Mix_PlayChannel(-1, sonJC, 0);
-                    }
+                } else {
+                    player.state = STATE_DEAD;
+                    player.velY = -10.0f;
+                }
+            }
+        }
+
+        // -- Gestion Collision Joueur/Olaf
+        for (int i = 0; i < NB_OLAF; i++) {
+            if (player.state != STATE_DEAD && mesOlaf[i].vivant && SDL_HasIntersection(&player.rect, &mesOlaf[i].rect)) {
+                if (player.velY > 0 && (player.rect.y + player.rect.h) < (mesOlaf[i].rect.y + 20)) {
+                    mesOlaf[i].vivant = 0;
+                    player.velY = -12.0f;
+                    score.bonus += 150;
                 } else {
                     player.state = STATE_DEAD;
                     player.velY = -10.0f;
@@ -368,6 +378,7 @@ int main(int argc, char* argv[]) {
         for(int i=0; i<NB_JEAN_CLAUDE; i++) render_jc(renderer, &jc[i], camera.x, camera.y, texJeanClaude);
         for(int i=0; i<NB_CHECKPOINTS; i++) render_checkpoint(renderer, texCheckpoint, &mesCheckpoints[i], camera.x, camera.y);
         for(int i=0; i<NB_PIECES; i++) if (mesPieces[i].vivant) render_coin(renderer, texCoin, mesPieces[i].rect.x, mesPieces[i].rect.y, camera.x, camera.y);
+        for (int i = 0; i < NB_OLAF; i++) render_snowman(renderer, &mesOlaf[i], camera.x, camera.y, texOlaf);
 
         if (hitboxes) render_debug_hitboxes(renderer, &player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, &monDrapeau, camera.x, camera.y);
 
@@ -391,7 +402,7 @@ int main(int argc, char* argv[]) {
         if (player.lives <= 0) {
             int action = gameover(renderer, font, &player, score_affichage_fin, meilleur_score);
             if (action == 1) {
-                reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesPieces, &score, &camera, 1, lvl->id);
+                reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPieces, &score, &camera, 1, lvl->id);
                 for (int i = 0; i < NB_CHECKPOINTS; i++) mesCheckpoints[i].actif = 0;
                 startTime = SDL_GetTicks(); tempsRestant = tempsMax;
             } else running = 0;
@@ -405,9 +416,9 @@ int main(int argc, char* argv[]) {
     cleanup_level(lvl);
     for (int i = 0; i < 5; i++) SDL_DestroyTexture(texVies[i]);
     for (int i = 0; i < 16; i++) if (texPiecesHUD[i]) SDL_DestroyTexture(texPiecesHUD[i]);
-    Mix_FreeChunk(sonSaut); Mix_FreeChunk(bouleFeu); Mix_FreeChunk(coin); Mix_FreeChunk(sonThwomp); Mix_FreeChunk(sonJC); Mix_CloseAudio();
+    Mix_FreeChunk(sonSaut); Mix_FreeChunk(bouleFeu); Mix_FreeChunk(coin); Mix_CloseAudio();
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
-    SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo); SDL_DestroyTexture(texCoquilas); SDL_DestroyTexture(texJeanClaude);
+    SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo); SDL_DestroyTexture(texCoquilas); SDL_DestroyTexture(texJeanClaude); SDL_DestroyTexture(texOlaf);
     SDL_DestroyTexture(texCoin); SDL_DestroyTexture(texCheckpoint); SDL_DestroyTexture(texMat); SDL_DestroyTexture(texFlag);
     if (font) TTF_CloseFont(font);
     SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window);

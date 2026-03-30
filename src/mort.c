@@ -33,8 +33,7 @@ void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s){
     Mix_HaltChannel(-1);
 }
 
-
-void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodoboo, Coquilas* mesCoquilas, Ennemi* jc, Piece* pieces, Score* s, Camera* cam, int total_reset, int levelID) {
+void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodoboo, Coquilas* mesCoquilas, Ennemi* jc, Ennemi* mesOlaf, Piece* pieces, Score* s, Camera* cam, int total_reset, int levelID) {
     // Replacer le joueur au point de départ
     if (levelID == 1) {
         // --- MAP 1 ---
@@ -114,19 +113,26 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
         init_player(p, p->checkpointX, p->checkpointY);
 
         // Sauvegarder l'état des ennemis avant de les réinitialiser
-        int etatLoup[NB_LOUPAS];
+        int etatLoup[NB_LOUPAS], etatOlaf[NB_OLAF];
         if (!total_reset) {
             for(int i=0; i<NB_LOUPAS; i++)  etatLoup[i] = mesLoupas[i].vivant;
+            for(int i=0; i<NB_OLAF; i++)  etatOlaf[i] = mesOlaf[i].vivant;
         }
 
         // Réinitialiser les ennemis
         init_loupas(&mesLoupas[0], 600, 1000);
 
+        init_snowman(&mesOlaf[0], 1200, 800);
+        init_snowman(&mesOlaf[1], 1500, 800);
+
+
 
         // On laisse mort ceux qui étaient morts avant le reset si ce n'est pas un gameover
         if( !total_reset){
             for(int i=0; i<NB_LOUPAS; i++)  mesLoupas[i].vivant = etatLoup[i];
+            for(int i=0; i<NB_OLAF; i++)  mesOlaf[i].vivant = etatOlaf[i];
         }
+
 
 
 

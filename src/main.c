@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
     sonSaut = Mix_LoadWAV("assets/son/Jump.wav");
     bouleFeu = Mix_LoadWAV("assets/son/BouleFeu.wav");
     coin = Mix_LoadWAV("assets/son/coin.wav");
-    sonThwomp = Mix_LoadWAV("assets/son/sonThowp.wav");
+    sonThwomp = Mix_LoadWAV("assets/son/sonThwomp.wav");
     sonJC = Mix_LoadWAV("assets/son/sonJC.wav");
     
     // Audio - Musiques 
@@ -319,9 +319,14 @@ int main(int argc, char* argv[]) {
 
                 // -- Podoboo --
                 for (int i = 0; i < NB_PODOBOO; i++) {
-                    update_podoboo(&mesPodoboo[i], &camera);
-                    if (SDL_HasIntersection(&player.rect, &mesPodoboo[i].rect)) {
-                        if (player.state != STATE_DEAD) { player.state = STATE_DEAD; player.velY = -8.0f; }
+                    if (mesPodoboo[i].vivant) { 
+                        update_podoboo(&mesPodoboo[i], &camera);
+                        if (SDL_HasIntersection(&player.rect, &mesPodoboo[i].rect)) {
+                            if (player.state != STATE_DEAD) { 
+                                player.state = STATE_DEAD; 
+                                player.velY = -8.0f; 
+                            }
+                        }
                     }
                 }
 
@@ -417,7 +422,7 @@ int main(int argc, char* argv[]) {
             for(int i=0; i<NB_PIECES; i++) if (mesPieces[i].vivant) render_coin(renderer, texCoin, mesPieces[i].rect.x, mesPieces[i].rect.y, camera.x, camera.y);
             for(int i=0; i<NB_OLAF; i++) render_snowman(renderer, &mesOlaf[i], camera.x, camera.y, texOlaf);
 
-            if (hitboxes) render_debug_hitboxes(renderer, &player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, &monDrapeau, camera.x, camera.y);
+            if (hitboxes) render_debug_hitboxes(renderer, &player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, &monDrapeau, camera.x, camera.y);
 
             render_score(renderer, font, &score);
             render_lives(renderer, texVies, player.lives);

@@ -11,8 +11,6 @@
 //========================Loupas================================
 //==============================================================
 
-
-
 void init_loupas(Ennemi* e, int x, int y) {
     e->rect.x = x; 
     e->rect.y = y;
@@ -442,8 +440,8 @@ void render_jc(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_
 void init_snowman(Ennemi* e, int x, int y) {
     e->rect.x = x; 
     e->rect.y = y;
-    e->rect.w = 32; // Ajuste selon la taille de ton sprite
-    e->rect.h = 48; 
+    e->rect.w = 28; 
+    e->rect.h = 32; 
     e->velY = 0.0f; 
     e->speed = 1.5f; 
     e->direction = -1; 
@@ -460,22 +458,25 @@ void render_snowman(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY,
 
     int texW, texH;
     SDL_QueryTexture(texOlaf, NULL, NULL, &texW, &texH);
-
-    int nbFrames = 4; // Ta sprite sheet a 4 images
+    int nbFrames = 4; 
     int frameW = texW / nbFrames;
-
     int frame = (SDL_GetTicks() / 150) % nbFrames;
     SDL_Rect src = { frame * frameW, 0, frameW, texH };
-    
-    // On dessine le sprite un peu plus grand que la hitbox pour le visuel
-    SDL_Rect dest = { e->rect.x - scrollX - 8, e->rect.y - scrollY, 48, 48 };
+    int tailleImage = 64;
+    int posX = (e->rect.x + e->rect.w / 2) - (tailleImage / 2);
+    int posY = (e->rect.y + e->rect.h) - tailleImage;
 
-    // Gestion du flip selon la direction
+    posY += 15; 
+    SDL_Rect dest = { 
+        posX - scrollX, 
+        posY - scrollY, 
+        tailleImage, 
+        tailleImage 
+    };
+
     if (e->direction > 0) {
         SDL_RenderCopyEx(renderer, texOlaf, &src, &dest, 0, NULL, SDL_FLIP_HORIZONTAL);
     } else {
         SDL_RenderCopy(renderer, texOlaf, &src, &dest);
     }
 }
-
-

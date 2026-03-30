@@ -409,3 +409,48 @@ MenuResult afficher_selection_map(SDL_Renderer* renderer, int width, int height,
 
     return result;
 }
+
+MenuResult afficher_pause(SDL_Renderer* renderer, int width, int height, TTF_Font* font, SDL_Texture* texBoutons) {
+    int pauseRunning = 1;
+    MenuResult result = MENU_PLAY; // Par défaut, on continue
+    SDL_Event e;
+    
+    // Chaque bouton fait environ 85x85 pixels dans l'image originale
+    SDL_Rect srcPlay = {340, 170, 85, 85};    // Bouton Play (blanc)
+    SDL_Rect srcRestart = {170, 255, 85, 85}; // Bouton Recommencer (blanc)
+    SDL_Rect srcHome = {510, 255, 85, 85};    // Bouton Home (blanc)
+
+    int btnSize = 100;
+    int centerX = width / 2;
+    SDL_Rect dstPlay = { centerX - 180, height / 2 - 50, btnSize, btnSize };
+    SDL_Rect dstRestart = { centerX - 50, height / 2 - 50, btnSize, btnSize };
+    SDL_Rect dstHome = { centerX + 80, height / 2 - 50, btnSize, btnSize };
+
+    while (pauseRunning) {
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) return MENU_QUIT;
+            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) pauseRunning = 0;
+            
+            if (e.type == SDL_MOUSEBUTTONDOWN) {
+                SDL_Point p = {e.button.x, e.button.y};
+                if (SDL_PointInRect(&p, &dstPlay)) pauseRunning = 0;
+                if (SDL_PointInRect(&p, &dstRestart)) { result = MENU_RESTART; pauseRunning = 0; }
+                if (SDL_PointInRect(&p, &dstHome)) { result = MENU_NONE; pauseRunning = 0; }
+            }
+        }
+
+        // Overlay semi-transparent pour assombrir le jeu derrière
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 150);
+        SDL_Rect full = {0, 0, width, height};
+        SDL_RenderFillRect(renderer, &full);
+
+        // Dessin des icônes
+        SDL_RenderCopy(renderer, texBoutons, &srcPlay, &dstPlay);
+        SDL_RenderCopy(renderer, texBoutons, &srcRestart, &dstRestart);
+        SDL_RenderCopy(renderer, texBoutons, &srcHome, &dstHome);
+
+        SDL_RenderPresent(renderer);
+    }
+    return result;
+}

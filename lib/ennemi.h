@@ -10,6 +10,8 @@
 #include "player.h"
 #include "camera.h"
 
+extern Mix_Chunk * bouleFeu;
+
 /**
  * @enum ThwompState
  * @brief Les différents états du Thwomp.
@@ -75,7 +77,7 @@ typedef struct Coquilas {
 #define NB_THWOMPS 8
 
 void init_loupas(Ennemi* e, int x, int y);
-void update_loupas(Ennemi* e, int* map);
+void update_loupas(Ennemi* e, int* map, int levelID);
 /**
  * @brief Affiche l'ennemi Loup en animant sa Sprite Sheet.
  * @param renderer Le renderer SDL.
@@ -88,7 +90,7 @@ void render_loupas(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY,
                    SDL_Texture* texEnnemi);
 
 void init_thwomp(Thwomp* t, int x, int y);
-void update_thwomp(Thwomp* t, Player* p, int* map);
+void update_thwomp(Thwomp* t, Player* p, int* map, int levelID);
 void render_thwomp(SDL_Renderer* renderer, Thwomp* t, int scrollX, int scrollY, SDL_Texture* texThwomp);
 
 void init_podoboo(Podoboo* p, int posX, int limYBas, int limYHaut);
@@ -97,13 +99,13 @@ void render_podoboo(SDL_Renderer* renderer, Podoboo* p, int camX, int camY, SDL_
 
 
 void init_coquilas(Coquilas* c, int x, int y); 
-void update_coquilas(Coquilas* c, int* map);
+void update_coquilas(Coquilas* c, int* map, int levelID);
 void render_coquilas(SDL_Renderer* renderer, Coquilas* c, int scrollX, int scrollY, 
                    SDL_Texture* texCoquilas);
 
 
 void init_jc(Ennemi* e, int x, int y);
-void update_jc(Ennemi* e, int* map);
+void update_jc(Ennemi* e, int* map, int levelID);
 void render_jc(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_Texture* texMomie);
 
 

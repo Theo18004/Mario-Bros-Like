@@ -33,6 +33,7 @@
 Mix_Chunk * sonSaut = NULL;
 Mix_Chunk * bouleFeu = NULL;
 Mix_Chunk * coin = NULL;
+Mix_Chunk * sonThwomp = NULL;
 
 int main(int argc, char* argv[]) {
     (void)argc;
@@ -132,6 +133,7 @@ int main(int argc, char* argv[]) {
     sonSaut = Mix_LoadWAV("assets/son/Jump.wav");
     bouleFeu = Mix_LoadWAV("assets/son/BouleFeu.wav");
     coin = Mix_LoadWAV("assets/son/coin.wav");
+    sonThwomp = Mix_LoadWAV("assets/son/sonThowp.wav");
     Mix_Volume(-1, (volume * 128) / 100);
 
     // --- 5. Initialisation Objets ---
@@ -398,7 +400,7 @@ int main(int argc, char* argv[]) {
     cleanup_level(lvl);
     for (int i = 0; i < 5; i++) SDL_DestroyTexture(texVies[i]);
     for (int i = 0; i < 16; i++) if (texPiecesHUD[i]) SDL_DestroyTexture(texPiecesHUD[i]);
-    Mix_FreeChunk(sonSaut); Mix_FreeChunk(bouleFeu); Mix_FreeChunk(coin); Mix_CloseAudio();
+    Mix_FreeChunk(sonSaut); Mix_FreeChunk(bouleFeu); Mix_FreeChunk(coin); Mix_FreeChunk(sonThwomp); Mix_CloseAudio();
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
     SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo); SDL_DestroyTexture(texCoquilas); SDL_DestroyTexture(texJeanClaude);
     SDL_DestroyTexture(texCoin); SDL_DestroyTexture(texCheckpoint); SDL_DestroyTexture(texMat); SDL_DestroyTexture(texFlag);

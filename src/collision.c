@@ -100,11 +100,9 @@ int get_slope(int worldX, int tileX, int tileY, int tile_id, int levelID) {
 int demi_plate_sol(int tile_id, int levelID) { 
     if ( levelID == 1){
         return ((tile_id >= 462 && tile_id <= 464) || (tile_id >= 440 && tile_id <= 442));
-        printf('demi plate'); 
     }
     else if (levelID == 2) {
-        return 0; 
-        printf('pas de demi plate'); 
+        return 0;  
     }
     return 0;
 }

@@ -20,6 +20,7 @@ typedef enum {
     MENU_OPTIONS = 2, /**< L'utilisateur est dans les options */
     MENU_CHOIX_MAP1 = 3, /**< L'utilisateur a choisi la map 1 */
     MENU_CHOIX_MAP2 = 4,  /**< L'utilisateur a choisi la map 2 */
+    MENU_RESTART = 5,
     MENU_NONE = -1 /**< Aucun choix retour au menu précédent */
 } MenuResult;
 
@@ -28,5 +29,6 @@ void sauvegarder_parametres();
 MenuResult afficher_menu(SDL_Renderer* renderer, int width, int height);
 void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font* font, SDL_Texture* texBG);
 MenuResult afficher_selection_map(SDL_Renderer* renderer, int width, int height, TTF_Font* font, SDL_Texture* texBG);
+MenuResult afficher_pause(SDL_Renderer* renderer, int width, int height, TTF_Font* font, SDL_Texture* texBoutons);
 
 #endif

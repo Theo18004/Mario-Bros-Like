@@ -65,7 +65,7 @@ void render_timer(SDL_Renderer* renderer, TTF_Font* font, int tempsRestant) {
     int posX = 1175;
     int posY = 10;
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_Rect dest = { posX, posY, surface->w, surface->h };
+    SDL_Rect dest = { posX-100, posY, surface->w, surface->h };
     SDL_RenderCopy(renderer, texture, NULL, &dest);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
@@ -97,7 +97,7 @@ void render_score(SDL_Renderer* renderer, TTF_Font* font, Score* s) {
     if (!surface) return;
     
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_Rect dest = { s->rect.x, s->rect.y, surface->w, surface->h };
+    SDL_Rect dest = { s->rect.x -100, s->rect.y, surface->w, surface->h };
 
     SDL_RenderCopy(renderer, texture, NULL, &dest);
     SDL_FreeSurface(surface);
@@ -346,4 +346,57 @@ void render_debug_hitboxes(SDL_Renderer* renderer, Player* player,
     SDL_RenderFillRect(renderer, &rMat);
     SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
     SDL_RenderDrawRect(renderer, &rMat);
+}
+
+
+// FONCTIONS DE MENU PAUSE ---
+
+void init_pause_menu(PauseMenu* pm, SDL_Texture* texIcons, int logicalW, int logicalH) {
+    pm->texIcons = texIcons;
+
+    // Découpage automatique sur la grille de bouton.png
+    if (texIcons) {
+        int texW = 0, texH = 0;
+        SDL_QueryTexture(texIcons, NULL, NULL, &texW, &texH);
+        int srcBtnW = texW / 12; 
+        int srcBtnH = texH / 4;  
+
+        pm->srcPauseIcon = (SDL_Rect){5 * srcBtnW, 2 * srcBtnH, srcBtnW, srcBtnH}; // Engrenage
+        pm->srcPlay      = (SDL_Rect){4 * srcBtnW, 2 * srcBtnH, srcBtnW, srcBtnH}; // Jouer
+        pm->srcRestart   = (SDL_Rect){2 * srcBtnW, 3 * srcBtnH, srcBtnW, srcBtnH}; // Recommencer
+        pm->srcHome      = (SDL_Rect){6 * srcBtnW, 3 * srcBtnH, srcBtnW, srcBtnH}; // Accueil
+    } else {
+        pm->srcPauseIcon = (SDL_Rect){0, 0, 0, 0};
+        pm->srcPlay      = (SDL_Rect){0, 0, 0, 0};
+        pm->srcRestart   = (SDL_Rect){0, 0, 0, 0};
+        pm->srcHome      = (SDL_Rect){0, 0, 0, 0};
+    }
+
+    int btnSize = 100;
+    pm->dstPlay    = (SDL_Rect){ logicalW / 2 - 180, logicalH / 2 - 62, btnSize, btnSize }; 
+    pm->dstRestart = (SDL_Rect){ logicalW / 2 - 50, logicalH / 2 - 50, btnSize, btnSize };
+    pm->dstHome    = (SDL_Rect){ logicalW / 2 + 80, logicalH / 2 - 50, btnSize, btnSize };
+    pm->dstPausePos = (SDL_Rect){ logicalW - 80, 5, 50, 50 };
+}
+
+void render_pause_menu(SDL_Renderer* renderer, PauseMenu* pm, int enPause, int logicalW, int logicalH) {
+    if (!enPause) {
+        // En jeu normal : on dessine juste l'engrenage dans le HUD
+        if (pm->texIcons) {
+            SDL_RenderCopy(renderer, pm->texIcons, &pm->srcPauseIcon, &pm->dstPausePos);
+        }
+    } else {
+        // En mode Pause : Voile noir transparent
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 150);
+        SDL_Rect full = {0, 0, logicalW, logicalH};
+        SDL_RenderFillRect(renderer, &full);
+
+        // Boutons du menu
+        if (pm->texIcons) {
+            SDL_RenderCopy(renderer, pm->texIcons, &pm->srcPlay, &pm->dstPlay);
+            SDL_RenderCopy(renderer, pm->texIcons, &pm->srcRestart, &pm->dstRestart);
+            SDL_RenderCopy(renderer, pm->texIcons, &pm->srcHome, &pm->dstHome);
+        }
+    }
 }

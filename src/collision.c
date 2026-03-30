@@ -67,7 +67,7 @@ int is_slope_up_right(int tile_id, int levelID) {
 }
 int is_slope_up_left(int tile_id, int levelID) {
     if ( levelID == 1) {
-        return (tile_id == 267 || tile_id == 303); 
+        return (tile_id == 269 || tile_id == 303); 
     }else if (levelID == 2) {
         return (tile_id == 178 || tile_id == 201); 
     }
@@ -97,9 +97,19 @@ int get_slope(int worldX, int tileX, int tileY, int tile_id, int levelID) {
 }
 
 
-int demi_plate_sol(int tile_id) { return ((tile_id >= 462 && tile_id <= 464) || (tile_id >= 440 && tile_id <= 442));}
+int demi_plate_sol(int tile_id, int levelID) { 
+    if ( levelID == 1){
+        return ((tile_id >= 462 && tile_id <= 464) || (tile_id >= 440 && tile_id <= 442));
+        printf('demi plate'); 
+    }
+    else if (levelID == 2) {
+        return 0; 
+        printf('pas de demi plate'); 
+    }
+    return 0;
+}
 
-int demi_plate(SDL_Rect rect, int* map) {
+int demi_plate(SDL_Rect rect, int* map, int levelID) {
     int scaled_tile = TILE_SIZE * MAP_SCALE;
     int left_tile   = rect.x / scaled_tile;
     int right_tile  = (rect.x + rect.w - 1) / scaled_tile;
@@ -110,8 +120,8 @@ int demi_plate(SDL_Rect rect, int* map) {
         for (int x = left_tile; x <= right_tile; x++) {
             if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
                 int tile = map[y * MAP_WIDTH + x];
-                
-                if (demi_plate_sol(tile)) {
+
+                if (demi_plate_sol(tile, levelID)) {
                     int tile_top = y * scaled_tile;
                     int tile_limit = tile_top + (int)(scaled_tile );
                     if (rect.y < tile_limit && (rect.y + rect.h) > tile_top) {
@@ -164,7 +174,7 @@ int check_collision(SDL_Rect rect, int* map, int check_demi, int levelID) {
                     }
                     return 1; 
                 }
-                if (demi_plate_sol(tile)) {
+                if (demi_plate_sol(tile, levelID)) {
                     if (check_demi == 1) {
                         int tile_top = y * scaled_tile;
                         if (rect.y + rect.h > tile_top && rect.y + rect.h <= tile_top + 25) {

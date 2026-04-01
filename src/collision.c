@@ -46,10 +46,10 @@ int is_full(int tile_id, int levelID) {
             (tile_id >= 378 && tile_id <= 380)||
             (tile_id >= 396 && tile_id <= 398)||
             (tile_id >= 418 && tile_id <= 420)||
-            (tile_id >= 506 && tile_id <= 510)||
-            (tile_id >= 528 && tile_id <= 532)||
-            (tile_id >= 550 && tile_id <= 554)||
-            (tile_id >= 572 && tile_id <= 576)||
+            (tile_id >= 519 && tile_id <= 526)|| 
+            (tile_id >= 541 && tile_id <= 548)||
+            (tile_id >= 563 && tile_id <= 566)||
+            (tile_id >= 585 && tile_id <= 589)||
             tile_id == 402 ){
             return 1;
             }
@@ -61,7 +61,7 @@ int is_slope_up_right(int tile_id, int levelID) {
     if ( levelID == 1) {
         return (tile_id == 268 || tile_id == 304); 
     }else if (levelID == 2) {
-        return (tile_id == 177 || tile_id == 198); 
+        return (tile_id == 177 || tile_id == 198 || tile_id == 567); 
     } 
     return 0;
 }
@@ -69,7 +69,7 @@ int is_slope_up_left(int tile_id, int levelID) {
     if ( levelID == 1) {
         return (tile_id == 269 || tile_id == 303); 
     }else if (levelID == 2) {
-        return (tile_id == 178 || tile_id == 201); 
+        return (tile_id == 178 || tile_id == 201 || tile_id == 568); 
     }
     return 0;
 }

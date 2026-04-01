@@ -32,6 +32,7 @@ Mix_Chunk * bouleFeu = NULL;
 Mix_Chunk * coin = NULL;
 Mix_Chunk * sonThwomp = NULL;
 Mix_Chunk * sonJC = NULL;
+Mix_Music * musiqueMenu = NULL;
 Mix_Music * musiqueSurface = NULL;
 Mix_Music * musiqueDonjon = NULL;
 
@@ -114,6 +115,7 @@ int main(int argc, char* argv[]) {
     sonJC = Mix_LoadWAV("assets/son/sonJC.wav");
     
     // Audio - Musiques 
+    musiqueMenu = Mix_LoadMUS("assets/music/Sunrise_at_the_Peak.wav");
     musiqueSurface = Mix_LoadMUS("assets/music/Above_the_Floating_Isles.wav");
     musiqueDonjon = Mix_LoadMUS("assets/music/Across_the_Green_Ridge.wav");
 
@@ -135,6 +137,12 @@ int main(int argc, char* argv[]) {
         
         // 1. On remet les coordonnées en mode "Ecran physique" pour le menu
         SDL_RenderSetLogicalSize(renderer, 0, 0);
+
+        // LANCEMENT DE LA MUSIQUE DU MENU 
+        Mix_HaltMusic(); 
+        if (musiqueMenu) {
+            Mix_PlayMusic(musiqueMenu, -1); 
+        }
 
         // 2. Affichage du Menu Principal
         MenuResult menuChoix = afficher_menu(renderer, physicalW, physicalH);
@@ -296,8 +304,9 @@ int main(int argc, char* argv[]) {
                     }
                 }
 
-                if (score.value > meilleur_score) { meilleur_score = score.value; }
-                if (player.lives > 0) { score_affichage_fin = score.value; }
+                int score_total = score.value + score.bonus;
+                if (score_total > meilleur_score) { meilleur_score = score_total; }
+                if (player.lives > 0) { score_affichage_fin = score_total; }
 
                 // 4. Collisions
                 // -- Loup --
@@ -469,6 +478,7 @@ int main(int argc, char* argv[]) {
     // Libération Audio
     Mix_FreeChunk(sonSaut); Mix_FreeChunk(bouleFeu); Mix_FreeChunk(coin); 
     Mix_FreeChunk(sonThwomp); Mix_FreeChunk(sonJC);
+    if (musiqueMenu) Mix_FreeMusic(musiqueMenu);
     if (musiqueSurface) Mix_FreeMusic(musiqueSurface);
     if (musiqueDonjon) Mix_FreeMusic(musiqueDonjon);
     Mix_CloseAudio();

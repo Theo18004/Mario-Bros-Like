@@ -1,7 +1,7 @@
 #include "menu.h"
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h> 
 #include <stdio.h>
-
 #include <stdio.h>
 
 int luminosite = 255; // valeur max : 255
@@ -202,6 +202,12 @@ void afficher_parametres(SDL_Renderer* renderer, int width, int height, TTF_Font
                 // Glisser les barres
                 if (SDL_PointInRect(&p, &barSon)) {
                     volume = ((p.x - barSon.x) * 100) / barSon.w;
+                    
+                    if (volume < 0) volume = 0;
+                    if (volume > 100) volume = 100;
+
+                    Mix_Volume(-1, (volume * 128) / 100);      
+                    Mix_VolumeMusic((volume * 128) / 100);      
                 }
                 if (SDL_PointInRect(&p, &barLum)) {
                     luminosite = ((p.x - barLum.x) * 255) / barLum.w;

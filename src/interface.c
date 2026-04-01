@@ -83,7 +83,7 @@ void update_score(Score* s, int player_x) {
     if (player_x > s->max_x) {
         s->max_x = player_x;
     }
-    s->value = (s->max_x / 20) + s->bonus;
+    s->value = (s->max_x / 20);
 }
 
 void render_score(SDL_Renderer* renderer, TTF_Font* font, Score* s) {

@@ -44,12 +44,15 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
-        lvl->playerStart = (SDL_Point){ 20, 900 };
+        lvl->playerStart = (SDL_Point){ 4200, 800 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");
-        lvl->bgs[1] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/portfull.png");
-        lvl->bgs[2] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/villefull.png");
+        lvl->bgs[1] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/lune1.png"); // 1er plan crateres + sol
+        lvl->bgs[2] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/lune2.png"); // 2eme plan carteres seul
+        lvl->bgs[3] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/lune3.png"); // 3eme plan montagnes
+        lvl->bgs[4] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/lunebg.png"); // 4eme plan espace
+        lvl->bgs[5] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/villefull.png"); 
     }
 
     lvl->mapPixelWidth = MAP_WIDTH * TILE_SIZE * MAP_SCALE;
@@ -198,16 +201,22 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
             , cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startWinterX, 00);
         SDL_RenderSetClipRect(renderer, NULL);
 
-        // --- PORT ---
-        int startPortX = 150 * 32;
-        int endPortX = 300 * 32;
-        SDL_Rect clipPort = { startPortX - cameraX, 0, endPortX - startPortX, screenH };
-        if (clipPort.x < 0) { clipPort.w += clipPort.x; clipPort.x = 0; }
-
-        SDL_RenderSetClipRect(renderer, &clipPort);
-        draw_parallax_bg(renderer, lvl->bgs[1], cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startPortX, -350);
-        SDL_RenderSetClipRect(renderer, NULL);
-
+        // --- LUNE ---
+        int startMoonX = 150 * 32; 
+        int endMoonX = 300 * 32; 
+        SDL_Rect clipMoon = { startMoonX - cameraX, 0, endMoonX - startMoonX, screenH };
+        
+        if (clipMoon.x < 0) { clipMoon.w += clipMoon.x; clipMoon.x = 0; }
+        
+        if (clipMoon.w > 0) {
+            SDL_RenderSetClipRect(renderer, &clipMoon);
+            draw_parallax_bg(renderer, lvl->bgs[4], cameraX, cameraY, 0.62f, 0.0f, screenW, screenH, startMoonX, -130);
+            draw_parallax_bg(renderer, lvl->bgs[3], cameraX, cameraY, 0.10f, 0.0f, screenW, screenH, startMoonX, 170);
+            draw_parallax_bg(renderer, lvl->bgs[2], cameraX, cameraY, 0.25f, 0.0f, screenW, screenH, startMoonX, 265);
+            draw_parallax_bg(renderer, lvl->bgs[1], cameraX, cameraY, 0.45f, 0.0f, screenW, screenH, startMoonX, 360);
+            
+            SDL_RenderSetClipRect(renderer, NULL);
+        }
         // --- VILLE ---
         int startVilleX = 300 * 32;
         int endVilleX = MAP_WIDTH * 32;
@@ -215,7 +224,7 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
         if (clipVille.x < 0) { clipVille.w += clipVille.x; clipVille.x = 0; }
 
         SDL_RenderSetClipRect(renderer, &clipVille);
-        draw_parallax_bg(renderer, lvl->bgs[2], cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startVilleX, 0);
+        draw_parallax_bg(renderer, lvl->bgs[4], cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startVilleX, 0);
         SDL_RenderSetClipRect(renderer, NULL);
     }
 }

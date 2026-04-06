@@ -273,7 +273,7 @@ int victory_screen(SDL_Renderer* renderer, TTF_Font* font, Player* player, Score
 
 void render_debug_hitboxes(SDL_Renderer* renderer, Player* player, 
                            Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, 
-                           Coquilas* coquilas, Ennemi* jc, Flag* drapeau, 
+                           Coquilas* coquilas, Ennemi* jc, Ennemi* olaf,Presse* presses, Flag* drapeau, 
                            int camX, int camY) {
                            
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -340,7 +340,32 @@ void render_debug_hitboxes(SDL_Renderer* renderer, Player* player,
         }
     }
 
-    // 7. Drapeau (Mât)
+    
+    // 7. Olafs
+    for (int i = 0; i < NB_OLAF; i++) {
+        if (olaf[i].vivant) {
+            SDL_SetRenderDrawColor(renderer, 255, 192, 203, 128);
+            SDL_Rect r = { olaf[i].rect.x - camX, olaf[i].rect.y - camY, olaf[i].rect.w, olaf[i].rect.h };
+            SDL_RenderFillRect(renderer, &r);
+            SDL_SetRenderDrawColor(renderer, 255, 192, 203, 255);
+            SDL_RenderDrawRect(renderer, &r);
+        }
+    }
+
+    // 8. Presses
+    for (int i = 0; i < NB_PRESSES; i++) {
+        if (presses[i].vivant) {
+            SDL_SetRenderDrawColor(renderer, 128, 0, 128, 128);
+            SDL_Rect r = { presses[i].extensionRect.x - camX, presses[i].extensionRect.y - camY, presses[i].extensionRect.w, presses[i].extensionRect.h };
+            SDL_RenderFillRect(renderer, &r);
+            SDL_SetRenderDrawColor(renderer, 128, 0, 128, 255);
+            SDL_RenderDrawRect(renderer, &r);
+        }
+    }
+
+    // 9. Alien 
+
+    // 10. Drapeau (Mât)
     SDL_SetRenderDrawColor(renderer, 255, 0, 255, 128);
     SDL_Rect rMat = { drapeau->matRect.x - camX, drapeau->matRect.y - camY, drapeau->matRect.w, drapeau->matRect.h };
     SDL_RenderFillRect(renderer, &rMat);

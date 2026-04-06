@@ -480,3 +480,76 @@ void render_snowman(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY,
         SDL_RenderCopy(renderer, texOlaf, &src, &dest);
     }
 }
+
+
+//==============================================================
+//======================Presse Hydraulique======================
+//==============================================================
+#define PRESSE_FRAME_W 32 
+#define PRESSE_FRAME_H 32 
+#define NUM_PRESSE_FRAMES 5
+#define PRESSE_ANIM_DELAY 100 
+
+void init_presse(Presse* p, int x, int y, Uint32 offset) {
+    p->baseRect = (SDL_Rect){x, y, 50, 64}; 
+    p->extensionRect = (SDL_Rect){x, y, 50, 30};
+    
+    p->currentFrame = 0;
+    p->frameTimer = SDL_GetTicks();
+    p->startDelay = offset; // On enregistre le décalage
+    p->activated = (offset == 0); // Si offset est 0, on l'active direct
+    p->animationState = 0;
+    p->vivant = 1;
+}
+
+void update_presse(Presse* p) {
+    if (!p->vivant) return;
+
+    // Gestion du délai de l'animation pour chaque presse 
+    if (!p->activated) {
+        if (SDL_GetTicks() - p->frameTimer > p->startDelay) {
+            p->activated = 1;
+            p->frameTimer = SDL_GetTicks();
+        }
+        return; 
+    }
+
+    // Délais d'animation
+    int delay = 60; 
+    if (p->currentFrame == 0) delay = 700; // Pause en haut
+    if (p->currentFrame == 2) delay = 300; // Pause en bas 
+
+    if (SDL_GetTicks() - p->frameTimer > (Uint32)delay) {
+        if (p->animationState == 0) { //chute
+            if (p->currentFrame < 2) p->currentFrame++;
+            else p->animationState = 1;
+        } 
+        else { //remontée
+            if (p->currentFrame > 0) p->currentFrame--;
+            else p->animationState = 0;
+        }
+
+        // Hitbox adaptative avec les frames de la presse
+        int h[] = {50, 60, 80}; 
+        p->extensionRect.h = h[p->currentFrame];
+        p->frameTimer = SDL_GetTicks();
+    }
+}
+
+void render_presse(SDL_Renderer* renderer, Presse* p, int camX, int camY, SDL_Texture* tex) {
+    if (!p->vivant || !tex) return;
+
+    int texW, texH;
+    SDL_QueryTexture(tex, NULL, NULL, &texW, &texH);
+    int frameW = texW / NUM_PRESSE_FRAMES; 
+    int frameH = texH; 
+
+    SDL_Rect src = { p->currentFrame * frameW, 0, frameW, frameH };
+    SDL_Rect dest = { 
+        p->baseRect.x - camX, 
+        p->baseRect.y - camY, 
+        p->baseRect.w, 96  
+    };
+
+    SDL_RenderCopy(renderer, tex, &src, &dest);
+}

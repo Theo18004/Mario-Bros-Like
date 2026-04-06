@@ -10,6 +10,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "Items.h"
 
+
 struct Player;
 typedef struct Player Player;
 
@@ -28,6 +29,9 @@ typedef struct Coquilas Coquilas;
 struct Flag;
 typedef struct Flag Flag;
 
+struct Presse;
+typedef struct Presse Presse;
+
 typedef struct {
     int value;    /**< Valeur du score actuel */
     int bonus;   /**< Bonus accumulé (Pièces / Monstres) */
@@ -35,7 +39,7 @@ typedef struct {
     SDL_Rect rect; /**< Position d'affichage du score */
 } Score;
 
-// --- NOUVEAU : STRUCTURE DU MENU PAUSE ---
+// --- STRUCTURE DU MENU PAUSE ---
 typedef struct {
     SDL_Texture* texIcons;
     SDL_Rect srcPauseIcon;
@@ -57,7 +61,6 @@ void init_pause_menu(PauseMenu* pm, SDL_Texture* texIcons, int logicalW, int log
  * @brief Affiche le menu pause (ou juste l'engrenage si pas en pause).
  */
 void render_pause_menu(SDL_Renderer* renderer, PauseMenu* pm, int enPause, int logicalW, int logicalH);
-// ------------------------------------------
 
 /**
  * @brief Affiche les cœurs représentant les vies restantes.
@@ -76,8 +79,8 @@ void render_timer(SDL_Renderer* renderer, TTF_Font* font, int tempsRestant);
 
 void render_debug_hitboxes(SDL_Renderer* renderer, Player* player, 
                            Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, 
-                           Coquilas* coquilas, Ennemi* jc, Flag* drapeau, 
-                           int camX, int camY);
+                           Coquilas* coquilas, Ennemi* jc, Ennemi* olaf,Presse* presses, Flag* drapeau, 
+                           int camX, int camY) ;
 
 /**
  * @brief Affiche le score du joueur à l'écran.

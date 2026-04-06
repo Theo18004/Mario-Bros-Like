@@ -70,12 +70,24 @@ typedef struct Coquilas {
     int vivant;         /**< 1 si actif, 0 si supprimé */
 } Coquilas;
 
+typedef struct Presse {
+    SDL_Rect baseRect;   // La partie fixede la presse
+    SDL_Rect extensionRect; // La hitbox qui va grandir et rétrécir
+    int currentFrame;    // Frame d'animation actuelle 
+    Uint32 frameTimer;   // Pour contrôler la vitesse d'animation
+    Uint32 startDelay; // Délai avant de commencer l'animation
+    int activated;     // 1 si la presse a été activée , 0 sinon
+    int animationState;  // 0 = en extension, 1 = en rétractation 
+    int vivant;
+} Presse;
+
 #define NB_PODOBOO 11
 #define NB_COQUILAS 3
 #define NB_JEAN_CLAUDE 4
 #define NB_LOUPAS 5
 #define NB_THWOMPS 8
 #define NB_OLAF 2
+#define NB_PRESSES 3
 
 void init_loupas(Ennemi* e, int x, int y);
 void update_loupas(Ennemi* e, int* map, int levelID);
@@ -112,5 +124,9 @@ void render_jc(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_
 void init_snowman(Ennemi* e, int x, int y);
 void update_snowman(Ennemi* e, int* map, int levelID);
 void render_snowman(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY, SDL_Texture* texOlaf);
+
+void init_presse(Presse* p, int x, int y, Uint32 offset);
+void update_presse(Presse* p);
+void render_presse(SDL_Renderer* renderer, Presse* p, int camX, int camY, SDL_Texture* tex);
 
 #endif

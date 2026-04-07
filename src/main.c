@@ -83,6 +83,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texCoquilas = IMG_LoadTexture(renderer, "assets/Ennemi/coquilas_noir.png");
     SDL_Texture* texJeanClaude = IMG_LoadTexture(renderer, "assets/Ennemi/jean-claude.png");
     SDL_Texture* texOlaf = IMG_LoadTexture(renderer, "assets/Ennemi/olaf.png");
+    SDL_Texture* texAlien = IMG_LoadTexture(renderer, "assets/Ennemi/alien.png");
     SDL_Texture* texPresse = IMG_LoadTexture(renderer, "assets/Ennemi/presse.png");
 
     // Textures Items & HUD
@@ -190,13 +191,14 @@ int main(int argc, char* argv[]) {
         Coquilas mesCoquilas[NB_COQUILAS];
         Ennemi jc[NB_JEAN_CLAUDE];
         Ennemi mesOlaf[NB_OLAF];
+        Ennemi mesAliens[NB_ALIENS];
+        Presse mesPresses[NB_PRESSES];
         Piece mesPieces[NB_PIECES];
         Checkpoint mesCheckpoints[NB_CHECKPOINTS];
         Flag monDrapeau;
 
         // Spawn des entités selon le niveau (incluant Olaf)
-        Presse mesPresses[NB_PRESSES];
-        spawn_level_entities(lvl, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPresses, mesPieces, mesCheckpoints, &monDrapeau);
+        spawn_level_entities(lvl, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPresses, mesAliens, mesPieces, mesCheckpoints, &monDrapeau);
 
         Score score;
         init_score(&score);
@@ -284,6 +286,7 @@ int main(int argc, char* argv[]) {
                 for (int i = 0; i < NB_COQUILAS; i++) update_coquilas(&mesCoquilas[i], lvl->tileMap, lvl->id);
                 for (int i = 0; i < NB_JEAN_CLAUDE; i++) update_jc(&jc[i], lvl->tileMap, lvl->id);
                 for (int i = 0; i < NB_OLAF; i++) update_snowman(&mesOlaf[i], lvl->tileMap, lvl->id);
+                for (int i = 0; i < NB_ALIENS; i++) update_alien(&mesAliens[i], lvl->tileMap, lvl->id); 
                 for (int i = 0; i < NB_PRESSES; i++) {update_presse(&mesPresses[i]);}
                 update_score(&score, (int)player.rect.x);
                 update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
@@ -369,6 +372,17 @@ int main(int argc, char* argv[]) {
                     }
                 }
 
+                // -- Aliens --
+                for (int i = 0; i < NB_ALIENS; i++) {
+                    if (player.state != STATE_DEAD && mesAliens[i].vivant && SDL_HasIntersection(&player.rect, &mesAliens[i].rect)) {
+                        int pieds_avant = (player.rect.y + player.rect.h) - (int)player.velY;
+                        if (player.velY > 0 && pieds_avant <= mesAliens[i].rect.y + 15) {
+                            mesAliens[i].vivant = 0; score.bonus += 100; player.velY = -12.0f;
+                        } else { player.state = STATE_DEAD; player.velY = -10.0f; }
+                    }
+                }
+            
+                // -- Presse --
                 for (int i = 0; i < NB_PRESSES; i++) {
                     if (!mesPresses[i].vivant) continue;
                     if (player.state != STATE_DEAD && SDL_HasIntersection(&player.rect, &mesPresses[i].extensionRect)) {
@@ -443,6 +457,7 @@ int main(int argc, char* argv[]) {
             for(int i=0; i<NB_CHECKPOINTS; i++) render_checkpoint(renderer, texCheckpoint, &mesCheckpoints[i], camera.x, camera.y);
             for(int i=0; i<NB_PIECES; i++) if (mesPieces[i].vivant) render_coin(renderer, texCoin, mesPieces[i].rect.x, mesPieces[i].rect.y, camera.x, camera.y);
             for(int i=0; i<NB_OLAF; i++) render_snowman(renderer, &mesOlaf[i], camera.x, camera.y, texOlaf);
+            for(int i=0; i<NB_ALIENS; i++) render_alien(renderer, &mesAliens[i], camera.x, camera.y, texAlien);
             for (int i = 0; i < NB_PRESSES; i++) {render_presse(renderer, &mesPresses[i], camera.x, camera.y, texPresse);}
             if (hitboxes) render_debug_hitboxes(renderer, &player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPresses, &monDrapeau, camera.x, camera.y);
 
@@ -503,7 +518,8 @@ int main(int argc, char* argv[]) {
     
     // Libération Graphique
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
-    SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo); SDL_DestroyTexture(texCoquilas); SDL_DestroyTexture(texJeanClaude); SDL_DestroyTexture(texOlaf); SDL_DestroyTexture(texPresse);
+    SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo); SDL_DestroyTexture(texCoquilas); 
+    SDL_DestroyTexture(texJeanClaude); SDL_DestroyTexture(texOlaf); SDL_DestroyTexture(texPresse); SDL_DestroyTexture(texAlien);
     SDL_DestroyTexture(texCoin); SDL_DestroyTexture(texCheckpoint); SDL_DestroyTexture(texMat); SDL_DestroyTexture(texFlag);
     if (texIcons) SDL_DestroyTexture(texIcons); 
     if (font) TTF_CloseFont(font);

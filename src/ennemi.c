@@ -575,24 +575,21 @@ void update_alien(Ennemi* a, int* map, int levelID) {
     update_loupas(a, map, levelID); 
 }
 
-void render_alien(SDL_Renderer* renderer, Ennemi* a, int scrollX, int scrollY, 
-                   SDL_Texture* texAlien) {
+void render_alien(SDL_Renderer* renderer, Ennemi* a, int scrollX, int scrollY, SDL_Texture* texAlien) {
     if (!a->vivant || !texAlien) return;
 
-    int nbFrames = 5;      
-    int frameW = 64;        
-    int frameH = 32;        
-    int startX = 320;       
-    int startY = 128;       
+    int texW, texH;
+    SDL_QueryTexture(texAlien, NULL, NULL, &texW, &texH);
+    int nbFrames = 5; 
+    int frameW = texW / nbFrames; 
+    int frameH = texH;
 
-    int currentFrame = (SDL_GetTicks() / 200) % nbFrames;
-
-
-    SDL_Rect src = { startX + (currentFrame * frameW), startY, frameW, frameH };
+    // Animation 
+    int currentFrame = (SDL_GetTicks() / 120) % nbFrames;
+    SDL_Rect src = { currentFrame * frameW, 0, frameW, frameH };
     
-    int displayW = 56; 
-    int displayH = 30; 
-
+    int displayW = 64; 
+    int displayH = 32; 
     int offsetX = (a->rect.w - displayW) / 2;
     int offsetY = a->rect.h - displayH; 
 
@@ -603,7 +600,8 @@ void render_alien(SDL_Renderer* renderer, Ennemi* a, int scrollX, int scrollY,
         displayH 
     };
 
-    SDL_RendererFlip flip = (a->direction < 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    // Selon la direction on flip l'image 
+    SDL_RendererFlip flip = (a->direction > 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     SDL_RenderCopyEx(renderer, texAlien, &src, &dest, 0, NULL, flip);
 }

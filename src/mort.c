@@ -33,19 +33,30 @@ void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s){
     Mix_HaltChannel(-1);
 }
 
-void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodoboo, Coquilas* mesCoquilas, Ennemi* jc, Ennemi* mesOlaf, Piece* pieces, Score* s, Camera* cam, int total_reset, int levelID) {
-    // Replacer le joueur au point de départ
-    if (levelID == 1) {
-        // --- MAP 1 ---
-        if (total_reset){
-            p->lives = 3;
+void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodoboo, Coquilas* mesCoquilas, Ennemi* jc, Ennemi* mesOlaf,Ennemi* mesAliens,Presse* presses, Piece* pieces, Score* s, Camera* cam, int total_reset, int levelID) {
+    // On remet tout à 0 et le spawn au début après un game over
+    if (total_reset) {
+        p->lives = 3;  
+        init_score(s); 
+        
+        // Position de spawn par défaut si aucun checkpoint n'est actif
+        if (levelID == 1) {
             p->checkpointX = 20;
             p->checkpointY = 1000;
+        } else {
+            p->checkpointX = 20;
+            p->checkpointY = 800; // Ajuste selon le spawn de ta Map 2
         }
-        if (total_reset){
-            p->lives = 3;
-            init_score(s);
+
+        // Faire réapparaître toutes les pièces
+        for (int i = 0; i < NB_PIECES; i++) {
+            pieces[i].vivant = 1;
         }
+    }
+    
+    // Reinitialiser le joueur et les ennemis selon le niveau
+    if (levelID == 1) {
+        // --- MAP 1 ---
         init_player(p, p->checkpointX, p->checkpointY);
 
         // Sauvegarder l'état des ennemis avant de les réinitialiser
@@ -56,12 +67,14 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
         }
 
         // Réinitialiser les ennemis
+        // -- Loupas --
         init_loupas(&mesLoupas[0], 600, 1000);
         init_loupas(&mesLoupas[1], 1184, 768);
         init_loupas(&mesLoupas[2], 1920, 576);
         init_loupas(&mesLoupas[3], 2368, 576);
         init_loupas(&mesLoupas[4], 3072, 1056);
 
+        // -- Thwomps --
         init_thwomp(&thwomps[0], 8960, 672);
         init_thwomp(&thwomps[1], 9120, 672);
         init_thwomp(&thwomps[2], 9250, 672);
@@ -71,6 +84,7 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
         init_thwomp(&thwomps[6], 9728, 672);
         init_thwomp(&thwomps[7], 9888, 672);
 
+        // -- Podoboos --
         init_podoboo(&mesPodoboo[0], 7296, 1088, 800);
         init_podoboo(&mesPodoboo[1], 7488, 1088, 800);
         init_podoboo(&mesPodoboo[2], 7648, 1088, 800);
@@ -83,10 +97,12 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
         init_podoboo(&mesPodoboo[9], 8256, 1088, 800);
         init_podoboo(&mesPodoboo[10], 8320, 1088, 800);
 
+        // -- Coquilas --
         init_coquilas(&mesCoquilas[0], 5896, 650);
         init_coquilas(&mesCoquilas[1], 4416, 608);
         init_coquilas(&mesCoquilas[2], 6272, 960);
 
+        // -- Jean-Claude --
         init_jc(&jc[0], 10600, 900);
         init_jc(&jc[1], 10700, 450);
         init_jc(&jc[2], 11500, 750);
@@ -101,42 +117,32 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
         
     }else if (levelID == 2) {
         // --- MAP 2 ---
-        if (total_reset){
-            p->lives = 3;
-            p->checkpointX = 20;
-            p->checkpointY = 1000;
-        }
-        if (total_reset){
-            p->lives = 3;
-            init_score(s);
-        }
-        init_player(p, p->checkpointX, p->checkpointY);
-
-        // Sauvegarder l'état des ennemis avant de les réinitialiser
-        int etatLoup[NB_LOUPAS], etatOlaf[NB_OLAF];
+        // Sauvegarder l'état pour respawn
+        int etatOlaf[NB_OLAF], etatAlien[NB_ALIENS];
         if (!total_reset) {
-            for(int i=0; i<NB_LOUPAS; i++)  etatLoup[i] = mesLoupas[i].vivant;
-            for(int i=0; i<NB_OLAF; i++)  etatOlaf[i] = mesOlaf[i].vivant;
+            for(int i=0; i<NB_OLAF; i++) etatOlaf[i] = mesOlaf[i].vivant;
+            for(int i=0; i<NB_ALIENS; i++) etatAlien[i] = mesAliens[i].vivant;
         }
 
-        // Réinitialiser les ennemis
-        init_snowman(&mesOlaf[0], 1200, 800);
-        init_snowman(&mesOlaf[1], 1500, 800);
+        // --- Olaf ---
+        int xOlaf[] = {1440, 3040, 3552, 3840, 4000, 4320, 5344, 5408, 5472, 6496};
+        int yOlaf[] = {960, 960, 1056, 1056, 1056, 1056, 576, 576, 576, 960};
+        for(int i=0; i<NB_OLAF; i++) init_snowman(&mesOlaf[i], xOlaf[i], yOlaf[i]);
 
+        // --- Aliens ---
+        int xAliens[] = {7328, 7520, 8000, 9088, 10048, 10368, 10720, 11360};
+        int yAliens[] = {960, 864, 928, 928, 1056, 1056, 864, 960};
+        for(int i=0; i<NB_ALIENS; i++) init_alien(&mesAliens[i], xAliens[i], yAliens[i]);
 
+        // --- Presses Hydrauliques ---
+        init_presse(&presses[0], 14200, 850, 0);
+        init_presse(&presses[1], 14400, 850, 200);
+        init_presse(&presses[2], 14750, 850, 400);
 
-        // On laisse mort ceux qui étaient morts avant le reset si ce n'est pas un gameover
-        if( !total_reset){
-            for(int i=0; i<NB_LOUPAS; i++)  mesLoupas[i].vivant = etatLoup[i];
-            for(int i=0; i<NB_OLAF; i++)  mesOlaf[i].vivant = etatOlaf[i];
-        }
-
-    }
-
-    // Faire réapparaître les pièces si gameover
-    if (total_reset) {
-        for (int i = 0; i < NB_PIECES; i++) {
-            pieces[i].vivant = 1;
+        //On laisse mort ceux qui étaient morts avant le reset si ce n'est pas un gameover
+        if (!total_reset) {
+            for(int i=0; i<NB_OLAF; i++) mesOlaf[i].vivant = etatOlaf[i];
+            for(int i=0; i<NB_ALIENS; i++) mesAliens[i].vivant = etatAlien[i];
         }
     }
     

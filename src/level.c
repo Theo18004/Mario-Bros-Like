@@ -44,7 +44,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
-        lvl->playerStart = (SDL_Point){ 20, 800 };
+        lvl->playerStart = (SDL_Point){ 11648, 700 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");
@@ -75,12 +75,14 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
     // --- MAP 1 ---
     if (lvl->id == 1) {
         // Coordonnées des ennemis
+        // -- Loupas --
         init_loupas(&loupas[0], 600, 1000); 
         init_loupas(&loupas[1], 1184, 768);
         init_loupas(&loupas[2], 1920, 576); 
         init_loupas(&loupas[3], 2368, 576);
         init_loupas(&loupas[4], 3072, 1056);
 
+        // -- Thwomps --
         init_thwomp(&thwomps[0], 8960, 672);
         init_thwomp(&thwomps[1], 9120, 672);
         init_thwomp(&thwomps[2], 9250, 672);  
@@ -90,6 +92,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_thwomp(&thwomps[6], 9728, 672); 
         init_thwomp(&thwomps[7], 9888, 672);
 
+        // -- Podoboos --
         init_podoboo(&podoboo[0], 7296, 1088, 800); 
         init_podoboo(&podoboo[1], 7488, 1088, 800);
         init_podoboo(&podoboo[2], 7648, 1088, 800);
@@ -102,15 +105,18 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_podoboo(&podoboo[9], 8256, 1088, 800);
         init_podoboo(&podoboo[10], 8320, 1088, 800);
 
+        // -- Coquilas --
         init_coquilas(&coquilas[0], 5896, 650);
         init_coquilas(&coquilas[1], 4416, 608);
         init_coquilas(&coquilas[2], 6272, 960);
 
+        // -- Jean-Claude --
         init_jc(&jc[0], 10600, 928);
         init_jc(&jc[1], 10700, 450);
         init_jc(&jc[2], 11500, 750);
         init_jc(&jc[3], 13000, 928);
         
+        // -- Drapeau fin --
         init_flag(flag, 15008, 747);
 
         // Coordonnées des pièces
@@ -127,20 +133,47 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
 
     // --- MAP 2 --- 
     else if(lvl->id == 2) {
+        // Drapeau fin
         init_flag(flag, 20000, 1000);
-        init_snowman(&olaf[0], 1200, 800);
-        init_snowman(&olaf[1], 1500, 800);
 
-        init_alien(&mesAliens[0], 500, 800);
-        init_alien(&mesAliens[1], 3500, 800);
+        // -- Olafs --
+        init_snowman(&olaf[0], 1440, 960);
+        init_snowman(&olaf[1], 3040, 960);
+        init_snowman(&olaf[2], 3552, 1056);
+        init_snowman(&olaf[3], 3840, 1056);
+        init_snowman(&olaf[4], 4000, 1056);
+        init_snowman(&olaf[5], 4320, 1056);
+        init_snowman(&olaf[6], 5344, 576);
+        init_snowman(&olaf[7], 5408, 576);
+        init_snowman(&olaf[8], 5472, 576);
+        init_snowman(&olaf[9], 6496, 960);
 
-        init_presse(&presse[0], 10200, 850, 0);
-        init_presse(&presse[1], 10400, 850, 200);
-        init_presse(&presse[2], 10750, 850, 400);
+        // -- Aliens --
+        init_alien(&mesAliens[0], 7328, 960);
+        init_alien(&mesAliens[1], 7520, 864);
+        init_alien(&mesAliens[2], 8000, 928);
+        init_alien(&mesAliens[3], 9088, 928);
+        init_alien(&mesAliens[4], 10048, 1056);
+        init_alien(&mesAliens[5], 10368, 1056);
+        init_alien(&mesAliens[6], 10720, 864);
+        init_alien(&mesAliens[7], 11360, 960);
 
-        checkpoints[0].rect = (SDL_Rect){ 4800, 950, 64, 64 };
+        // -- Presses --
+        init_presse(&presse[0], 14200, 850, 0);
+        init_presse(&presse[1], 14400, 850, 200);
+        init_presse(&presse[2], 14750, 850, 400);
+
+        // Coordonnées des pièces
+        for (int i = 0; i < NB_PIECES; i++) { pieces[i].rect.w = 32; pieces[i].rect.h = 32; pieces[i].vivant = 1; }
+        pieces[0].rect.x = 5408; pieces[0].rect.y = 544;
+        pieces[1].rect.x = 5536; pieces[1].rect.y = 896;
+        pieces[2].rect.x = 40352; pieces[2].rect.y = 576;
+        pieces[3].rect.x = 11585; pieces[3].rect.y = 640;
+
+        // Checkpoints
+        checkpoints[0].rect = (SDL_Rect){ 6720, 928, 64, 64 };
         checkpoints[0].actif = 0;
-        checkpoints[1].rect = (SDL_Rect){ 9600, 950, 64, 64 };
+        checkpoints[1].rect = (SDL_Rect){ 11648, 896, 64, 64 };
         checkpoints[1].actif = 0;
     }
 }
@@ -199,7 +232,7 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
     else if(lvl->id == 2) {
         // --- HIVER ---
         int startWinterX = 0 * 32; 
-        int endWinterX = 150 * 32;
+        int endWinterX = 210 * 32;
         SDL_Rect clipWinter = { startWinterX - cameraX, 0, endWinterX - startWinterX, screenH };
         if (clipWinter.x < 0) { clipWinter.w += clipWinter.x; clipWinter.x = 0; } // Sécurité clipping
 
@@ -209,8 +242,8 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
         SDL_RenderSetClipRect(renderer, NULL);
 
         // --- LUNE ---
-        int startMoonX = 150 * 32; 
-        int endMoonX = 300 * 32; 
+        int startMoonX = 210 * 32; 
+        int endMoonX = 364 * 32; 
         SDL_Rect clipMoon = { startMoonX - cameraX, 0, endMoonX - startMoonX, screenH };
         
         if (clipMoon.x < 0) { clipMoon.w += clipMoon.x; clipMoon.x = 0; }
@@ -225,7 +258,7 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
             SDL_RenderSetClipRect(renderer, NULL);
         }
         // --- VILLE ---
-        int startVilleX = 300 * 32;
+        int startVilleX = 364 * 32;
         int endVilleX = MAP_WIDTH * 32;
         SDL_Rect clipVille = { startVilleX - cameraX, 0, endVilleX - startVilleX, screenH };
         if (clipVille.x < 0) { clipVille.w += clipVille.x; clipVille.x = 0; }

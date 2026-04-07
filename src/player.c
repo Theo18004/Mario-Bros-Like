@@ -49,7 +49,7 @@ void update_player(Player* p, const Uint8* keys, int* map, int levelID) {
 
     // --- 2. Adaptation selon le BIOME (Lune) ---
     int currentTileX = p->rect.x / (TILE_SIZE * MAP_SCALE); 
-    if (levelID == 2 && currentTileX >= 150 && currentTileX < 300) {
+    if (levelID == 2 && currentTileX >= 211 && currentTileX < 363) {
         gravity = 0.3f;  // gravité faible ( apesanteur )
     }
 

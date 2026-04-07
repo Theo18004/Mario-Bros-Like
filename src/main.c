@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texCoquilas = IMG_LoadTexture(renderer, "assets/Ennemi/coquilas_noir.png");
     SDL_Texture* texJeanClaude = IMG_LoadTexture(renderer, "assets/Ennemi/jean-claude.png");
     SDL_Texture* texOlaf = IMG_LoadTexture(renderer, "assets/Ennemi/olaf.png");
-    SDL_Texture* texAlien = IMG_LoadTexture(renderer, "assets/Ennemi/alien.png");
+    SDL_Texture* texAlien = IMG_LoadTexture(renderer, "assets/Ennemi/aliens.png");
     SDL_Texture* texPresse = IMG_LoadTexture(renderer, "assets/Ennemi/presse.png");
 
     // Textures Items & HUD
@@ -257,7 +257,7 @@ int main(int argc, char* argv[]) {
                             Mix_HaltMusic(); 
                             if (idMap == 1 && musiqueSurface) Mix_PlayMusic(musiqueSurface, -1);
                             else if (idMap == 2 && musiqueDonjon) Mix_PlayMusic(musiqueDonjon, -1);
-                            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPieces, &score, &camera, 1, lvl->id);
+                            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, mesPieces, &score, &camera, 1, lvl->id);
                             for (int i = 0; i < NB_CHECKPOINTS; i++) mesCheckpoints[i].actif = 0;
                             startTime = SDL_GetTicks();
                             tempsRestant = tempsMax;
@@ -297,7 +297,7 @@ int main(int argc, char* argv[]) {
                     if (temps_sauvegarde <= 0) temps_sauvegarde = tempsMax; 
 
                     gerer_mort_joueur(&player, lvl->playerStart.x, lvl->playerStart.y, &score);
-                    reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPieces, &score, &camera, 0, lvl->id);
+                    reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, mesPieces, &score, &camera, 0, lvl->id);
                     startTime = SDL_GetTicks() - ((tempsMax - temps_sauvegarde) * 1000);
                     tempsRestant = temps_sauvegarde;
                 }
@@ -459,7 +459,7 @@ int main(int argc, char* argv[]) {
             for(int i=0; i<NB_OLAF; i++) render_snowman(renderer, &mesOlaf[i], camera.x, camera.y, texOlaf);
             for(int i=0; i<NB_ALIENS; i++) render_alien(renderer, &mesAliens[i], camera.x, camera.y, texAlien);
             for (int i = 0; i < NB_PRESSES; i++) {render_presse(renderer, &mesPresses[i], camera.x, camera.y, texPresse);}
-            if (hitboxes) render_debug_hitboxes(renderer, &player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPresses, &monDrapeau, camera.x, camera.y);
+            if (hitboxes) render_debug_hitboxes(renderer, &player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, &monDrapeau, camera.x, camera.y);
 
             render_score(renderer, font, &score);
             render_lives(renderer, texVies, player.lives);
@@ -484,7 +484,7 @@ int main(int argc, char* argv[]) {
                 Mix_HaltMusic(); // Arrête la musique sur l'écran Game Over
                 int action = gameover(renderer, font, &player, score_affichage_fin, meilleur_score);
                 if (action == 1) {
-                    reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPieces, &score, &camera, 1, lvl->id);
+                    reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, mesPieces, &score, &camera, 1, lvl->id);
                     for (int i = 0; i < NB_CHECKPOINTS; i++) mesCheckpoints[i].actif = 0;
                     startTime = SDL_GetTicks(); tempsRestant = tempsMax;
                     

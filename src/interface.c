@@ -273,7 +273,7 @@ int victory_screen(SDL_Renderer* renderer, TTF_Font* font, Player* player, Score
 
 void render_debug_hitboxes(SDL_Renderer* renderer, Player* player, 
                            Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, 
-                           Coquilas* coquilas, Ennemi* jc, Ennemi* olaf,Presse* presses, Flag* drapeau, 
+                           Coquilas* coquilas, Ennemi* jc, Ennemi* olaf, Ennemi* aliens, Presse* presses, Flag* drapeau, 
                            int camX, int camY) {
                            
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -364,7 +364,16 @@ void render_debug_hitboxes(SDL_Renderer* renderer, Player* player,
     }
 
     // 9. Alien 
-
+    for (int i = 0; i < NB_ALIENS; i++) {
+        if (aliens[i].vivant) {
+            SDL_SetRenderDrawColor(renderer, 0, 128, 0, 128);
+            SDL_Rect r = { aliens[i].rect.x - camX, aliens[i].rect.y - camY, aliens[i].rect.w, aliens[i].rect.h };
+            SDL_RenderFillRect(renderer, &r);
+            SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
+            SDL_RenderDrawRect(renderer, &r);
+        }
+    }
+    
     // 10. Drapeau (Mât)
     SDL_SetRenderDrawColor(renderer, 255, 0, 255, 128);
     SDL_Rect rMat = { drapeau->matRect.x - camX, drapeau->matRect.y - camY, drapeau->matRect.w, drapeau->matRect.h };

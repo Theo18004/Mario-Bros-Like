@@ -120,7 +120,7 @@ void update_thwomp(Thwomp* t, Player* p, int* map, int levelID) {
                 if (p->rect.y > t->rect.y) {
                     t->state = THWOMP_FALLING;
                     if(sonThwomp != NULL) {
-                        Mix_PlayChannel(-1, sonThwomp, 0);
+                        Mix_PlayChannel(1, sonThwomp, 0);
                     }
                     t->velY = 0;
                 }
@@ -228,7 +228,7 @@ void update_podoboo(Podoboo* p, Camera * cam) {
 
         if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
             if (bouleFeu != NULL) {
-                Mix_PlayChannel(-1, bouleFeu, 0);
+                Mix_PlayChannel(2, bouleFeu, 0);
             }
         }
     }
@@ -238,7 +238,7 @@ void update_podoboo(Podoboo* p, Camera * cam) {
 
         if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
             if (bouleFeu != NULL) {
-                Mix_PlayChannel(-1, bouleFeu, 0);
+                Mix_PlayChannel(2, bouleFeu, 0);
             }
         }
     }

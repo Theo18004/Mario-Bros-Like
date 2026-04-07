@@ -120,7 +120,7 @@ void update_thwomp(Thwomp* t, Player* p, int* map, int levelID) {
                 if (p->rect.y > t->rect.y) {
                     t->state = THWOMP_FALLING;
                     if(sonThwomp != NULL) {
-                        Mix_PlayChannel(1, sonThwomp, 0);
+                        Mix_PlayChannel(-1, sonThwomp, 0);
                     }
                     t->velY = 0;
                 }
@@ -228,7 +228,7 @@ void update_podoboo(Podoboo* p, Camera * cam) {
 
         if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
             if (bouleFeu != NULL) {
-                Mix_PlayChannel(2, bouleFeu, 0);
+                Mix_PlayChannel(-1, bouleFeu, 0);
             }
         }
     }
@@ -238,7 +238,7 @@ void update_podoboo(Podoboo* p, Camera * cam) {
 
         if(p->rect.x >= cam->x - 50 && p->rect.x <= cam->x + cam->w + 50) {
             if (bouleFeu != NULL) {
-                Mix_PlayChannel(2, bouleFeu, 0);
+                Mix_PlayChannel(-1, bouleFeu, 0);
             }
         }
     }
@@ -552,4 +552,58 @@ void render_presse(SDL_Renderer* renderer, Presse* p, int camX, int camY, SDL_Te
     };
 
     SDL_RenderCopy(renderer, tex, &src, &dest);
+}
+
+//==============================================================
+//==========================Alien===============================
+//==============================================================
+
+void init_alien(Ennemi* a, int x, int y) {
+    a->rect.x = x; 
+    a->rect.y = y;
+    a->rect.w = 40; 
+    a->rect.h = 28; 
+    a->velY = 0.0f; 
+    a->speed = 2.0f; 
+    a->direction = -1; 
+    a->onGround = 0;
+    a->state = STATE_RUN; 
+    a->vivant = 1;
+}
+
+void update_alien(Ennemi* a, int* map, int levelID) {
+    update_loupas(a, map, levelID); 
+}
+
+void render_alien(SDL_Renderer* renderer, Ennemi* a, int scrollX, int scrollY, 
+                   SDL_Texture* texAlien) {
+    if (!a->vivant || !texAlien) return;
+
+    int nbFrames = 5;      
+    int frameW = 64;        
+    int frameH = 32;        
+    int startX = 320;       
+    int startY = 128;       
+
+    int currentFrame = (SDL_GetTicks() / 200) % nbFrames;
+
+
+    SDL_Rect src = { startX + (currentFrame * frameW), startY, frameW, frameH };
+    
+    int displayW = 56; 
+    int displayH = 30; 
+
+    int offsetX = (a->rect.w - displayW) / 2;
+    int offsetY = a->rect.h - displayH; 
+
+    SDL_Rect dest = {
+        a->rect.x - scrollX + offsetX,
+        a->rect.y - scrollY + offsetY,
+        displayW,
+        displayH 
+    };
+
+    SDL_RendererFlip flip = (a->direction < 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+    SDL_RenderCopyEx(renderer, texAlien, &src, &dest, 0, NULL, flip);
 }

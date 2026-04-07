@@ -45,10 +45,12 @@ typedef struct {
     SDL_Rect srcPauseIcon;
     SDL_Rect srcPlay;
     SDL_Rect srcRestart;
+    SDL_Rect srcParam;
     SDL_Rect srcHome;
     SDL_Rect dstPausePos;
     SDL_Rect dstPlay;
     SDL_Rect dstRestart;
+    SDL_Rect dstParam;
     SDL_Rect dstHome;
 } PauseMenu;
 

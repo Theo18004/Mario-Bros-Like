@@ -88,6 +88,7 @@ typedef struct Presse {
 #define NB_THWOMPS 8
 #define NB_OLAF 2
 #define NB_PRESSES 3
+#define NB_ALIENS 2
 
 void init_loupas(Ennemi* e, int x, int y);
 void update_loupas(Ennemi* e, int* map, int levelID);
@@ -128,5 +129,9 @@ void render_snowman(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY,
 void init_presse(Presse* p, int x, int y, Uint32 offset);
 void update_presse(Presse* p);
 void render_presse(SDL_Renderer* renderer, Presse* p, int camX, int camY, SDL_Texture* tex);
+
+void init_alien(Ennemi* a, int x, int y);
+void update_alien(Ennemi* a, int* map, int levelID);
+void render_alien(SDL_Renderer* renderer, Ennemi* a, int scrollX, int scrollY, SDL_Texture* texAlien);
 
 #endif

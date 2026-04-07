@@ -86,9 +86,9 @@ typedef struct Presse {
 #define NB_JEAN_CLAUDE 4
 #define NB_LOUPAS 5
 #define NB_THWOMPS 8
-#define NB_OLAF 2
+#define NB_OLAF 10  
 #define NB_PRESSES 3
-#define NB_ALIENS 2
+#define NB_ALIENS 8
 
 void init_loupas(Ennemi* e, int x, int y);
 void update_loupas(Ennemi* e, int* map, int levelID);

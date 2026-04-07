@@ -81,7 +81,7 @@ void render_timer(SDL_Renderer* renderer, TTF_Font* font, int tempsRestant);
 
 void render_debug_hitboxes(SDL_Renderer* renderer, Player* player, 
                            Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, 
-                           Coquilas* coquilas, Ennemi* jc, Ennemi* olaf,Presse* presses, Flag* drapeau, 
+                           Coquilas* coquilas, Ennemi* jc, Ennemi* olaf, Ennemi* aliens, Presse* presses, Flag* drapeau, 
                            int camX, int camY) ;
 
 /**

@@ -379,34 +379,42 @@ void render_debug_hitboxes(SDL_Renderer* renderer, Player* player,
 void init_pause_menu(PauseMenu* pm, SDL_Texture* texIcons, int logicalW, int logicalH) {
     pm->texIcons = texIcons;
 
-    // Découpage automatique sur la grille de bouton.png
     if (texIcons) {
         int texW = 0, texH = 0;
         SDL_QueryTexture(texIcons, NULL, NULL, &texW, &texH);
         int srcBtnW = texW / 12; 
         int srcBtnH = texH / 4;  
 
-        pm->srcPauseIcon = (SDL_Rect){5 * srcBtnW, 2 * srcBtnH, srcBtnW, srcBtnH}; // Engrenage
+        pm->srcPauseIcon = (SDL_Rect){5 * srcBtnW, 2 * srcBtnH, srcBtnW, srcBtnH}; // Engrenage HUD
         pm->srcPlay      = (SDL_Rect){4 * srcBtnW, 2 * srcBtnH, srcBtnW, srcBtnH}; // Jouer
         pm->srcRestart   = (SDL_Rect){2 * srcBtnW, 3 * srcBtnH, srcBtnW, srcBtnH}; // Recommencer
+        pm->srcParam     = (SDL_Rect){7 * srcBtnW, 2 * srcBtnH, srcBtnW, srcBtnH}; // Bouton Paramètres (Engrenage)
         pm->srcHome      = (SDL_Rect){6 * srcBtnW, 3 * srcBtnH, srcBtnW, srcBtnH}; // Accueil
     } else {
         pm->srcPauseIcon = (SDL_Rect){0, 0, 0, 0};
         pm->srcPlay      = (SDL_Rect){0, 0, 0, 0};
         pm->srcRestart   = (SDL_Rect){0, 0, 0, 0};
+        pm->srcParam     = (SDL_Rect){0, 0, 0, 0};
         pm->srcHome      = (SDL_Rect){0, 0, 0, 0};
     }
 
     int btnSize = 100;
-    pm->dstPlay    = (SDL_Rect){ logicalW / 2 - 180, logicalH / 2 - 62, btnSize, btnSize }; 
-    pm->dstRestart = (SDL_Rect){ logicalW / 2 - 50, logicalH / 2 - 50, btnSize, btnSize };
-    pm->dstHome    = (SDL_Rect){ logicalW / 2 + 80, logicalH / 2 - 50, btnSize, btnSize };
-    pm->dstPausePos = (SDL_Rect){ logicalW - 80, 5, 50, 50 };
+    int spacing = 20; // Espace entre les boutons
+    // Calcul pour centrer les 4 boutons parfaitement
+    int totalWidth = (4 * btnSize) + (3 * spacing);
+    int startX = (logicalW / 2) - (totalWidth / 2);
+
+    pm->dstPlay    = (SDL_Rect){ startX, logicalH / 2 - 62, btnSize, btnSize }; 
+    pm->dstRestart = (SDL_Rect){ startX + (btnSize + spacing), logicalH / 2 - 50, btnSize, btnSize };
+    pm->dstParam   = (SDL_Rect){ startX + 2 * (btnSize + spacing), logicalH / 2 - 62, btnSize, btnSize };
+    pm->dstHome    = (SDL_Rect){ startX + 3 * (btnSize + spacing), logicalH / 2 - 50, btnSize, btnSize };
+    
+    pm->dstPausePos = (SDL_Rect){ logicalW - 80, 5, 50, 50 }; // Engrenage HUD
 }
 
 void render_pause_menu(SDL_Renderer* renderer, PauseMenu* pm, int enPause, int logicalW, int logicalH) {
     if (!enPause) {
-        // En jeu normal : on dessine juste l'engrenage dans le HUD
+        // on dessine juste l'engrenage dans le HUD
         if (pm->texIcons) {
             SDL_RenderCopy(renderer, pm->texIcons, &pm->srcPauseIcon, &pm->dstPausePos);
         }
@@ -417,10 +425,11 @@ void render_pause_menu(SDL_Renderer* renderer, PauseMenu* pm, int enPause, int l
         SDL_Rect full = {0, 0, logicalW, logicalH};
         SDL_RenderFillRect(renderer, &full);
 
-        // Boutons du menu
+        // Boutons du menu (Maintenant avec Paramètres !)
         if (pm->texIcons) {
             SDL_RenderCopy(renderer, pm->texIcons, &pm->srcPlay, &pm->dstPlay);
             SDL_RenderCopy(renderer, pm->texIcons, &pm->srcRestart, &pm->dstRestart);
+            SDL_RenderCopy(renderer, pm->texIcons, &pm->srcParam, &pm->dstParam);
             SDL_RenderCopy(renderer, pm->texIcons, &pm->srcHome, &pm->dstHome);
         }
     }

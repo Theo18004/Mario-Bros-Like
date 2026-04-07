@@ -32,7 +32,6 @@ Mix_Chunk * bouleFeu = NULL;
 Mix_Chunk * coin = NULL;
 Mix_Chunk * sonThwomp = NULL;
 Mix_Chunk * sonJC = NULL;
-Mix_Chunk * sonEcrasement = NULL;
 Mix_Music * musiqueMenu = NULL;
 Mix_Music * musiqueSurface = NULL;
 Mix_Music * musiqueDonjon = NULL;
@@ -57,10 +56,6 @@ int main(int argc, char* argv[]) {
     }
     Mix_AllocateChannels(32);
     Mix_ReserveChannels(1);
-    Mix_ReserveChannels(2);
-    Mix_ReserveChannels(3);
-    Mix_ReserveChannels(4);
-    Mix_ReserveChannels(5);
 
     SDL_Window* window = SDL_CreateWindow("Mario-Bros-Like",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -118,8 +113,7 @@ int main(int argc, char* argv[]) {
     bouleFeu = Mix_LoadWAV("assets/son/BouleFeu.wav");
     coin = Mix_LoadWAV("assets/son/coin.wav");
     sonThwomp = Mix_LoadWAV("assets/son/sonThowp.wav");
-    sonJC = Mix_LoadWAV("assets/son/sonJP.wav");
-    sonEcrasement = Mix_LoadWAV("assets/son/sonEcrasement.wav");
+    sonJC = Mix_LoadWAV("assets/son/sonJC.wav");
     
     // Audio - Musiques 
     musiqueMenu = Mix_LoadMUS("assets/music/Sunrise_at_the_Peak.wav");
@@ -187,7 +181,7 @@ int main(int argc, char* argv[]) {
 
         // 5. Initialisation des objets du niveau
         Player player;
-        init_player(&player, 10200, lvl->playerStart.y);
+        init_player(&player, lvl->playerStart.x, lvl->playerStart.y);
         player.lives = 3;
 
         Ennemi mesLoupas[NB_LOUPAS];
@@ -250,6 +244,7 @@ int main(int argc, char* argv[]) {
                             Mix_PauseMusic();
                         }
                     } else {
+                        // Clics dans le menu pause
                         if (SDL_PointInRect(&p, &menuPause.dstPlay)) {
                             enPause = 0; 
                             Mix_ResumeMusic();
@@ -264,6 +259,12 @@ int main(int argc, char* argv[]) {
                             for (int i = 0; i < NB_CHECKPOINTS; i++) mesCheckpoints[i].actif = 0;
                             startTime = SDL_GetTicks();
                             tempsRestant = tempsMax;
+                        }
+                        // Clic sur le bouton Paramètres ---
+                        if (SDL_PointInRect(&p, &menuPause.dstParam)) {
+                            SDL_RenderSetLogicalSize(renderer, 0, 0); 
+                            afficher_parametres(renderer, physicalW, physicalH, font, NULL); 
+                            SDL_RenderSetLogicalSize(renderer, logicalW, logicalH);
                         }
                         if (SDL_PointInRect(&p, &menuPause.dstHome)) { 
                             Mix_HaltMusic(); 
@@ -354,7 +355,7 @@ int main(int argc, char* argv[]) {
                     if (player.state != STATE_DEAD && jc[i].vivant && SDL_HasIntersection(&player.rect, &jc[i].rect)) {
                         if (player.velY > 0 && (player.rect.y + player.rect.h) < (jc[i].rect.y + 30)) {
                             jc[i].vivant = 0; player.velY = -12.0f;
-                            if(sonJC != NULL) Mix_PlayChannel(3, sonJC, 0);
+                            if(sonJC != NULL) Mix_PlayChannel(-1, sonJC, 0);
                         } else { player.state = STATE_DEAD; player.velY = -10.0f; }
                     }
                 }
@@ -364,7 +365,6 @@ int main(int argc, char* argv[]) {
                     if (player.state != STATE_DEAD && mesOlaf[i].vivant && SDL_HasIntersection(&player.rect, &mesOlaf[i].rect)) {
                         if (player.velY > 0 && (player.rect.y + player.rect.h) < (mesOlaf[i].rect.y + 20)) {
                             mesOlaf[i].vivant = 0; player.velY = -10.0f; score.bonus += 150;
-                            Mix_PlayChannel(4, sonEcrasement, 0);
                         } else { player.state = STATE_DEAD; player.velY = -10.0f; }
                     }
                 }
@@ -374,6 +374,7 @@ int main(int argc, char* argv[]) {
                     if (player.state != STATE_DEAD && SDL_HasIntersection(&player.rect, &mesPresses[i].extensionRect)) {
                         player.state = STATE_DEAD;
                         player.velY = -10.0f; 
+                        // Mix_PlayChannel(-1, sonEcrasement, 0);
                     }
                 }
 

@@ -31,7 +31,7 @@ https://pzuh.itch.io/free-desert-platformer-tileset
 
 
 * Loup
-
+https://opengameart.org/content/lpc-wolf-animation
 
 
 
@@ -47,13 +47,13 @@ https://mario.fandom.com/fr/wiki/Bulle_de_lave?file=SMRBulleDeLave.png
 
 
 * thwomp
-
+https://www.deviantart.com/t3hteeks/art/Thwomp-Sprite-Sheet-194130365
 
 
 
 
 * jc
-
+https://opengameart.org/content/mummies
 
 
 

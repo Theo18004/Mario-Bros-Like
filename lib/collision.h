@@ -27,6 +27,9 @@ int is_slope_up_right(int tile_id, int levelID);
 /** @brief Vérifie si une tuile est une pente montante vers la gauche. */
 int is_slope_up_left(int tile_id, int levelID);
 
+/** @brief Vérifie si le joueur est sur un bloc de glace. */
+
+int check_on_ice(SDL_Rect rect, int* map, int levelID);
 /** @brief Calcule la hauteur exacte sur une pente. */
 int get_slope(int worldX, int tileX, int tileY, int tile_id, int levelID);
 

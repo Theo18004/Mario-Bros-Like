@@ -27,6 +27,7 @@ typedef enum {
 typedef struct Player{
     SDL_Rect rect;      /**< Hitbox et position */
     float velY;         /**< Vélocité verticale */
+    float velX;         /**< Vélocité horizontale */
     int facingRight;    /**< Orientation du regard */
     int onGround;       /**< Est au sol ? */
     int lives;          /**< Nombre de vies restantes */

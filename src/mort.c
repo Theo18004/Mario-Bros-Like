@@ -120,8 +120,6 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
         }
 
         // Réinitialiser les ennemis
-        init_loupas(&mesLoupas[0], 600, 1000);
-
         init_snowman(&mesOlaf[0], 1200, 800);
         init_snowman(&mesOlaf[1], 1500, 800);
 
@@ -132,22 +130,6 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
             for(int i=0; i<NB_LOUPAS; i++)  mesLoupas[i].vivant = etatLoup[i];
             for(int i=0; i<NB_OLAF; i++)  mesOlaf[i].vivant = etatOlaf[i];
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 

@@ -416,7 +416,7 @@ MenuResult afficher_selection_map(SDL_Renderer* renderer, int width, int height,
     return result;
 }
 
-MenuResult afficher_pause(SDL_Renderer* renderer, int width, int height, TTF_Font* font, SDL_Texture* texBoutons) {
+MenuResult afficher_pause(SDL_Renderer* renderer, int width, int height, SDL_Texture* texBoutons) {
     int pauseRunning = 1;
     MenuResult result = MENU_PLAY; // Par défaut, on continue
     SDL_Event e;

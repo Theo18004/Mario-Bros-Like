@@ -44,7 +44,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
-        lvl->playerStart = (SDL_Point){ 4200, 800 };
+        lvl->playerStart = (SDL_Point){ 20, 800 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");
@@ -60,13 +60,14 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
     return lvl;
 }
 
-void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, Coquilas* coquilas, Ennemi* jc, Ennemi* olaf, Piece* pieces, Checkpoint* checkpoints, Flag* flag) {
+void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, Coquilas* coquilas, Ennemi* jc, Ennemi* olaf,Presse* presse, Piece* pieces, Checkpoint* checkpoints, Flag* flag) {
     for (int i = 0; i < NB_LOUPAS; i++) loupas[i].vivant = 0;
     for (int i = 0; i < NB_THWOMPS; i++) thwomps[i].vivant = 0;
     for (int i = 0; i < NB_PODOBOO; i++) podoboo[i].vivant = 0;
     for (int i = 0; i < NB_COQUILAS; i++) coquilas[i].vivant = 0;
     for (int i = 0; i < NB_JEAN_CLAUDE; i++) jc[i].vivant = 0;
     for (int i = 0; i < NB_OLAF; i++) olaf[i].vivant = 0;   
+    for (int i = 0; i < NB_PRESSES; i++) presse[i].vivant = 0;
     for (int i = 0; i < NB_PIECES; i++) pieces[i].vivant = 1;
     for (int i = 0; i < NB_CHECKPOINTS; i++) checkpoints[i].actif = 0;
 
@@ -125,11 +126,13 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
 
     // --- MAP 2 --- 
     else if(lvl->id == 2) {
-        init_loupas(&loupas[0], 600, 1000);
         init_flag(flag, 20000, 1000);
-
         init_snowman(&olaf[0], 1200, 800);
         init_snowman(&olaf[1], 1500, 800);
+
+        init_presse(&presse[0], 10200, 850, 0);
+        init_presse(&presse[1], 10400, 850, 200);
+        init_presse(&presse[2], 10750, 850, 400);
 
         checkpoints[0].rect = (SDL_Rect){ 4800, 950, 64, 64 };
         checkpoints[0].actif = 0;

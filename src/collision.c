@@ -132,6 +132,27 @@ int demi_plate(SDL_Rect rect, int* map, int levelID) {
     return 0; 
 }
 
+int is_ice(int tile_id, int levelID) {
+    if (levelID == 2) {
+        if (tile_id == 402) return 1; 
+    }
+    return 0;
+}
+
+int check_on_ice(SDL_Rect rect, int* map, int levelID) {
+    int scaled_tile = TILE_SIZE * MAP_SCALE;
+    int x1 = rect.x / scaled_tile;
+    int x2 = (rect.x + rect.w - 1) / scaled_tile;
+    int y = (rect.y + rect.h + 1) / scaled_tile;
+
+    if (y >= 0 && y < MAP_HEIGHT && x1 >= 0 && x2 < MAP_WIDTH) {
+        int t1 = map[y * MAP_WIDTH + x1];
+        int t2 = map[y * MAP_WIDTH + x2];
+        return (is_ice(t1, levelID) || is_ice(t2, levelID));
+    }
+    return 0;
+}
+
 int check_collision(SDL_Rect rect, int* map, int check_demi, int levelID) {
     int scaled_tile = TILE_SIZE * MAP_SCALE;
     int left_tile   = rect.x / scaled_tile;

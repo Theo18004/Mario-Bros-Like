@@ -120,6 +120,7 @@ int gameover(SDL_Renderer* renderer, TTF_Font* font, Player* player, int score_a
 
         int gameOverScreen = 1;
         int action = 0; // 0 = Quitter, 1 = Rejouer
+        if(sonDefaite != NULL) Mix_PlayChannel(-1, sonDefaite, 0);
 
         while (gameOverScreen) {
             SDL_Event e;

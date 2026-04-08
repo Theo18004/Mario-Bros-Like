@@ -120,7 +120,7 @@ void update_thwomp(Thwomp* t, Player* p, int* map, int levelID) {
                 if (p->rect.y > t->rect.y) {
                     t->state = THWOMP_FALLING;
                     if(sonThwomp != NULL) {
-                        Mix_PlayChannel(-1, sonThwomp, 0);
+                        Mix_PlayChannel(1, sonThwomp, 0);
                     }
                     t->velY = 0;
                 }

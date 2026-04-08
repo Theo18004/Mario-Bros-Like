@@ -3,6 +3,7 @@
  * @brief Gestion de la machine à état de mort du joueur.
  */
 #include "mort.h"
+#include "defs.h"
 #include "ennemi.h"
 
 int verifier_conditions_mort(Player* p, int mapPixelHeight){
@@ -10,7 +11,10 @@ int verifier_conditions_mort(Player* p, int mapPixelHeight){
     if (p->state == STATE_DEAD){
        int limiteSolChute = mapPixelHeight - 65;
        if (p->rect.y >= limiteSolChute) {
-            if (momentImpactSol == 0) momentImpactSol = SDL_GetTicks();
+            if (momentImpactSol == 0){ 
+                momentImpactSol = SDL_GetTicks(); 
+                if(sonMortJoueur != NULL) Mix_PlayChannel(-1, sonMortJoueur, 0);
+            }
             if (SDL_GetTicks() - momentImpactSol > 1000) { momentImpactSol = 0; return 1; }
         }
         return 0;

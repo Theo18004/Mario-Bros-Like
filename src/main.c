@@ -35,6 +35,8 @@ Mix_Chunk * sonJC = NULL;
 Mix_Chunk * sonEcrasement = NULL;
 Mix_Chunk * sonAlien = NULL;
 Mix_Chunk * sonLoup = NULL;
+Mix_Chunk * sonMortJoueur = NULL;
+Mix_Chunk * sonDefaite = NULL;
 Mix_Music * musiqueMenu = NULL;
 Mix_Music * musiqueSurface = NULL;
 Mix_Music * musiqueDonjon = NULL;
@@ -121,13 +123,16 @@ int main(int argc, char* argv[]) {
     sonThwomp = Mix_LoadWAV("assets/son/sonThowp.wav");
     sonJC = Mix_LoadWAV("assets/son/sonJP.wav");
     sonEcrasement = Mix_LoadWAV("assets/son/sonEcrasement.wav");
-    sonAlien = Mix_LoadWAV("assets/son/sonAlien.wav");
-    sonLoup = Mix_LoadWAV("assets/son/sonLoup.wav");
+    sonAlien = Mix_LoadWAV("assets/son/son_mort_alien.wav");
+    sonLoup = Mix_LoadWAV("assets/son/son_loup_mort.wav");
+    sonMortJoueur = Mix_LoadWAV("assets/son/son_mort.wav");
+    sonDefaite = Mix_LoadWAV("assets/son/son_defaite.wav");
     
     // Audio - Musiques 
     musiqueMenu = Mix_LoadMUS("assets/music/Sunrise_at_the_Peak.wav");
     musiqueSurface = Mix_LoadMUS("assets/music/Above_the_Floating_Isles.wav");
     musiqueDonjon = Mix_LoadMUS("assets/music/Across_the_Green_Ridge.wav");
+    
 
     // Appliquer le volume (bruitages ET musiques)
     Mix_Volume(-1, (volume * 128) / 100);
@@ -302,7 +307,7 @@ int main(int argc, char* argv[]) {
                 // 2. Gestion Mort
                 if (verifier_conditions_mort(&player, lvl->mapPixelHeight)) {
                     int temps_sauvegarde = tempsRestant;
-                    if (temps_sauvegarde <= 0) temps_sauvegarde = tempsMax; 
+                    if (temps_sauvegarde <= 0) temps_sauvegarde = tempsMax;
 
                     gerer_mort_joueur(&player, lvl->playerStart.x, lvl->playerStart.y, &score);
                     reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, mesPieces, &score, &camera, 0, lvl->id);
@@ -498,6 +503,7 @@ int main(int argc, char* argv[]) {
                     reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, mesPieces, &score, &camera, 1, lvl->id);
                     for (int i = 0; i < NB_CHECKPOINTS; i++) mesCheckpoints[i].actif = 0;
                     startTime = SDL_GetTicks(); tempsRestant = tempsMax;
+                    if(coin != NULL) Mix_PlayChannel(-1, coin, 0);
                     
                     // Relance la musique après un "Try Again"
                     if (idMap == 1 && musiqueSurface) Mix_PlayMusic(musiqueSurface, -1);
@@ -522,7 +528,8 @@ int main(int argc, char* argv[]) {
     // Libération Audio
     Mix_FreeChunk(sonSaut); Mix_FreeChunk(bouleFeu); Mix_FreeChunk(coin); 
     Mix_FreeChunk(sonThwomp); Mix_FreeChunk(sonJC); Mix_FreeChunk(sonEcrasement);
-    Mix_FreeChunk(sonLoup); Mix_FreeChunk(sonAlien);
+    Mix_FreeChunk(sonLoup); Mix_FreeChunk(sonAlien); Mix_FreeChunk(sonMortJoueur);
+    Mix_FreeChunk(sonDefaite);
     if (musiqueMenu) Mix_FreeMusic(musiqueMenu);
     if (musiqueSurface) Mix_FreeMusic(musiqueSurface);
     if (musiqueDonjon) Mix_FreeMusic(musiqueDonjon);

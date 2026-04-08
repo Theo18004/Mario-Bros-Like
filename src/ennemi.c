@@ -69,10 +69,7 @@ void render_loupas(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY,
     int startY = 128;       
 
     int currentFrame = (SDL_GetTicks() / 200) % nbFrames;
-
-
     SDL_Rect src = { startX + (currentFrame * frameW), startY, frameW, frameH };
-    
     int displayW = 56; 
     int displayH = 30; 
 
@@ -87,7 +84,6 @@ void render_loupas(SDL_Renderer* renderer, Ennemi* e, int scrollX, int scrollY,
     };
 
     SDL_RendererFlip flip = (e->direction < 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    
     SDL_RenderCopyEx(renderer, texEnnemi, &src, &dest, 0, NULL, flip);
 }
 
@@ -120,7 +116,7 @@ void update_thwomp(Thwomp* t, Player* p, int* map, int levelID) {
                 if (p->rect.y > t->rect.y) {
                     t->state = THWOMP_FALLING;
                     if(sonThwomp != NULL) {
-                        Mix_PlayChannel(1, sonThwomp, 0);
+                        Mix_PlayChannel(-1, sonThwomp, 0);
                     }
                     t->velY = 0;
                 }
@@ -604,4 +600,47 @@ void render_alien(SDL_Renderer* renderer, Ennemi* a, int scrollX, int scrollY, S
     SDL_RendererFlip flip = (a->direction > 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     SDL_RenderCopyEx(renderer, texAlien, &src, &dest, 0, NULL, flip);
+}
+
+
+//==============================================================
+//===========================Harv===============================
+//==============================================================
+
+void init_harv(Ennemi* h, int x, int y, float speed) {
+    h->rect.x = x;
+    h->rect.y = y;
+    h->rect.w = 60; 
+    h->rect.h = 30;
+    h->speed = speed;
+    h->direction = -1;
+    h->velY = 0.0f;
+    h->onGround = 0;
+    h->state = STATE_RUN;
+    h->vivant = 1;
+}
+
+void update_harv(Ennemi* h, int* map, int levelID) {
+    update_loupas(h, map, levelID);
+}
+
+void render_harv(SDL_Renderer* renderer, Ennemi* h, int scrollX, int scrollY, SDL_Texture* texHarv) {
+    if (!h->vivant || !texHarv) return;
+
+    int displayW = 64; 
+    int displayH = 32; 
+
+    int offsetX = (h->rect.w - displayW) / 2;
+    int offsetY = (h->rect.h - displayH); 
+    offsetY += 4; 
+
+    SDL_Rect dest = { 
+        h->rect.x - scrollX + offsetX, 
+        h->rect.y - scrollY + offsetY, 
+        displayW, 
+        displayH 
+    };
+
+    SDL_RendererFlip flip = (h->direction > 0) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RenderCopyEx(renderer, texHarv, NULL, &dest, 0, NULL, flip);
 }

@@ -32,11 +32,6 @@ Mix_Chunk * bouleFeu = NULL;
 Mix_Chunk * coin = NULL;
 Mix_Chunk * sonThwomp = NULL;
 Mix_Chunk * sonJC = NULL;
-Mix_Chunk * sonEcrasement = NULL;
-Mix_Chunk * sonAlien = NULL;
-Mix_Chunk * sonLoup = NULL;
-Mix_Chunk * sonMortJoueur = NULL;
-Mix_Chunk * sonDefaite = NULL;
 Mix_Music * musiqueMenu = NULL;
 Mix_Music * musiqueSurface = NULL;
 Mix_Music * musiqueDonjon = NULL;
@@ -61,8 +56,6 @@ int main(int argc, char* argv[]) {
     }
     Mix_AllocateChannels(32);
     Mix_ReserveChannels(1);
-    Mix_ReserveChannels(2);
-    Mix_ReserveChannels(3);
 
     SDL_Window* window = SDL_CreateWindow("Mario-Bros-Like",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -92,6 +85,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texOlaf = IMG_LoadTexture(renderer, "assets/Ennemi/olaf.png");
     SDL_Texture* texAlien = IMG_LoadTexture(renderer, "assets/Ennemi/aliens.png");
     SDL_Texture* texPresse = IMG_LoadTexture(renderer, "assets/Ennemi/presse.png");
+    SDL_Texture* texHarv = IMG_LoadTexture(renderer, "assets/Ennemi/harv.png");
 
     // Textures Items & HUD
     SDL_Texture* texVies[5];
@@ -121,18 +115,12 @@ int main(int argc, char* argv[]) {
     bouleFeu = Mix_LoadWAV("assets/son/BouleFeu.wav");
     coin = Mix_LoadWAV("assets/son/coin.wav");
     sonThwomp = Mix_LoadWAV("assets/son/sonThowp.wav");
-    sonJC = Mix_LoadWAV("assets/son/sonJP.wav");
-    sonEcrasement = Mix_LoadWAV("assets/son/sonEcrasement.wav");
-    sonAlien = Mix_LoadWAV("assets/son/son_mort_alien.wav");
-    sonLoup = Mix_LoadWAV("assets/son/son_loup_mort.wav");
-    sonMortJoueur = Mix_LoadWAV("assets/son/son_mort.wav");
-    sonDefaite = Mix_LoadWAV("assets/son/son_defaite.wav");
+    sonJC = Mix_LoadWAV("assets/son/sonJC.wav");
     
     // Audio - Musiques 
     musiqueMenu = Mix_LoadMUS("assets/music/Sunrise_at_the_Peak.wav");
     musiqueSurface = Mix_LoadMUS("assets/music/Above_the_Floating_Isles.wav");
     musiqueDonjon = Mix_LoadMUS("assets/music/Across_the_Green_Ridge.wav");
-    
 
     // Appliquer le volume (bruitages ET musiques)
     Mix_Volume(-1, (volume * 128) / 100);
@@ -206,12 +194,13 @@ int main(int argc, char* argv[]) {
         Ennemi mesOlaf[NB_OLAF];
         Ennemi mesAliens[NB_ALIENS];
         Presse mesPresses[NB_PRESSES];
+        Ennemi mesHarvs[NB_HARV];
         Piece mesPieces[NB_PIECES];
         Checkpoint mesCheckpoints[NB_CHECKPOINTS];
         Flag monDrapeau;
 
         // Spawn des entités selon le niveau (incluant Olaf)
-        spawn_level_entities(lvl, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPresses, mesAliens, mesPieces, mesCheckpoints, &monDrapeau);
+        spawn_level_entities(lvl, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesPresses, mesAliens, mesHarvs, mesPieces, mesCheckpoints, &monDrapeau);
 
         Score score;
         init_score(&score);
@@ -270,7 +259,7 @@ int main(int argc, char* argv[]) {
                             Mix_HaltMusic(); 
                             if (idMap == 1 && musiqueSurface) Mix_PlayMusic(musiqueSurface, -1);
                             else if (idMap == 2 && musiqueDonjon) Mix_PlayMusic(musiqueDonjon, -1);
-                            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, mesPieces, &score, &camera, 1, lvl->id);
+                            reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesHarvs, mesPresses, mesPieces, &score, &camera, 1, lvl->id);
                             for (int i = 0; i < NB_CHECKPOINTS; i++) mesCheckpoints[i].actif = 0;
                             startTime = SDL_GetTicks();
                             tempsRestant = tempsMax;
@@ -301,16 +290,17 @@ int main(int argc, char* argv[]) {
                 for (int i = 0; i < NB_OLAF; i++) update_snowman(&mesOlaf[i], lvl->tileMap, lvl->id);
                 for (int i = 0; i < NB_ALIENS; i++) update_alien(&mesAliens[i], lvl->tileMap, lvl->id); 
                 for (int i = 0; i < NB_PRESSES; i++) {update_presse(&mesPresses[i]);}
+                for (int i = 0; i < NB_HARV; i++) update_harv(&mesHarvs[i], lvl->tileMap, lvl->id);
                 update_score(&score, (int)player.rect.x);
                 update_camera(&camera, &player, mapPixelWidth, mapPixelHeight);
 
                 // 2. Gestion Mort
                 if (verifier_conditions_mort(&player, lvl->mapPixelHeight)) {
                     int temps_sauvegarde = tempsRestant;
-                    if (temps_sauvegarde <= 0) temps_sauvegarde = tempsMax;
+                    if (temps_sauvegarde <= 0) temps_sauvegarde = tempsMax; 
 
                     gerer_mort_joueur(&player, lvl->playerStart.x, lvl->playerStart.y, &score);
-                    reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, mesPieces, &score, &camera, 0, lvl->id);
+                    reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesHarvs, mesPresses, mesPieces, &score, &camera, 0, lvl->id);
                     startTime = SDL_GetTicks() - ((tempsMax - temps_sauvegarde) * 1000);
                     tempsRestant = temps_sauvegarde;
                 }
@@ -340,7 +330,6 @@ int main(int argc, char* argv[]) {
                         int pieds_avant = (player.rect.y + player.rect.h) - (int)player.velY;
                         if (player.velY > 0 && pieds_avant <= mesLoupas[i].rect.y + 15) {
                             mesLoupas[i].vivant = 0; score.bonus += 100; player.velY = -12.0f;
-                            if(sonLoup != NULL) Mix_PlayChannel(-1, sonLoup, 0);
                         } else { player.state = STATE_DEAD; player.velY = -10.0f; }
                     }
                 }
@@ -372,7 +361,7 @@ int main(int argc, char* argv[]) {
                     if (player.state != STATE_DEAD && jc[i].vivant && SDL_HasIntersection(&player.rect, &jc[i].rect)) {
                         if (player.velY > 0 && (player.rect.y + player.rect.h) < (jc[i].rect.y + 30)) {
                             jc[i].vivant = 0; player.velY = -12.0f;
-                            if(sonJC != NULL) Mix_PlayChannel(2, sonJC, 0);
+                            if(sonJC != NULL) Mix_PlayChannel(-1, sonJC, 0);
                         } else { player.state = STATE_DEAD; player.velY = -10.0f; }
                     }
                 }
@@ -382,7 +371,6 @@ int main(int argc, char* argv[]) {
                     if (player.state != STATE_DEAD && mesOlaf[i].vivant && SDL_HasIntersection(&player.rect, &mesOlaf[i].rect)) {
                         if (player.velY > 0 && (player.rect.y + player.rect.h) < (mesOlaf[i].rect.y + 20)) {
                             mesOlaf[i].vivant = 0; player.velY = -10.0f; score.bonus += 150;
-                            if(sonEcrasement != NULL) Mix_PlayChannel(-1, sonEcrasement, 0);
                         } else { player.state = STATE_DEAD; player.velY = -10.0f; }
                     }
                 }
@@ -393,7 +381,6 @@ int main(int argc, char* argv[]) {
                         int pieds_avant = (player.rect.y + player.rect.h) - (int)player.velY;
                         if (player.velY > 0 && pieds_avant <= mesAliens[i].rect.y + 15) {
                             mesAliens[i].vivant = 0; score.bonus += 100; player.velY = -12.0f;
-                            if(sonAlien != NULL) Mix_PlayChannel(-1, sonAlien, 0);
                         } else { player.state = STATE_DEAD; player.velY = -10.0f; }
                     }
                 }
@@ -404,7 +391,15 @@ int main(int argc, char* argv[]) {
                     if (player.state != STATE_DEAD && SDL_HasIntersection(&player.rect, &mesPresses[i].extensionRect)) {
                         player.state = STATE_DEAD;
                         player.velY = -10.0f; 
-                        Mix_PlayChannel(-1, sonEcrasement, 0);
+                        // Mix_PlayChannel(-1, sonEcrasement, 0);
+                    }
+                }
+
+                // -- Harv --
+                for(int i=0; i<NB_HARV; i++) {
+                    if( mesHarvs[i].vivant && player.state != STATE_DEAD && SDL_HasIntersection(&player.rect, &mesHarvs[i].rect)){
+                        player.state = STATE_DEAD; 
+                        player.velY = -12.0f; 
                     }
                 }
 
@@ -474,8 +469,9 @@ int main(int argc, char* argv[]) {
             for(int i=0; i<NB_PIECES; i++) if (mesPieces[i].vivant) render_coin(renderer, texCoin, mesPieces[i].rect.x, mesPieces[i].rect.y, camera.x, camera.y);
             for(int i=0; i<NB_OLAF; i++) render_snowman(renderer, &mesOlaf[i], camera.x, camera.y, texOlaf);
             for(int i=0; i<NB_ALIENS; i++) render_alien(renderer, &mesAliens[i], camera.x, camera.y, texAlien);
-            for (int i = 0; i < NB_PRESSES; i++) {render_presse(renderer, &mesPresses[i], camera.x, camera.y, texPresse);}
-            if (hitboxes) render_debug_hitboxes(renderer, &player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, &monDrapeau, camera.x, camera.y);
+            for(int i=0; i< NB_PRESSES; i++) {render_presse(renderer, &mesPresses[i], camera.x, camera.y, texPresse);}
+            for(int i=0; i<NB_HARV; i++) { render_harv(renderer, &mesHarvs[i], camera.x, camera.y, texHarv); }
+            if (hitboxes) render_debug_hitboxes(renderer, &player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, mesHarvs, &monDrapeau, camera.x, camera.y);
 
             render_score(renderer, font, &score);
             render_lives(renderer, texVies, player.lives);
@@ -500,10 +496,9 @@ int main(int argc, char* argv[]) {
                 Mix_HaltMusic(); // Arrête la musique sur l'écran Game Over
                 int action = gameover(renderer, font, &player, score_affichage_fin, meilleur_score);
                 if (action == 1) {
-                    reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesPresses, mesPieces, &score, &camera, 1, lvl->id);
+                    reset_level(&player, mesLoupas, mesThwomps, mesPodoboo, mesCoquilas, jc, mesOlaf, mesAliens, mesHarvs, mesPresses, mesPieces, &score, &camera, 1, lvl->id);
                     for (int i = 0; i < NB_CHECKPOINTS; i++) mesCheckpoints[i].actif = 0;
                     startTime = SDL_GetTicks(); tempsRestant = tempsMax;
-                    if(coin != NULL) Mix_PlayChannel(-1, coin, 0);
                     
                     // Relance la musique après un "Try Again"
                     if (idMap == 1 && musiqueSurface) Mix_PlayMusic(musiqueSurface, -1);
@@ -527,9 +522,7 @@ int main(int argc, char* argv[]) {
     
     // Libération Audio
     Mix_FreeChunk(sonSaut); Mix_FreeChunk(bouleFeu); Mix_FreeChunk(coin); 
-    Mix_FreeChunk(sonThwomp); Mix_FreeChunk(sonJC); Mix_FreeChunk(sonEcrasement);
-    Mix_FreeChunk(sonLoup); Mix_FreeChunk(sonAlien); Mix_FreeChunk(sonMortJoueur);
-    Mix_FreeChunk(sonDefaite);
+    Mix_FreeChunk(sonThwomp); Mix_FreeChunk(sonJC);
     if (musiqueMenu) Mix_FreeMusic(musiqueMenu);
     if (musiqueSurface) Mix_FreeMusic(musiqueSurface);
     if (musiqueDonjon) Mix_FreeMusic(musiqueDonjon);
@@ -538,7 +531,7 @@ int main(int argc, char* argv[]) {
     // Libération Graphique
     SDL_DestroyTexture(texIdle); SDL_DestroyTexture(texRun); SDL_DestroyTexture(texJump); SDL_DestroyTexture(texDead);
     SDL_DestroyTexture(texLoup); SDL_DestroyTexture(texThwomp); SDL_DestroyTexture(texPodoboo); SDL_DestroyTexture(texCoquilas); 
-    SDL_DestroyTexture(texJeanClaude); SDL_DestroyTexture(texOlaf); SDL_DestroyTexture(texPresse); SDL_DestroyTexture(texAlien);
+    SDL_DestroyTexture(texJeanClaude); SDL_DestroyTexture(texOlaf); SDL_DestroyTexture(texPresse); SDL_DestroyTexture(texAlien); SDL_DestroyTexture(texHarv);
     SDL_DestroyTexture(texCoin); SDL_DestroyTexture(texCheckpoint); SDL_DestroyTexture(texMat); SDL_DestroyTexture(texFlag);
     if (texIcons) SDL_DestroyTexture(texIcons); 
     if (font) TTF_CloseFont(font);

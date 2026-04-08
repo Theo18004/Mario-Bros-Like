@@ -120,7 +120,6 @@ int gameover(SDL_Renderer* renderer, TTF_Font* font, Player* player, int score_a
 
         int gameOverScreen = 1;
         int action = 0; // 0 = Quitter, 1 = Rejouer
-        if(sonDefaite != NULL) Mix_PlayChannel(-1, sonDefaite, 0);
 
         while (gameOverScreen) {
             SDL_Event e;
@@ -274,7 +273,7 @@ int victory_screen(SDL_Renderer* renderer, TTF_Font* font, Player* player, Score
 
 void render_debug_hitboxes(SDL_Renderer* renderer, Player* player, 
                            Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, 
-                           Coquilas* coquilas, Ennemi* jc, Ennemi* olaf, Ennemi* aliens, Presse* presses, Flag* drapeau, 
+                           Coquilas* coquilas, Ennemi* jc, Ennemi* olaf, Ennemi* aliens, Presse* presses, Ennemi* harvs, Flag* drapeau, 
                            int camX, int camY) {
                            
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -374,8 +373,19 @@ void render_debug_hitboxes(SDL_Renderer* renderer, Player* player,
             SDL_RenderDrawRect(renderer, &r);
         }
     }
+
+    // 10. Harv
+    for (int i = 0; i < NB_HARV; i++) {
+        if (harvs[i].vivant) {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 255, 128);
+            SDL_Rect r = { harvs[i].rect.x - camX, harvs[i].rect.y - camY, harvs[i].rect.w, harvs[i].rect.h };
+            SDL_RenderFillRect(renderer, &r);
+            SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+            SDL_RenderDrawRect(renderer, &r);
+        }
+    }
     
-    // 10. Drapeau (Mât)
+    // 11. Drapeau (Mât)
     SDL_SetRenderDrawColor(renderer, 255, 0, 255, 128);
     SDL_Rect rMat = { drapeau->matRect.x - camX, drapeau->matRect.y - camY, drapeau->matRect.w, drapeau->matRect.h };
     SDL_RenderFillRect(renderer, &rMat);

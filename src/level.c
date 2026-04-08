@@ -44,7 +44,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
-        lvl->playerStart = (SDL_Point){ 11648, 700 };
+        lvl->playerStart = (SDL_Point){ 11648, 700 }; //11648, 700
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");
@@ -60,7 +60,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
     return lvl;
 }
 
-void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, Coquilas* coquilas, Ennemi* jc, Ennemi* olaf,Presse* presse,Ennemi* mesAliens, Piece* pieces, Checkpoint* checkpoints, Flag* flag) {
+void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* podoboo, Coquilas* coquilas, Ennemi* jc, Ennemi* olaf, Presse* presse, Ennemi* mesAliens, Ennemi* mesHarvs, Piece* pieces, Checkpoint* checkpoints, Flag* flag) {
     for (int i = 0; i < NB_LOUPAS; i++) loupas[i].vivant = 0;
     for (int i = 0; i < NB_THWOMPS; i++) thwomps[i].vivant = 0;
     for (int i = 0; i < NB_PODOBOO; i++) podoboo[i].vivant = 0;
@@ -69,6 +69,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
     for (int i = 0; i < NB_OLAF; i++) olaf[i].vivant = 0;
     for (int i = 0; i < NB_ALIENS; i++) mesAliens[i].vivant = 0;   
     for (int i = 0; i < NB_PRESSES; i++) presse[i].vivant = 0;
+    for(int i=0; i<NB_HARV; i++) mesHarvs[i].vivant = 0;
     for (int i = 0; i < NB_PIECES; i++) pieces[i].vivant = 1;
     for (int i = 0; i < NB_CHECKPOINTS; i++) checkpoints[i].actif = 0;
 
@@ -134,7 +135,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
     // --- MAP 2 --- 
     else if(lvl->id == 2) {
         // Drapeau fin
-        init_flag(flag, 20000, 1000);
+        init_flag(flag, 15000, 1000);
 
         // -- Olafs --
         init_snowman(&olaf[0], 1440, 960);
@@ -163,11 +164,17 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_presse(&presse[1], 14400, 850, 200);
         init_presse(&presse[2], 14750, 850, 400);
 
+
+        // -- Harv --
+        init_harv(&mesHarvs[0], 14200, 850, 3.5f);
+        init_harv(&mesHarvs[1], 14400, 850, 5.0f);
+        
+
         // Coordonnées des pièces
         for (int i = 0; i < NB_PIECES; i++) { pieces[i].rect.w = 32; pieces[i].rect.h = 32; pieces[i].vivant = 1; }
         pieces[0].rect.x = 5408; pieces[0].rect.y = 544;
         pieces[1].rect.x = 5536; pieces[1].rect.y = 896;
-        pieces[2].rect.x = 40352; pieces[2].rect.y = 576;
+        pieces[2].rect.x = 10352; pieces[2].rect.y = 576;
         pieces[3].rect.x = 11585; pieces[3].rect.y = 640;
 
         // Checkpoints
@@ -264,7 +271,7 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
         if (clipVille.x < 0) { clipVille.w += clipVille.x; clipVille.x = 0; }
 
         SDL_RenderSetClipRect(renderer, &clipVille);
-        draw_parallax_bg(renderer, lvl->bgs[4], cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startVilleX, 0);
+        draw_parallax_bg(renderer, lvl->bgs[5], cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startVilleX, -90);
         SDL_RenderSetClipRect(renderer, NULL);
     }
 }

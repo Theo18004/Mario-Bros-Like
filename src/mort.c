@@ -3,7 +3,6 @@
  * @brief Gestion de la machine à état de mort du joueur.
  */
 #include "mort.h"
-#include "defs.h"
 #include "ennemi.h"
 
 int verifier_conditions_mort(Player* p, int mapPixelHeight){
@@ -11,10 +10,7 @@ int verifier_conditions_mort(Player* p, int mapPixelHeight){
     if (p->state == STATE_DEAD){
        int limiteSolChute = mapPixelHeight - 65;
        if (p->rect.y >= limiteSolChute) {
-            if (momentImpactSol == 0){ 
-                momentImpactSol = SDL_GetTicks(); 
-                if(sonMortJoueur != NULL) Mix_PlayChannel(-1, sonMortJoueur, 0);
-            }
+            if (momentImpactSol == 0) momentImpactSol = SDL_GetTicks();
             if (SDL_GetTicks() - momentImpactSol > 1000) { momentImpactSol = 0; return 1; }
         }
         return 0;
@@ -37,7 +33,10 @@ void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s){
     Mix_HaltChannel(-1);
 }
 
-void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodoboo, Coquilas* mesCoquilas, Ennemi* jc, Ennemi* mesOlaf,Ennemi* mesAliens,Presse* presses, Piece* pieces, Score* s, Camera* cam, int total_reset, int levelID) {
+void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodoboo, 
+                 Coquilas* mesCoquilas, Ennemi* jc, Ennemi* mesOlaf, Ennemi* mesAliens, 
+                 Ennemi* mesHarvs, Presse* presses, Piece* pieces, Score* s, 
+                 Camera* cam, int total_reset, int levelID) {
     // On remet tout à 0 et le spawn au début après un game over
     if (total_reset) {
         p->lives = 3;  
@@ -142,6 +141,10 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
         init_presse(&presses[0], 14200, 850, 0);
         init_presse(&presses[1], 14400, 850, 200);
         init_presse(&presses[2], 14750, 850, 400);
+
+        // --- Harv --
+        init_harv(&mesHarvs[0], 3000, 960, 3.5f);
+        init_harv(&mesHarvs[1], 5000, 960, 5.0f);
 
         //On laisse mort ceux qui étaient morts avant le reset si ce n'est pas un gameover
         if (!total_reset) {

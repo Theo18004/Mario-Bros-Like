@@ -28,6 +28,9 @@ void gerer_mort_joueur(Player* p, int spawnX, int spawnY, Score* s);
  * @brief Réinitialise l'intégralité du niveau (joueur, monstres, pièces, caméra).
     * @param total_reset Si 1, réinitialise aussi les vies et le score.
  */
-void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodoboo, Coquilas* mesCoquilas, Ennemi* jc, Ennemi* mesOlaf,Ennemi* mesAliens,Presse* presse, Piece* pieces, Score* s, Camera* cam, int total_reset, int levelID);
+void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodoboo, 
+                 Coquilas* mesCoquilas, Ennemi* jc, Ennemi* mesOlaf, Ennemi* mesAliens, 
+                 Ennemi* mesHarvs, Presse* presse, Piece* pieces, Score* s, 
+                 Camera* cam, int total_reset, int levelID);
 
 #endif

@@ -89,6 +89,7 @@ typedef struct Presse {
 #define NB_OLAF 10  
 #define NB_PRESSES 3
 #define NB_ALIENS 8
+#define NB_HARV 2
 
 void init_loupas(Ennemi* e, int x, int y);
 void update_loupas(Ennemi* e, int* map, int levelID);
@@ -133,5 +134,9 @@ void render_presse(SDL_Renderer* renderer, Presse* p, int camX, int camY, SDL_Te
 void init_alien(Ennemi* a, int x, int y);
 void update_alien(Ennemi* a, int* map, int levelID);
 void render_alien(SDL_Renderer* renderer, Ennemi* a, int scrollX, int scrollY, SDL_Texture* texAlien);
+
+void init_harv(Ennemi* h, int x, int y, float speed);
+void update_harv(Ennemi* h, int* map, int levelID);
+void render_harv(SDL_Renderer* renderer, Ennemi* h, int scrollX, int scrollY, SDL_Texture* texHarv);
 
 #endif

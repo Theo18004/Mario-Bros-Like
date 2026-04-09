@@ -44,6 +44,14 @@ typedef struct {
     Uint32 animStart;    
 } Checkpoint;
 
+/**
+ * @brief Dessine l'animation d'ouverture de la fleur Checkpoint.
+ * @param renderer Le renderer du SDL.
+ * @param texDrapeau Texture représentant le tissu.
+ * @param d Pointeur vers le Checkpoint.
+ * @param camX Décalage de la caméra en X.
+ * @param camY Décalage de la caméra en Y.
+ */
 // Déclaration de la fonction pour l'affichage des drapeau 
 void render_checkpoint(SDL_Renderer* renderer, SDL_Texture* texDrapeau, Checkpoint* d, int camX, int camY);
 

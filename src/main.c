@@ -32,6 +32,11 @@ Mix_Chunk * bouleFeu = NULL;
 Mix_Chunk * coin = NULL;
 Mix_Chunk * sonThwomp = NULL;
 Mix_Chunk * sonJC = NULL;
+Mix_Chunk * sonEcrasement = NULL;
+Mix_Chunk * sonAlien = NULL;
+Mix_Chunk * sonLoup = NULL;
+Mix_Chunk * sonMortJoueur = NULL;
+Mix_Chunk * sonDefaite = NULL;
 Mix_Music * musiqueMenu = NULL;
 Mix_Music * musiqueSurface = NULL;
 Mix_Music * musiqueDonjon = NULL;
@@ -56,6 +61,8 @@ int main(int argc, char* argv[]) {
     }
     Mix_AllocateChannels(32);
     Mix_ReserveChannels(1);
+    Mix_ReserveChannels(2);
+    Mix_ReserveChannels(3);
 
     SDL_Window* window = SDL_CreateWindow("Mario-Bros-Like",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -116,6 +123,11 @@ int main(int argc, char* argv[]) {
     coin = Mix_LoadWAV("assets/son/coin.wav");
     sonThwomp = Mix_LoadWAV("assets/son/sonThowp.wav");
     sonJC = Mix_LoadWAV("assets/son/sonJC.wav");
+    sonEcrasement = Mix_LoadWAV("assets/son/sonEcrasement.wav");
+    sonAlien = Mix_LoadWAV("assets/son/son_mort_alien.wav");
+    sonLoup = Mix_LoadWAV("assets/son/son_loup_mort.wav");
+    sonMortJoueur = Mix_LoadWAV("assets/son/son_mort.wav");
+    sonDefaite = Mix_LoadWAV("assets/son/son_defaite.wav");
     
     // Audio - Musiques 
     musiqueMenu = Mix_LoadMUS("assets/music/Sunrise_at_the_Peak.wav");
@@ -330,6 +342,7 @@ int main(int argc, char* argv[]) {
                         int pieds_avant = (player.rect.y + player.rect.h) - (int)player.velY;
                         if (player.velY > 0 && pieds_avant <= mesLoupas[i].rect.y + 15) {
                             mesLoupas[i].vivant = 0; score.bonus += 100; player.velY = -12.0f;
+                            if(sonLoup != NULL) Mix_PlayChannel(-1, sonLoup, 0);
                         } else { player.state = STATE_DEAD; player.velY = -10.0f; }
                     }
                 }
@@ -371,6 +384,7 @@ int main(int argc, char* argv[]) {
                     if (player.state != STATE_DEAD && mesOlaf[i].vivant && SDL_HasIntersection(&player.rect, &mesOlaf[i].rect)) {
                         if (player.velY > 0 && (player.rect.y + player.rect.h) < (mesOlaf[i].rect.y + 20)) {
                             mesOlaf[i].vivant = 0; player.velY = -10.0f; score.bonus += 150;
+                            if(sonEcrasement != NULL) Mix_PlayChannel(-1, sonEcrasement, 0);
                         } else { player.state = STATE_DEAD; player.velY = -10.0f; }
                     }
                 }
@@ -381,6 +395,7 @@ int main(int argc, char* argv[]) {
                         int pieds_avant = (player.rect.y + player.rect.h) - (int)player.velY;
                         if (player.velY > 0 && pieds_avant <= mesAliens[i].rect.y + 15) {
                             mesAliens[i].vivant = 0; score.bonus += 100; player.velY = -12.0f;
+                            if(sonAlien != NULL) Mix_PlayChannel(-1, sonAlien, 0);
                         } else { player.state = STATE_DEAD; player.velY = -10.0f; }
                     }
                 }
@@ -391,7 +406,7 @@ int main(int argc, char* argv[]) {
                     if (player.state != STATE_DEAD && SDL_HasIntersection(&player.rect, &mesPresses[i].extensionRect)) {
                         player.state = STATE_DEAD;
                         player.velY = -10.0f; 
-                        // Mix_PlayChannel(-1, sonEcrasement, 0);
+                        Mix_PlayChannel(-1, sonEcrasement, 0);
                     }
                 }
 
@@ -522,7 +537,9 @@ int main(int argc, char* argv[]) {
     
     // Libération Audio
     Mix_FreeChunk(sonSaut); Mix_FreeChunk(bouleFeu); Mix_FreeChunk(coin); 
-    Mix_FreeChunk(sonThwomp); Mix_FreeChunk(sonJC);
+    Mix_FreeChunk(sonThwomp); Mix_FreeChunk(sonJC); Mix_FreeChunk(sonEcrasement);
+    Mix_FreeChunk(sonLoup); Mix_FreeChunk(sonAlien); Mix_FreeChunk(sonMortJoueur);
+    Mix_FreeChunk(sonDefaite);
     if (musiqueMenu) Mix_FreeMusic(musiqueMenu);
     if (musiqueSurface) Mix_FreeMusic(musiqueSurface);
     if (musiqueDonjon) Mix_FreeMusic(musiqueDonjon);

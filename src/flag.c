@@ -1,16 +1,20 @@
+/**
+ * @file flag.c
+ * @brief Gestion du joueur (états, physique et rendu).
+ */
+
 #include "flag.h"
 #include <stdio.h>
 
-// --- Variables d'animation (à ajuster selon ta spritesheet) ---
-#define NUM_FRAMES_DESCENDING 8 // Hypothèse : 8 frames dans ta spritesheet
+// --- Variables d'animation ---
+#define NUM_FRAMES_DESCENDING 8 // Hypothèse : 8 frames 
 #define DESCEND_SPEED 150.0f     // Pixels par seconde
 
-// Dans ton fichier .c
 void init_flag(Flag* f, int x, int y) {
-    // 1. On règle le Mât (ex: 32 pixels de large, 400 de haut)
+    // 1. On règle le Mât 
     f->matRect = (SDL_Rect){ x, y, 60, 250 };
 
-    // 2. On règle le Dreapeau (ex: 64x64 pixels)
+    // 2. On règle le Dreapeau 
     // On le positionne en haut du mât (y) et collé à gauche du mât (x - 64)
     f->flagRect = (SDL_Rect){ x+36 , y+45 , 64, 64 }; 
 
@@ -24,10 +28,10 @@ void update_flag(Flag* f) {
 
         // Tant qu'on n'est pas en bas, on descend
         if (f->flagRect.y < yMax) {
-            f->flagRect.y += 5; // Vitesse de chute (augmente pour aller plus vite)
+            f->flagRect.y += 5; // Vitesse de chute 
         } else {
             f->flagRect.y = yMax; // On le cale parfaitement en bas
-            f->actif = 2; // Fini !
+            f->actif = 2; // Fini 
         }
     }
 }
@@ -38,7 +42,7 @@ void render_flag(SDL_Renderer* renderer, Flag* f, SDL_Texture* texMat, SDL_Textu
     if (texMat) {
         SDL_RenderCopy(renderer, texMat, NULL, &destMat);
     } else {
-        // Si tu n'as pas de texture pour le mât, on dessine juste un poteau gris !
+        // Si on as pas de texture pour le mât, on dessine juste un poteau gris !
         SDL_SetRenderDrawColor(renderer, 150, 150, 150, 255);
         SDL_RenderFillRect(renderer, &destMat);
     }

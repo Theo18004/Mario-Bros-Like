@@ -21,7 +21,7 @@ extern Mix_Chunk *sonDefaite;
 
 #define TILE_SIZE 16        /**< Taille de base d'une tuile (pixels) */
 #define MAP_SCALE 2         /**< Facteur d'agrandissement de l'affichage */
-#define MAP_WIDTH 484       /**< Nombre de tuiles en largeur */
+#define MAP_WIDTH 525       /**< Nombre de tuiles en largeur */
 #define MAP_HEIGHT 38       /**< Nombre de tuiles en hauteur */
 #define REFERENCE_HEIGHT 750 /**< Hauteur de référence pour la mise à l'échelle */
 #define TILE_SOLID 7        /**< Identifiant d'une tuile solide générique */

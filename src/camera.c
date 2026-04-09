@@ -5,11 +5,6 @@
 #include "camera.h"
 #include "defs.h"
 
-/**
- * @brief Met à jour les coordonnées de la caméra pour suivre le joueur.
- * @details La caméra est centrée sur le joueur horizontalement et possède
- * un seuil de suivi vertical pour ne pas osciller à chaque petit saut.
- */
 void update_camera(Camera* cam, Player* p, int mapWidthPixel, int mapHeightPixel) {
     // Centrer sur le joueur
     cam->x = p->rect.x - cam->w / 2;

@@ -4,13 +4,17 @@
  */
 #include "mort.h"
 #include "ennemi.h"
+#include "defs.h"
 
 int verifier_conditions_mort(Player* p, int mapPixelHeight){
     static Uint32 momentImpactSol = 0;
     if (p->state == STATE_DEAD){
        int limiteSolChute = mapPixelHeight - 65;
        if (p->rect.y >= limiteSolChute) {
-            if (momentImpactSol == 0) momentImpactSol = SDL_GetTicks();
+            if (momentImpactSol == 0) {
+                momentImpactSol = SDL_GetTicks();
+                if(sonMortJoueur != NULL) Mix_PlayChannel(-1, sonMortJoueur, 0);
+            }
             if (SDL_GetTicks() - momentImpactSol > 1000) { momentImpactSol = 0; return 1; }
         }
         return 0;

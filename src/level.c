@@ -44,7 +44,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
-        lvl->playerStart = (SDL_Point){ 16150, 700 };
+        lvl->playerStart = (SDL_Point){ 20, 700 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");

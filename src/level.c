@@ -15,7 +15,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTileset.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
 
-        lvl->playerStart = (SDL_Point){ 14144, 700 };
+        lvl->playerStart = (SDL_Point){ 20, 700 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/Background/sky.png");
@@ -44,7 +44,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
-        lvl->playerStart = (SDL_Point){ 11648, 700 }; //11648, 700
+        lvl->playerStart = (SDL_Point){ 16150, 700 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");
@@ -52,7 +52,10 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         lvl->bgs[2] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/lune2.png"); // 2eme plan carteres seul
         lvl->bgs[3] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/lune3.png"); // 3eme plan montagnes
         lvl->bgs[4] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/lunebg.png"); // 4eme plan espace
-        lvl->bgs[5] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/villefull.png"); 
+        lvl->bgs[5] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/villefull.png");  // 5eme plan ville
+
+        lvl->bgs[10] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/chateau_map2.png"); // Chateau final
+        lvl->bgsPos[10] = (SDL_Rect){ (MAP_WIDTH - 15) * 32, 150, 450, 450 };
     }
 
     lvl->mapPixelWidth = MAP_WIDTH * TILE_SIZE * MAP_SCALE;
@@ -135,7 +138,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
     // --- MAP 2 --- 
     else if(lvl->id == 2) {
         // Drapeau fin
-        init_flag(flag, 15000, 1000);
+        init_flag(flag, 16224, 780);
 
         // -- Olafs --
         init_snowman(&olaf[0], 1440, 960);
@@ -160,9 +163,9 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_alien(&mesAliens[7], 11360, 960);
 
         // -- Presses --
-        init_presse(&presse[0], 14200, 850, 0);
-        init_presse(&presse[1], 14400, 850, 200);
-        init_presse(&presse[2], 14750, 850, 400);
+        init_presse(&presse[0], 15040, 925, 0);
+        init_presse(&presse[1], 15104, 925, 200);
+        init_presse(&presse[2], 15232, 925, 400);
 
 
         // -- Harv --
@@ -180,7 +183,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         // Checkpoints
         checkpoints[0].rect = (SDL_Rect){ 6720, 928, 64, 64 };
         checkpoints[0].actif = 0;
-        checkpoints[1].rect = (SDL_Rect){ 11648, 896, 64, 64 };
+        checkpoints[1].rect = (SDL_Rect){ 11630, 960, 64, 64 };
         checkpoints[1].actif = 0;
     }
 }
@@ -273,6 +276,12 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
         SDL_RenderSetClipRect(renderer, &clipVille);
         draw_parallax_bg(renderer, lvl->bgs[5], cameraX, cameraY, 0.5f, 0.0f, screenW, screenH, startVilleX, -90);
         SDL_RenderSetClipRect(renderer, NULL);
+
+        if (lvl->bgs[10]) {
+            SDL_Rect posC2 = lvl->bgsPos[10];
+            posC2.x -= cameraX; 
+            SDL_RenderCopy(renderer, lvl->bgs[10], NULL, &posC2);
+        }
     }
 }
 

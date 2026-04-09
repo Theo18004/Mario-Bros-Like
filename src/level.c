@@ -15,7 +15,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTileset.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
 
-        lvl->playerStart = (SDL_Point){ 20, 1000 };
+        lvl->playerStart = (SDL_Point){ 14144, 700 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/Background/sky.png");
@@ -34,7 +34,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         lvl->bgsPos[12] = (SDL_Rect){ 330 * 32, 0, 0, 300 };
 
         lvl->bgs[13] = IMG_LoadTexture(renderer, "assets/Sprites/Background/chateau.png");
-        lvl->bgsPos[13] = (SDL_Rect){ (MAP_WIDTH - 15) * 32, 115, 450, 450 };
+        lvl->bgsPos[13] = (SDL_Rect){ (MAP_WIDTH - 20) * 32, 115, 450, 450 };
     } 
 
     // --- MAP 2 --- 
@@ -69,7 +69,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
     for (int i = 0; i < NB_OLAF; i++) olaf[i].vivant = 0;
     for (int i = 0; i < NB_ALIENS; i++) mesAliens[i].vivant = 0;   
     for (int i = 0; i < NB_PRESSES; i++) presse[i].vivant = 0;
-    for(int i=0; i<NB_HARV; i++) mesHarvs[i].vivant = 0;
+    for (int i = 0; i<NB_HARV; i++) mesHarvs[i].vivant = 0;
     for (int i = 0; i < NB_PIECES; i++) pieces[i].vivant = 1;
     for (int i = 0; i < NB_CHECKPOINTS; i++) checkpoints[i].actif = 0;
 
@@ -118,7 +118,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_jc(&jc[3], 13000, 928);
         
         // -- Drapeau fin --
-        init_flag(flag, 15008, 747);
+        init_flag(flag, 16000, 747);
 
         // Coordonnées des pièces
         for (int i = 0; i < NB_PIECES; i++) { pieces[i].rect.w = 32; pieces[i].rect.h = 32; pieces[i].vivant = 1; }

@@ -1,3 +1,7 @@
+/**
+ * @file Items.c
+ * @brief Gestion des objets ramassables du jeu (Pièces).
+ */
 #include "Items.h"
 #include <math.h>
 

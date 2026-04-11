@@ -44,7 +44,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
-        lvl->playerStart = (SDL_Point){ 8256, 700 };
+        lvl->playerStart = (SDL_Point){ 20, 700 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");
@@ -150,7 +150,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_snowman(&olaf[6], 5344, 576);
         init_snowman(&olaf[7], 5408, 576);
         init_snowman(&olaf[8], 5472, 576);
-        init_snowman(&olaf[9], 6496, 960);
+        init_snowman(&olaf[9], 6464, 960);
 
         // -- Aliens --
         init_alien(&mesAliens[0], 7104, 960);
@@ -172,6 +172,8 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_harv(&mesHarvs[0], 12960, 992, 3.5f);
         init_harv(&mesHarvs[1], 13280, 992, 5.0f);
         init_harv(&mesHarvs[2], 13600, 992, 7.0f);
+        init_harv(&mesHarvs[3], 14976, 832, 9.0f);
+        init_harv(&mesHarvs[4], 15680, 832, 9.0f);
         
 
         // Coordonnées des pièces
@@ -182,7 +184,7 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         pieces[3].rect.x = 15328; pieces[3].rect.y = 960;
 
         // Checkpoints
-        checkpoints[0].rect = (SDL_Rect){ 6720, 928, 64, 64 };
+        checkpoints[0].rect = (SDL_Rect){ 6496, 928, 64, 64 };
         checkpoints[0].actif = 0;
         checkpoints[1].rect = (SDL_Rect){ 11424, 960, 64, 64 };
         checkpoints[1].actif = 0;
@@ -243,7 +245,7 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
     else if(lvl->id == 2) {
         // --- HIVER ---
         int startWinterX = 0 * 32; 
-        int endWinterX = 210 * 32;
+        int endWinterX = 204 * 32;
         SDL_Rect clipWinter = { startWinterX - cameraX, 0, endWinterX - startWinterX, screenH };
         if (clipWinter.x < 0) { clipWinter.w += clipWinter.x; clipWinter.x = 0; } // Sécurité clipping
 
@@ -253,7 +255,7 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
         SDL_RenderSetClipRect(renderer, NULL);
 
         // --- LUNE ---
-        int startMoonX = 203 * 32; 
+        int startMoonX = 204 * 32; 
         int endMoonX = 357 * 32; 
         SDL_Rect clipMoon = { startMoonX - cameraX, 0, endMoonX - startMoonX, screenH };
         

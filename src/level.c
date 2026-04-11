@@ -164,19 +164,13 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
 
         // -- Presses --
         init_presse(&presse[0], 14912, 925, 0);
-
         init_presse(&presse[1], 15008, 925, 400);
         init_presse(&presse[2], 15056, 925, 400);
         init_presse(&presse[3], 15104, 925, 400);   
-
         init_presse(&presse[4], 15200, 925, 200);
-
-        // BLOC POST PIECE
         init_presse(&presse[5], 15328, 925, 600);
-        //BLOC 2 
         init_presse(&presse[6], 15424, 925, 1000);
         init_presse(&presse[7], 15472, 925, 1000);
-        //BLOC 4 FINAL
         init_presse(&presse[8], 15568, 925, 800);
         init_presse(&presse[9], 15616, 925, 800);
         init_presse(&presse[10], 15664, 925, 800);

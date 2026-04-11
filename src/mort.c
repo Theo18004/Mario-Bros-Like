@@ -143,17 +143,17 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
 
         // --- Presses Hydrauliques ---
         init_presse(&presses[0], 14912, 925, 0);
-        init_presse(&presses[1], 15008, 925, 200);
-        init_presse(&presses[2], 15056, 925, 200);
-        init_presse(&presses[3], 15104, 925, 200);  
+        init_presse(&presses[1], 15008, 925, 400);
+        init_presse(&presses[2], 15056, 925, 400);
+        init_presse(&presses[3], 15104, 925, 400);   
         init_presse(&presses[4], 15200, 925, 200);
-        init_presse(&presses[5], 15328, 925, 150);
-        init_presse(&presses[6], 15424, 925, 150);
-        init_presse(&presses[7], 15472, 925, 150);
-        init_presse(&presses[8], 15568, 925, 150);
-        init_presse(&presses[9], 15616, 925, 150);
-        init_presse(&presses[10], 15664, 925, 150);
-        init_presse(&presses[11], 15712, 925, 150);
+        init_presse(&presses[5], 15328, 925, 600);
+        init_presse(&presses[6], 15424, 925, 1000);
+        init_presse(&presses[7], 15472, 925, 1000);
+        init_presse(&presses[8], 15568, 925, 800);
+        init_presse(&presses[9], 15616, 925, 800);
+        init_presse(&presses[10], 15664, 925, 800);
+        init_presse(&presses[11], 15712, 925, 800);
 
         // --- Harv --
         init_harv(&mesHarvs[0], 12960, 992, 3.5f);

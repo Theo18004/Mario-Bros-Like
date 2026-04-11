@@ -44,7 +44,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
-        lvl->playerStart = (SDL_Point){ 20, 700 };
+        lvl->playerStart = (SDL_Point){ 14000, 700 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");
@@ -163,25 +163,38 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_alien(&mesAliens[7], 11104, 960);
 
         // -- Presses --
-        init_presse(&presse[0], 15040, 925, 0);
-        init_presse(&presse[1], 15104, 925, 200);
-        init_presse(&presse[2], 15232, 925, 400);
+        init_presse(&presse[0], 14912, 925, 0);
 
+        init_presse(&presse[1], 15008, 925, 400);
+        init_presse(&presse[2], 15056, 925, 400);
+        init_presse(&presse[3], 15104, 925, 400);   
+
+        init_presse(&presse[4], 15200, 925, 200);
+
+        // BLOC POST PIECE
+        init_presse(&presse[5], 15328, 925, 600);
+        //BLOC 2 
+        init_presse(&presse[6], 15424, 925, 1000);
+        init_presse(&presse[7], 15472, 925, 1000);
+        //BLOC 4 FINAL
+        init_presse(&presse[8], 15568, 925, 800);
+        init_presse(&presse[9], 15616, 925, 800);
+        init_presse(&presse[10], 15664, 925, 800);
+        init_presse(&presse[11], 15712, 925, 800);
 
         // -- Harv --
         init_harv(&mesHarvs[0], 12960, 992, 3.5f);
         init_harv(&mesHarvs[1], 13280, 992, 5.0f);
         init_harv(&mesHarvs[2], 13600, 992, 7.0f);
-        init_harv(&mesHarvs[3], 14976, 832, 9.0f);
+        init_harv(&mesHarvs[3], 15136, 832, 9.0f);
         init_harv(&mesHarvs[4], 15680, 832, 9.0f);
         
-
         // Coordonnées des pièces
         for (int i = 0; i < NB_PIECES; i++) { pieces[i].rect.w = 32; pieces[i].rect.h = 32; pieces[i].vivant = 1; }
         pieces[0].rect.x = 5408; pieces[0].rect.y = 544;
         pieces[1].rect.x = 5536; pieces[1].rect.y = 896;
         pieces[2].rect.x = 8512; pieces[2].rect.y = 800; 
-        pieces[3].rect.x = 15328; pieces[3].rect.y = 960;
+        pieces[3].rect.x = 15272; pieces[3].rect.y = 960;
 
         // Checkpoints
         checkpoints[0].rect = (SDL_Rect){ 6496, 928, 64, 64 };

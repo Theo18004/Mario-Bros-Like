@@ -142,14 +142,25 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
         for(int i=0; i<NB_ALIENS; i++) init_alien(&mesAliens[i], xAliens[i], yAliens[i]);
 
         // --- Presses Hydrauliques ---
-        init_presse(&presses[0], 15040, 925, 0);
-        init_presse(&presses[1], 15104, 925, 200);
-        init_presse(&presses[2], 15232, 925, 400);
+        init_presse(&presses[0], 14912, 925, 0);
+        init_presse(&presses[1], 15008, 925, 200);
+        init_presse(&presses[2], 15056, 925, 200);
+        init_presse(&presses[3], 15104, 925, 200);  
+        init_presse(&presses[4], 15200, 925, 200);
+        init_presse(&presses[5], 15328, 925, 150);
+        init_presse(&presses[6], 15424, 925, 150);
+        init_presse(&presses[7], 15472, 925, 150);
+        init_presse(&presses[8], 15568, 925, 150);
+        init_presse(&presses[9], 15616, 925, 150);
+        init_presse(&presses[10], 15664, 925, 150);
+        init_presse(&presses[11], 15712, 925, 150);
 
         // --- Harv --
         init_harv(&mesHarvs[0], 12960, 992, 3.5f);
         init_harv(&mesHarvs[1], 13280, 992, 5.0f);
         init_harv(&mesHarvs[2], 13600, 992, 7.0f);
+        init_harv(&mesHarvs[3], 15136, 832, 9.0f);
+        init_harv(&mesHarvs[4], 15680, 832, 9.0f);
         
 
         //On laisse mort ceux qui étaient morts avant le reset si ce n'est pas un gameover

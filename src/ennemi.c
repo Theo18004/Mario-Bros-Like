@@ -512,7 +512,7 @@ void update_presse(Presse* p) {
 
     // Délais d'animation
     int delay = 60; 
-    if (p->currentFrame == 0) delay = 700; // Pause en haut
+    if (p->currentFrame == 0) delay = 400; // Pause en haut
     if (p->currentFrame == 2) delay = 300; // Pause en bas 
 
     if (SDL_GetTicks() - p->frameTimer > (Uint32)delay) {

@@ -137,18 +137,20 @@ void reset_level(Player* p, Ennemi* mesLoupas, Thwomp* thwomps, Podoboo* mesPodo
         for(int i=0; i<NB_OLAF; i++) init_snowman(&mesOlaf[i], xOlaf[i], yOlaf[i]);
 
         // --- Aliens ---
-        int xAliens[] = {7328, 7520, 8000, 9088, 10048, 10368, 10720, 11360};
+        int xAliens[] = {7104, 7328, 7776, 8832, 9824, 10144, 10528, 11104};
         int yAliens[] = {960, 864, 928, 928, 1056, 1056, 864, 960};
         for(int i=0; i<NB_ALIENS; i++) init_alien(&mesAliens[i], xAliens[i], yAliens[i]);
 
         // --- Presses Hydrauliques ---
-        init_presse(&presses[0], 14200, 850, 0);
-        init_presse(&presses[1], 14400, 850, 200);
-        init_presse(&presses[2], 14750, 850, 400);
+        init_presse(&presses[0], 15040, 925, 0);
+        init_presse(&presses[1], 15104, 925, 200);
+        init_presse(&presses[2], 15232, 925, 400);
 
         // --- Harv --
-        init_harv(&mesHarvs[0], 3000, 960, 3.5f);
-        init_harv(&mesHarvs[1], 5000, 960, 5.0f);
+        init_harv(&mesHarvs[0], 12960, 992, 3.5f);
+        init_harv(&mesHarvs[1], 13280, 992, 5.0f);
+        init_harv(&mesHarvs[2], 13600, 992, 7.0f);
+        
 
         //On laisse mort ceux qui étaient morts avant le reset si ce n'est pas un gameover
         if (!total_reset) {

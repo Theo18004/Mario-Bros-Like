@@ -357,7 +357,7 @@ int main(int argc, char* argv[]) {
                 // -- Podoboo --
                 for (int i = 0; i < NB_PODOBOO; i++) {
                     update_podoboo(&mesPodoboo[i], &camera);
-                    if (SDL_HasIntersection(&player.rect, &mesPodoboo[i].rect)) {
+                    if (mesPodoboo[i].vivant && SDL_HasIntersection(&player.rect, &mesPodoboo[i].rect)) {
                         if (player.state != STATE_DEAD) { player.state = STATE_DEAD; player.velY = -8.0f; }
                     }
                 }

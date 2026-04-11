@@ -44,7 +44,7 @@ Level* load_level(SDL_Renderer* renderer, int levelID) {
         load_map_from_csv("assets/Maps/map2_v0.1.csv", lvl->tileMap);
         SDL_Texture* tTex = IMG_LoadTexture(renderer, "assets/Terrain/CustomTilesetMap2.png");
         lvl->tileset = (Tileset){ tTex, 22, 16, 16 };
-        lvl->playerStart = (SDL_Point){ 20, 700 };
+        lvl->playerStart = (SDL_Point){ 8256, 700 };
 
         // Backgrounds 
         lvl->bgs[0] = IMG_LoadTexture(renderer, "assets/Sprites/BackgroundMap2/BG.png");
@@ -153,14 +153,14 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
         init_snowman(&olaf[9], 6496, 960);
 
         // -- Aliens --
-        init_alien(&mesAliens[0], 7328, 960);
-        init_alien(&mesAliens[1], 7520, 864);
-        init_alien(&mesAliens[2], 8000, 928);
-        init_alien(&mesAliens[3], 9088, 928);
-        init_alien(&mesAliens[4], 10048, 1056);
-        init_alien(&mesAliens[5], 10368, 1056);
-        init_alien(&mesAliens[6], 10720, 864);
-        init_alien(&mesAliens[7], 11360, 960);
+        init_alien(&mesAliens[0], 7104, 960);
+        init_alien(&mesAliens[1], 7328, 864);
+        init_alien(&mesAliens[2], 7776, 928);
+        init_alien(&mesAliens[3], 8832, 928);
+        init_alien(&mesAliens[4], 9824, 1056);
+        init_alien(&mesAliens[5], 10144, 1056);
+        init_alien(&mesAliens[6], 10528, 864);
+        init_alien(&mesAliens[7], 11104, 960);
 
         // -- Presses --
         init_presse(&presse[0], 15040, 925, 0);
@@ -169,21 +169,22 @@ void spawn_level_entities(Level* lvl, Ennemi* loupas, Thwomp* thwomps, Podoboo* 
 
 
         // -- Harv --
-        init_harv(&mesHarvs[0], 14200, 850, 3.5f);
-        init_harv(&mesHarvs[1], 14400, 850, 5.0f);
+        init_harv(&mesHarvs[0], 12960, 992, 3.5f);
+        init_harv(&mesHarvs[1], 13280, 992, 5.0f);
+        init_harv(&mesHarvs[2], 13600, 992, 7.0f);
         
 
         // Coordonnées des pièces
         for (int i = 0; i < NB_PIECES; i++) { pieces[i].rect.w = 32; pieces[i].rect.h = 32; pieces[i].vivant = 1; }
         pieces[0].rect.x = 5408; pieces[0].rect.y = 544;
         pieces[1].rect.x = 5536; pieces[1].rect.y = 896;
-        pieces[2].rect.x = 10352; pieces[2].rect.y = 576;
-        pieces[3].rect.x = 11585; pieces[3].rect.y = 640;
+        pieces[2].rect.x = 8512; pieces[2].rect.y = 800; 
+        pieces[3].rect.x = 15328; pieces[3].rect.y = 960;
 
         // Checkpoints
         checkpoints[0].rect = (SDL_Rect){ 6720, 928, 64, 64 };
         checkpoints[0].actif = 0;
-        checkpoints[1].rect = (SDL_Rect){ 11630, 960, 64, 64 };
+        checkpoints[1].rect = (SDL_Rect){ 11424, 960, 64, 64 };
         checkpoints[1].actif = 0;
     }
 }
@@ -252,8 +253,8 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
         SDL_RenderSetClipRect(renderer, NULL);
 
         // --- LUNE ---
-        int startMoonX = 210 * 32; 
-        int endMoonX = 364 * 32; 
+        int startMoonX = 203 * 32; 
+        int endMoonX = 357 * 32; 
         SDL_Rect clipMoon = { startMoonX - cameraX, 0, endMoonX - startMoonX, screenH };
         
         if (clipMoon.x < 0) { clipMoon.w += clipMoon.x; clipMoon.x = 0; }
@@ -268,7 +269,7 @@ void draw_level_backgrounds(SDL_Renderer* renderer, Level* lvl, int cameraX, int
             SDL_RenderSetClipRect(renderer, NULL);
         }
         // --- VILLE ---
-        int startVilleX = 364 * 32;
+        int startVilleX = 357 * 32;
         int endVilleX = MAP_WIDTH * 32;
         SDL_Rect clipVille = { startVilleX - cameraX, 0, endVilleX - startVilleX, screenH };
         if (clipVille.x < 0) { clipVille.w += clipVille.x; clipVille.x = 0; }

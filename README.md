@@ -22,36 +22,52 @@ Ce projet est un moteur de jeu de plateforme rétro performant écrit en C avec 
 
 Le moteur intègre les mécaniques suivantes :
 
-* **Déplacements Fluides** : Gestion précise de la physique du joueur (course avec inertie) et sauts paraboliques avec une gravité réaliste.
-* **Système de Tilemap** : Chargement et rendu de niveaux basés sur des tuiles.
-* **Collisions Précises** : Détection et résolution des collisions avec le sol et les plateformes.
-* **Game Loop Optimisée** : Boucle de jeu fluide avec gestion du temps et synchronisation verticale (VSync).
-* **Animations Dynamiques** : Machine à états gérant les sprites (Idle, Run, Jump) et la direction du regard.
-* **Système d'enemis** : Gestion des mouvements de patrouille, détection des collisions et interactions avec le joueur (dégâts, élimination).
+* **Déplacements Fluides & Biomes** : Gestion précise de la physique du joueur (inertie, sauts paraboliques, gravité). La physique s'adapte au terrain (ex: glissades sur la glace, apesanteur lunaire).
+* **Système de Tilemap (CSV)** : Chargement et rendu de niveaux créés via l'éditeur *Tiled*.
+* **Collisions Précises** : Détection et résolution des collisions avec le sol, les murs et les demi-plateformes.
+* **Game Loop Optimisée** : Boucle de jeu fluide avec gestion du temps.
+* **Animations Dynamiques** : Machine à états gérant les sprites (Idle, Run, Jump, Dead) et la direction du regard.
+* **Système d'Ennemis Varié** : Gestion des mouvements de patrouille, machines à états complexes (Thwomp, Presse) et interactions avec le joueur.
+* **Interface & Audio** : Menus interactifs (Accueil, Pause, Paramètres), HUD (score, vies, timer) et intégration de musiques/bruitages avec SDL_mixer.
 
 ---
 
 ## 📂 Structure du Projet
 
 ```bash
+## 📂 Structure du Projet
+
+```bash
 .
-├── assets/          # Sprites, tuiles, images et autres ressources
-├── doc/             # Documentation supplémentaire du projet
-├── lib/             # Bibliothèques externes et dépendances
+├── assets/          # Sprites, tuiles, images, musiques, sons et polices (.ttf)
+├── bin/             # Exécutable final du jeu généré après la compilation
+├── debogage/        # Fichiers, logs ou outils utilisés pour le débogage
+├── doc/             # Documentation du code (générée via Doxygen dans doc/html)
+├── lib/             # Bibliothèques externes et dépendances (fichiers .dll, .a)
 ├── obj/             # Fichiers objets (.o) générés lors de la compilation
-├── src/             # Code source (.c)
+├── src/             # Fichiers de code source (.c)
 │   ├── camera.c     # Gestion du déplacement et du focus de la caméra
-│   ├── collision.c  # Moteur et détection des collisions
-│   ├── ennemi.c     # Logique, comportements et IA des ennemis
-│   ├── interface.c  # Gestion de l'interface utilisateur (HUD) en jeu
-│   ├── main.c       # Point d'entrée et boucle de jeu principale
-│   ├── map.c        # Gestion du chargement et rendu de la carte (Tilemap)
-│   ├── menu.c       # Gestion de l'écran titre et des menus de navigation
-│   ├── mort.c       # Gestion des conditions de défaite et de l'écran de Game Over
-│   ├── player.c     # Logique, contrôles et physique du joueur
-│   └── score.c      # Calcul, mise à jour et affichage du score
+│   ├── collision.c  # Moteur de collisions (sol, pentes, demi-plateformes, etc)
+│   ├── ennemi.c     # Logique, comportements (Machine à états) et rendu des ennemis
+│   ├── flag.c       # Gestion du drapeau de fin de niveau
+│   ├── interface.c  # HUD en jeu, écrans de victoire et Game Over
+│   ├── Items.c      # Gestion des objets interactifs (Pièces, Checkpoints)
+│   ├── level.c      # Initialisation des niveaux et gestion globale des maps
+│   ├── main.c       # Point d'entrée, initialisation globale et boucle de jeu
+│   ├── map.c        # Lecture du CSV, rendu des tuiles (tileset) et effets de parallaxe
+│   ├── menu.c       # Gestion de l'écran titre et du menu des paramètres
+│   ├── mort.c       # Gestion du respawn, perte de vies et conditions de mort
+│   └── player.c     # Logique, contrôles, animations et physique du joueur
+├── test/            # Programmes et scripts de tests unitaires
+├── .gitignore       # Règles d'exclusion pour le dépôt Git
+├── config.txt       # Fichier de sauvegarde locale (paramètres, luminosité)
+├── Diagramme de Gantt actuel.ods       # Suivi d'avancement réel du projet
+├── Diagramme de Gantt prévisionel.ods  # Planning initial du projet
+├── Doxygen          # Fichier de configuration pour la génération de documentation
 ├── Makefile         # Script d'automatisation de la compilation
-└── README.md        # Fichier de présentation et documentation principale
+├── README.md        # Fichier de présentation du projet
+├── To Do List.md    # Liste des tâches et fonctionnalités à implémenter
+└── Tout les Crédits Mario-Bros-Like.md # Sources et crédits des assets utilisés
 ```
 
 ## 🛠️ Prérequis
@@ -61,7 +77,7 @@ Linux (Debian/Ubuntu/Mint)
 
 ```bash
 sudo apt-get update
-sudo apt-get install build-essential libsdl2-dev libsdl2-image-dev
+sudo apt-get install build-essential libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
 ```
 
 🚀 Compilation & Lancement
@@ -81,7 +97,7 @@ make run
 ```
 Nettoyage : Pour supprimer les fichiers temporaires (.o) et l'exécutable :
 ```Bash
-    make clean
+make clean
 ```
 Note importante : Ne lancez pas l'exécutable en faisant cd bin puis ./MarioBrosLike. Le jeu a besoin d'être lancé depuis la racine pour charger les images situées dans assets/.
 
@@ -91,13 +107,15 @@ Note importante : Ne lancez pas l'exécutable en faisant cd bin puis ./MarioBros
 
 | Touche | Action | Description |
 | :---: | :--- | :--- |
-| <kbd>←</kbd> <kbd>→</kbd> | **Mouvement** | Courir vers la gauche ou la droite |
-| <kbd>↑</kbd> | **Saut** | Sauter |
+| <kbd>Q</kbd> <kbd>D</kbd> ou <kbd>←</kbd> <kbd>→</kbd> | **Mouvement** | Courir vers la gauche ou la droite |
+| <kbd>Z</kbd> <kbd>↑</kbd> | **Saut** | Sauter |
+| <kbd>P</kbd> | **Pause** | Affiche le menu pause en jeu |
 | <kbd>Echap</kbd> | **Quitter** | Fermer instantanément le jeu et revenir au bureau
 
 
 ⚙️ Fonctionnement Technique
-Chargement de Niveau par Image (temporaire)
+
+Le moteur lit des fichiers CSV générés par le logiciel Tiled. Chaque ID dans le CSV correspond à une tuile spécifique de la spritesheet (Tileset), ce qui permet de générer des niveaux vastes et de calculer les collisions de manière optimisée via une grille.
 
 Machine à États (Animation)
 
@@ -111,4 +129,4 @@ Le système d'animation gère les transitions entre les sprites selon l'état ph
 
     DEAD : Le joueur tombe et se couche sur le sol. 
 
-Chaque état possède sa propre vitesse d'animation et son nombre de frames, gérés par un timer interne (frameTimer).
+Chaque état possède sa propre vitesse d'animation et son nombre de frames, gérés par un timer interne (SDL_GetTicks()).

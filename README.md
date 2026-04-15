@@ -84,8 +84,10 @@ sudo apt-get install build-essential libsdl2-dev libsdl2-image-dev libsdl2-ttf-d
 Avant de compiler, récupérez les sources du projet en clonant le dépôt :
 Bash
 
+```Bash
 git clone https://github.com/Theo18004/Mario-Bros-Like.git
 cd Mario-Bros-Like
+```
 
 🚀 Compilation & Lancement
 

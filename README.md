@@ -79,6 +79,13 @@ Linux (Debian/Ubuntu/Mint)
 sudo apt-get update
 sudo apt-get install build-essential libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
 ```
+📥 Téléchargement et Installation
+
+Avant de compiler, récupérez les sources du projet en clonant le dépôt :
+Bash
+
+git clone https://github.com/Theo18004/Mario-Bros-Like.git
+cd Mario-Bros-Like
 
 🚀 Compilation & Lancement
 

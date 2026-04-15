@@ -1,3 +1,8 @@
+/**
+ * @file level.h
+ * @brief Chargements et gestions des niveaux, des décors et entités.
+ */
+
 #include "level.h"
 #include <stdlib.h>
 #include <stdio.h>

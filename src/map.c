@@ -1,3 +1,8 @@
+/**
+ * @file map.c
+ * @brief Gestion de la Tilemap (carte de tuiles) et des décors.
+ */
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>

@@ -1,3 +1,8 @@
+/**
+ * @file menu.c
+ * @brief Système de menus (principal, options) et gestion des paramètres.
+ */
+
 #include "menu.h"
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h> 

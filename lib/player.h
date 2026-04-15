@@ -36,8 +36,34 @@ typedef struct Player{
     int checkpointY;
 } Player;
 
+/**
+ * @brief Initialise le joueur.
+ * @param p Pointeur vers le joueur.
+ * @param x Position X initiale.
+ * @param y Position Y initiale.
+ */
 void init_player(Player* p, int x, int y);
+
+/**
+ * @brief Met à jour l'état du joueur.
+ * @param p Pointeur vers le joueur.
+ * @param keys État des touches (clavier).
+ * @param map Carte du niveau.
+ * @param levelID ID du niveau actuel.
+ */
 void update_player(Player* p, const Uint8* keys, int* map, int levelID);
+
+/**
+ * @brief Affiche le joueur à l'écran.
+ * @param renderer Le renderer SDL.
+ * @param p Pointeur vers le joueur.
+ * @param scrollX Décalage de la caméra en X.
+ * @param scrollY Décalage de la caméra en Y.
+ * @param texIdle Texture du joueur au repos.
+ * @param texRun Texture du joueur en course.
+ * @param texJump Texture du joueur en saut.
+ * @param texDead Texture du joueur mort.
+ */
 void render_player(SDL_Renderer* renderer, Player* p, int scrollX, int scrollY,
                    SDL_Texture* texIdle, SDL_Texture* texRun, SDL_Texture* texJump, SDL_Texture* texDead);
 

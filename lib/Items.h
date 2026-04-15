@@ -12,8 +12,8 @@
  * @brief Représente un objet ramassable (pièce) sur la carte.
  */
 typedef struct {
-    SDL_Rect rect;
-    int vivant; 
+    SDL_Rect rect; /**< Position de la pièce */
+    int vivant;    /**< Indique si la pièce est vivante (1) ou non (0) */
 } Piece;
 
 /** @def NB_PIECES
@@ -39,9 +39,9 @@ void render_coin(SDL_Renderer* renderer, SDL_Texture* texCoin, int x, int y, int
  * @brief Représente les points de sauvegarde de progression dans le niveau
  */
 typedef struct {
-    SDL_Rect rect; 
-    int actif;  
-    Uint32 animStart;    
+    SDL_Rect rect; /**< Position du checkpoint */
+    int actif;  /**< Indique si le checkpoint est actif (1) ou non (0) */
+    Uint32 animStart;    /**< Temps de début de l'animation */
 } Checkpoint;
 
 /**

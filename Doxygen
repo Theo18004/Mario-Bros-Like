@@ -15,10 +15,10 @@ SHOW_FILES             = YES
 
 # --- Chemins d'entrée (Sources) ---
 # Analyse le code source, les headers et le README pour la page d'accueil
-INPUT                  = src lib README.md 
-FILE_PATTERNS          = *.c *.h 
+INPUT                  = assets bin débogage obj test src lib README.md 
+FILE_PATTERNS          = *.c *.h *.o *.png *.ttf *.ods *.waw 
 RECURSIVE              = YES 
-USE_MDFILE_ASMAINPAGE  = README.md 
+USE_MDFILE_ASMAINPAGE  = README.md
 EXCLUDE                = bin test .git
 
 # --- Configuration de l'Interface HTML ---
